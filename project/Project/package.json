@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "express": "^4.21.1",
+    "mysql2": "^3.11.3",
+    "npm": "^10.9.0"
+  },
+  "name": "cocktailsapi",
+  "version": "1.0.0",
+  "description": "Project created for Solvro recrutation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index"
+  },
+  "author": "Kajetan Plewa",
+  "license": "ISC"
+}
