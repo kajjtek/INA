@@ -59,7 +59,7 @@ app.get('/ingredients', (req,res)=>{
             console.error("query is wrong: ",err);
             return res.status(500).send("database error");
         }
-        if(result.length==0){
+        if(result.length===0){
             console.error("The ingredients table is empty");
             res.status(404).send('No ingredient has been created');
             return;
@@ -86,18 +86,41 @@ app.get('/ingredients/:id', (req,res)=>{
 function ingredientSearching(name,ml){
     return new Promise((resolve,reject)=>{
         
-            const query2 = 'SELECT name, amount, ingredient_id from ingredients WHERE name=?';
+            const query2 = 'SELECT name, ingredient_id from ingredients WHERE name=?';
             database.query(query2,name, (err,result)=>{
                 if(err){
                     reject(["Database error during the ingredient searching phase "+name,"500"]);
+                    return;
                 }
                 if(result.length===0){
                     reject(["The ingredient required to creata a cocktail was not found "+name,"404"]);
+                    return;
                 }
                 if(result.amount<ml){
                     reject(["Nie wystarczajaco skladnika "+name,"400"]);
+                    return;
                 }
                 resolve(["Ingredient "+name+ " is correct",result[0].ingredient_id]);
+                //moze zakodowac jako array z tym tekstem i id wyszukanym
+            });
+       
+    });
+}
+
+function cocktailSearching(name){
+    return new Promise((resolve,reject)=>{
+        
+            const query2 = 'SELECT name, amount, ingredient_id from cocktails WHERE name=?';
+            database.query(query2,name, (err,result)=>{
+                if(err){
+                    reject(["Database error during the ingredient searching phase "+name,"500"]);
+                    return;
+                }
+                if(result.length===0){
+                    reject(["The ingredient required to creata a cocktail was not found "+name,"404"]);
+                    return;
+                }
+                resolve(result[0].ingredient_id);
                 //moze zakodowac jako array z tym tekstem i id wyszukanym
             });
        
@@ -132,7 +155,8 @@ function insertingSupportingTable(insertedID,name,ml,ingID){
     return new Promise((resolve,reject)=>{
         database.query('INSERT INTO cocktails_ingredients VALUES(?,?,?,?)',[insertedID,name,ml,ingID],(err,result3)=>{
             if(err){
-                reject(['Dodawanie do tabeli pomocniczej nie dziala '+err,'500'])
+                reject(['Dodawanie do tabeli pomocniczej nie dziala '+err,'500']);
+                return;
             }
             resolve('Prawidlowe dodanie do wspierajacej tabeli');
             // res.status(200).send('Child table filled');
@@ -141,20 +165,51 @@ function insertingSupportingTable(insertedID,name,ml,ingID){
 
 }
 
-function updatingTable(type,ArrayOfEdits){
+function updatingTable(type,ArrayOfEdits, ObjectName, ObjectID){
     var ToBeEdited=[];
-    for(let x of ArrayOfEdits){
-        if(x!=null){
-            ToBeEdited.push(x);
-        }
+    var NamesOfEdits=[]
+    for(let y of ArrayOfEdits){
+            if(y!=null){
+                ToBeEdited.push(y[1]);
+                NamesOfEdits.push(y[0]);
+            }
     }
     const CountOfEdits = ToBeEdited.length;
-    if(type.localeCompare('cocktails')){
-        var query ='UPDATE'
-    }else if(type.localeCompare('ingredients')){
-
+    if(type.localeCompare('cocktails')===0){
+        var query ='UPDATE cocktails SET ';
+        var wherestatement =' WHERE '+ObjectName+"=name";
+    }else if(type.localeCompare('ingredients')===0){
+        var query ='UPDATE ingredients SET ';
+        var wherestatement=' WHERE '+ObjectName+"=ingredients.name";
+    }else if(type.localeCompare('cocktails_ingredients')===0){
+        var query ='UPDATE cocktails_ingredients SET ';
+        var wherestatement=" WHERE "+ObjectName+"="+type+".name AND "+ObjectID+"="+type+".cocktail_id";
+    }
+    for(let i=0;i<CountOfEdits;i++){
+        query+= NamesOfEdits[i]+'=?';
+        if(i<CountOfEdits-1){
+            query+=" , ";
+        }
     }
 
+        query+=wherestatement;
+
+        return new Promise((resolve,reject)=>{
+            database.query(query,ToBeEdited,(err,result)=>{
+                if(err){
+                    reject(["Database error - updating","500"]);
+                    return;
+                }
+                if(result.length===0){
+                    reject(["Not found","404"]);
+                    return;
+                }
+                else{
+                    resolve(["Successful update","200"]);
+                }
+            })
+        });
+    
 }
 
 
@@ -232,7 +287,7 @@ app.post('/ingredients/create', (req,res)=>{
         })
     });
 
-app.put('/cocktails/edit/:id', (req,res)=>{
+app.put('/ingredients/edit/:name', (req,res)=>{
     const name = req.body.name||null;
         const description = req.body.description||null;
         var alcohol = req.body.alcohol||null;
@@ -245,5 +300,54 @@ app.put('/cocktails/edit/:id', (req,res)=>{
             alcohol=false;
         }
 
+        async function updatingIngredient() {
+            try{
+            const upgradeResult = await updatingTable("ingredients",[['name',name],['description',description],['alcohol',alcohol],['amount',amount],['image',image]],name,0);
+            res.status(parseInt(upgradeResult[1])).send(upgradeResult[0]);
+            }catch(error){
+                console.error(error[0]);
+                res.status(parseInt(error[1])).send(error[0]);
+            }
+        }
 
-})
+        updatingIngredient();
+
+});
+
+app.put('/cocktails/edit/:name', (req,res)=>{
+        const name = req.body.name||null;
+        const category = req.body.category||null;
+        const ingredients = req.body.ingredients||null;
+        const instructions = req.body.instructions||null;
+        var CocktailId;
+
+
+        async function updatingCocktail(table,tab,ObjectID) {
+            try{
+            const upgradeResult = await updatingTable(table,tab,name,ObjectID);
+            res.status(parseInt(upgradeResult[1])).send(upgradeResult[0]);
+            }catch(error){
+                console.error(error[0]);
+                res.status(parseInt(error[1])).send(error[0]);
+            }
+        }
+
+        updatingCocktail('cocktails',[["name",name],['category',category],['instructions',instructions]],0);
+        (async () => {
+            try{
+            CocktailId = await cocktailSearching(name);
+            }catch(error){
+                console.error(error[0]);
+                res.status(parseInt(error[1])).send(error[0]);
+            }
+        })();
+
+        for(let x of ingredients){
+            updatingCocktail('cocktails_ingredients',[['name',x.name],['ml',x.ml]],CocktailId);
+        }
+
+});
+
+app.delete('/cocktails/delete/:id',(req,res)=>{
+
+});

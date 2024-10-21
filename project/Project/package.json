@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "cocktailsapi": "file:",
     "express": "^4.21.1",
     "mysql2": "^3.11.3",
     "npm": "^10.9.0"
