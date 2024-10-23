@@ -102,10 +102,10 @@ function supportingTableIngredientsSearch(Id){
     });
 }
 
-function ingredientSearching(name,ml){
+function ingredientSearching(name,ml,type){
     return new Promise((resolve,reject)=>{
         
-            const query2 = 'SELECT name, ingredient_id from ingredients WHERE name=?';
+            const query2 = 'SELECT name, ingredient_id, amount from ingredients WHERE name=?';
             database.query(query2,name, (err,result)=>{
                 if(err){
                     reject(["Database error during the ingredient searching phase "+name,"500"]);
@@ -115,12 +115,17 @@ function ingredientSearching(name,ml){
                     reject(["The ingredient required to creata a cocktail was not found "+name,"404"]);
                     return;
                 }
-                if(result.amount<ml){
+                if(result.amount<ml&&type=='cocktails'){
                     reject(["Nie wystarczajaco skladnika "+name,"400"]);
                     return;
                 }
-                resolve(["Ingredient "+name+ " is correct",result[0].ingredient_id]);
-                //moze zakodowac jako array z tym tekstem i id wyszukanym
+                if(type=='cocktails'){
+                resolve(["Ingredient "+name+ " is correct",result[0].ingredient_id]);return;}
+                else if(type=='cocktails_create'){
+                    resolve(result[0].amount);
+                    console.log(result[0].amount);
+                    return;
+                }
             });
        
     });
@@ -222,7 +227,7 @@ function updatingTable(type,ArrayOfEdits, ObjectName, ObjectID){
         return new Promise((resolve,reject)=>{
             database.query(query,ToBeEdited,(err,result)=>{
                 if(err){
-                    reject(["Database error - updating"+err+query+NamesOfEdits,"500"]);
+                    reject(["Database error - updating"+err+query+NamesOfEdits+ToBeEdited,"500"]);
                     return;
                 }
                 if(result.length===0){
@@ -249,7 +254,7 @@ app.post('/cocktails/create', (req,res)=>{
         async function createCocktail(){
             try{
                 for(const x of ingredients){
-                    const searchingResult = await ingredientSearching(x.name,x.ml);
+                    const searchingResult = await ingredientSearching(x.name,x.ml,'cocktails');
                     console.log(searchingResult[0]);
                     ingID.push(searchingResult[1]);
                 }
@@ -259,6 +264,10 @@ app.post('/cocktails/create', (req,res)=>{
                 for(let i=0;i<ingredients.length;i++){
                     const insertingSupportingTableResult = await insertingSupportingTable(insertedID,ingredients[i].name,ingredients[i].ml,ingID[i]);
                     console.log(insertingSupportingTableResult);
+                    let ML = await ingredientSearching(ingredients[i].name,0,'cocktails_create');
+                    console.log(ML);
+                    const ingredientMLEdit = await updatingTable('ingredients',[['amount',ML-ingredients[i].ml]],ingredients[i].name,0);
+                    console.log(ingredientMLEdit);
                 }
                 res.status(200).send("Cocktail sucessfully created");
                 console.log("Cocktail successfully created");
@@ -339,7 +348,7 @@ app.put('/ingredients/edit/:name', (req,res)=>{
         updatingIngredient();
 
 });
-
+//jak nie znajdzie to pokazuje success
 app.put('/cocktails/edit/:name', (req,res)=>{
         const name = req.body.name||null;
         const category = req.body.category||null;
