@@ -1,9 +1,8 @@
-const express = require('express');
+import express, { json } from 'express';
 const app = express();
-const mysql = require('mysql2');
-const cocktail_ingredient = require('./cocktail_ingredient');
+import { createConnection } from 'mysql2';
 
-const database = mysql.createConnection({
+const database = createConnection({
     host:'localhost',
     user:'root',
     password:'0606',
@@ -18,7 +17,8 @@ database.connect((err)=>{
     console.log("Polaczona z baza danych");
 })
 
-app.use(express.json());
+app.use(json());
+export default app;
 
 const PORT = process.env.PORT || '8080';
 app.listen(PORT, ()=>console.log('Server is running ' + PORT));
@@ -92,7 +92,7 @@ function supportingTableIngredientsSearch(Id){
                 return;
             }
             if(result.length===0){
-                reject(["Not found in cockail_ingredients table"+query+Id,"404"]);
+                reject(["Not found in cocktails_ingredients table"+query+Id,"404"]);
                 return;
             }
             else{
@@ -100,6 +100,26 @@ function supportingTableIngredientsSearch(Id){
                 resolve(result);            }
         })
     });
+}
+
+function findIngredientAmount(name){
+    return new Promise((resolve,reject)=>{
+        
+        const query2 = 'SELECT amount from ingredients WHERE name=?';
+        database.query(query2,name, (err,result)=>{
+            if(err){
+                reject(["Database error - findIngredientAmount "+name,"500"]);
+                return;
+            }
+            if(result.length===0){
+                reject(["Not found - findIngredientAmount func"+name,"404"]);
+                return;
+            }
+            resolve(result[0].amount);
+            return;
+        });
+   
+});
 }
 
 function ingredientSearching(name,ml,type){
@@ -124,6 +144,31 @@ function ingredientSearching(name,ml,type){
                 else if(type=='cocktails_create'){
                     resolve(result[0].amount);
                     console.log(result[0].amount);
+                    return;
+                }else{
+                    resolve(undefined,'0');
+                    return;
+                }
+            });
+       
+    });
+}
+
+function doesIngredientExist(name){
+    return new Promise((resolve,reject)=>{
+        
+            const query2 = 'SELECT name, ingredient_id, amount from ingredients WHERE name=?';
+            database.query(query2,name, (err,result)=>{
+                if(err){
+                    reject(["Database error during the ingredient searching phase "+name,"500"]);
+                    return;
+                }
+                if(result.length===0){
+                    resolve(false);
+                    return;
+                }
+                else{
+                    resolve(true);
                     return;
                 }
             });
@@ -159,18 +204,19 @@ function insertingCocktail(name,category,instructions){
         database.query(query,[name,category,instructions],(err,result2)=>{
             if(err){
             if(err.message.includes("Column 'name' cannot be null")){
-                reject(["query wrong - name cannot be a null "+err,"500"]);
+                reject(["query wrong - name cannot be a null ","400"]);
                 return;
             }
             if(err.message.includes("Column 'category' cannot be null")){
-                reject(["query wrong - category cannot be a null "+err,"500"]);
+                reject(["query wrong - category cannot be a null ","400"]);
                 return;
             }
-            if(err.message.includes("Column 'alcohol' cannot be null")){
-                reject(["query wrong - alcohol cannot be a null "+err,"500"]);
+            if(err.message.includes("Column 'instructions' cannot be null")){
+                reject(["query wrong - instructions cannot be a null ","400"]);
                 return;
-            }}
-            resolve(["Koktajls stworzony",result2.insertId])
+            }
+        }
+            resolve(["Koktajls stworzony",result2.insertId]);
         });
     
     });
@@ -230,7 +276,7 @@ function updatingTable(type,ArrayOfEdits, ObjectName, ObjectID){
                     reject(["Database error - updating"+err+query+NamesOfEdits+ToBeEdited,"500"]);
                     return;
                 }
-                if(result.length===0){
+                if(result.affectedRows===0){
                     reject(["Not found","404"]);
                     return;
                 }
@@ -269,7 +315,7 @@ app.post('/cocktails/create', (req,res)=>{
                     const ingredientMLEdit = await updatingTable('ingredients',[['amount',ML-ingredients[i].ml]],ingredients[i].name,0);
                     console.log(ingredientMLEdit);
                 }
-                res.status(200).send("Cocktail sucessfully created");
+                res.status(201).send("Cocktail sucessfully created");
                 console.log("Cocktail successfully created");
             }
             catch(error){
@@ -283,42 +329,59 @@ app.post('/cocktails/create', (req,res)=>{
     });
 
 
-app.post('/ingredients/create', (req,res)=>{
+app.post('/ingredients/create', async(req,res)=>{
         const name = req.body.name||null;
         const description = req.body.description||null;
         var alcohol = req.body.alcohol||null;
         const amount = req.body.amount||null;
         const image = req.body.image||null;
+        let IngredientExsit = undefined;
+        let amountofIngredient=0;
 
-        if(alcohol.localeCompare("true")||alcohol.localeCompare("True")){
+        if(alcohol=="true"||alcohol=="True"){
             alcohol=true;
-        }else{
+        }else if(alcohol=="false"||alcohol=="False"){
             alcohol=false;
         }
-
-        const query = 'INSERT INTO ingredients(name,description,alcohol,image,amount) VALUES (?,?,?,?,?)';
+        try{
+        IngredientExsit = await doesIngredientExist(name);
+        console.log(IngredientExsit);
+//SPRAWDZ CZY ISTNIEJE JESLI TAK TO DODAJ AMOUNT DO SIEBIE
+        if(!IngredientExsit){
+            const query = 'INSERT INTO ingredients(name,description,alcohol,image,amount) VALUES (?,?,?,?,?)';
 
         database.query(query,[name,description,alcohol, image, amount], (err,result)=>{
             if(err){
             if(err.message.includes("Column 'name' cannot be null")){
                 console.error("query wrong - name cannot be a null");
-                res.status(500).send("Name cannot be a null");
+                res.status(400).send("Name cannot be a null");
                 return;
             }
             if(err.message.includes("Column 'description' cannot be null")){
                 console.error("query wrong - description cannot be a null");
-                res.status(500).send("Description cannot be a null");
+                res.status(400).send("Description cannot be a null");
                 return;
             }
             if(err.message.includes("Column 'alcohol' cannot be null")){
                 console.error("query wrong - alcohol cannot be a null");
-                res.status(500).send("Alcohol cannot be a null");
-                return;
+                res.status(400).send("Alcohol cannot be a null");
             }
+            return;//to usprawnic
         }
             console.log('Ingredient successfuly created');
-            res.status(200).send('Ingredient '+name+' was successfully created');
+            res.status(201).send('Ingredient '+name+' was successfully created');
         })
+        }else if(IngredientExsit){
+            amountofIngredient = await findIngredientAmount(name);
+            console.log(amountofIngredient);
+            const updateIngredient = await updatingTable('ingredients',[['amount',amount+amountofIngredient]],name,undefined);
+            res.status(201).send('Ingredient already exists - it was added to the already existing inventory');
+        }
+    }
+    catch(error){
+        console.error(error);
+        res.status(parseInt(error[1])).send(error[0]);
+    }
     });
 
 app.put('/ingredients/edit/:name', (req,res)=>{
@@ -336,7 +399,7 @@ app.put('/ingredients/edit/:name', (req,res)=>{
 
         async function updatingIngredient() {
             try{
-            const upgradeResult = await updatingTable("ingredients",[['name',name],['description',description],['alcohol',alcohol],['amount',amount],['image',image]],req.params.name,0);
+            const upgradeResult = await updatingTable("ingredients",[['name',name],['description',description],['alcohol',alcohol],['amount',amount],['image',image]],req.params.name,undefined);
             res.status(parseInt(upgradeResult[1])).send(upgradeResult[0]);
             console.log(upgradeResult[0]);
             }catch(error){
@@ -387,7 +450,7 @@ app.delete('/cocktails/delete/:id',(req,res)=>{
                         reject(["Database problem - cocktail_ingredients delete "+err,"500"]);
                         return;
                     }
-                    if(result.length===0){
+                    if(result.affectedRows===0){
                         reject(["Cocktails_ingredients Not Found - app.Delete","404"]);
                         return;
                     }
@@ -432,11 +495,192 @@ app.delete('/ingredients/delete/:id',(req,res)=>{
                     reject(["Database problem - ingredient delete "+err,"500"]);
                     return;
                 }
-                if(result.length===0){
+                if(result.affectedRows===0){
                     reject(["Cocktail Not Found - app.Delete","404"]);
                     return;
                 }
                 resolve(["Ingredient successfuly deleted","200"]);
+            })
+            })
+        })();
+
+        res.status(200).send("Delete process completed");
+        console.log("Delete Process completed")
+    }catch(error){
+        res.status(parseInt(error[1])).send(error[0]);
+        console.error(error[0]);
+    }
+})();
+});
+
+app.delete('/ingredients/deleteAll',(req,res)=>{
+    (async () => {
+    try{
+        const cocktailDeleteResult = await (()=>{
+            return new Promise((resolve,reject)=>{
+                let query = 'Delete From ingredients';
+            database.query(query,(err,result)=>{
+                if(err){
+                    reject(["Database problem - ingredient deleteALL "+err,"500"]);
+                    return;
+                }
+                if(result.affectedRows===0){
+                    reject(["No ingredients to delete Not Found - app.Delete"+query,"404"]);
+                    return;
+                }
+                resolve(["Ingredient successfuly deleted","200"]);
+            })
+            })
+        })();
+
+        await (()=>{
+            return new Promise((resolve,reject)=>{
+                database.query('ALTER TABLE ingredients AUTO_INCREMENT = 1', (err,result)=>{
+                    if (err) {
+                        console.error("Error resetting auto-increment on ingredients:", err);
+                        reject(["Database problem - resetting auto-increment " + err, "500"]);
+                        return;
+                    }
+                    console.log("Auto-increment reset for ingredients");
+                    resolve();
+                });
+            });
+        })();
+
+        res.status(200).send("Delete ALL process completed");
+        console.log("Delete ALL Process completed")
+    }catch(error){
+        res.status(parseInt(error[1])).send(error[0]);
+        console.error(error[0]);
+    }
+})();
+});
+
+app.delete('/cocktails/deleteAll',(req,res)=>{
+    
+    (async () => {
+    try{
+        const cocktail_ingredientDeleteResult = await (()=>{
+            return new Promise((resolve,reject)=>{
+                let query = 'DELETE FROM cocktails_ingredients';
+                database.query(query,[],(err,result)=>{
+                    if(err){
+                        reject(["Database problem - cocktail_ingredients deleteALL "+err,"500"]);
+                        return;
+                    }
+                    // if(result.length===0){
+                    //     reject(["Cocktails_ingredients Not Found - app.Delete","404"]);
+                    //     return;
+                    // }
+                    // resolve(["Cocktails_ingredients successfuly deleted","200"]);
+                    console.log('supporting table ALL deleted');
+                    resolve();
+                }) 
+            })
+        })();
+        const cocktailDeleteResult = await (()=>{
+            return new Promise((resolve,reject)=>{
+            database.query('DELETE FROM cocktails',[],(err,result)=>{
+                if(err){
+                    reject(["Database problem - cocktail delete "+err,"500"]);
+                    return;
+                }
+                // if(result.length===0){
+                //     reject(["Cocktails Not Found - app.DeleteALL","404"]);
+                //     return;
+                // }
+                // resolve(["Cocktails successfuly deleted","200"]);
+                console.log("all cocktails deleted");
+                resolve();
+            })
+            })
+        })();
+        await (()=>{
+            return new Promise((resolve,reject)=>{
+                database.query('ALTER TABLE cocktails AUTO_INCREMENT = 1', (err,result)=>{
+                    if (err) {
+                        console.error("Error resetting auto-increment on cocktails:", err);
+                        reject(["Database problem - resetting auto-increment " + err, "500"]);
+                        return;
+                    }
+                    console.log("Auto-increment reset for cocktails");
+                    resolve();
+                });
+            });
+        })();
+        res.status(200).send("DeleteALL process completed");
+        console.log("DeleteALL Process completed")
+    }catch(error){
+        res.status(parseInt(error[1])).send(error[0]);
+        console.error(error[0]);
+    }
+})();
+});
+
+app.delete('/ingredients/deletename/:name',(req,res)=>{
+    (async () => {
+    try{
+        const cocktailDeleteResult = await (()=>{
+            return new Promise((resolve,reject)=>{
+                let query = 'DELETE FROM ingredients WHERE name=?';
+            database.query(query,[req.params.name],(err,result)=>{
+                if(err){
+                    reject(["Database problem - ingredient delete "+err,"500"]);
+                    return;
+                }
+                if(result.length===0){
+                    reject(["Ingredient Not Found - app.Delete","404"]);
+                    return;
+                }
+                resolve(["Ingredient successfuly deleted","200"]);
+            })
+            })
+        })();
+
+        res.status(200).send("Delete process completed");
+        console.log("Delete Process completed")
+    }catch(error){
+        res.status(parseInt(error[1])).send(error[0]);
+        console.error(error[0]);
+    }
+})();
+});
+
+app.delete('/cocktails/deletename/:name',(req,res)=>{
+    
+    (async () => {
+    try{
+        const cocktail_ingredientDeleteResult = await (()=>{
+            return new Promise(async(resolve,reject)=>{
+                const ID = await cocktailSearching(req.params.name);
+                console.log(ID);
+                let query = 'DELETE FROM cocktails_ingredients WHERE cocktail_id=?';
+                database.query(query,[ID],(err,result)=>{
+                    if(err){
+                        reject(["Database problem - cocktail_ingredients delete "+err+query+ID,"500"]);
+                        return;
+                    }
+                    if(result.affectedRows===0){
+                        reject(["Cocktails_ingredients Not Found - app.Delete","404"]);
+                        return;
+                    }
+                    resolve(["Cocktails_ingredients successfuly deleted","200"]);
+                }) 
+            })
+        })();
+        const cocktailDeleteResult = await (()=>{
+            return new Promise((resolve,reject)=>{
+                let query = 'DELETE FROM cocktails WHERE name=?';
+            database.query(query,[req.params.name],(err,result)=>{
+                if(err){
+                    reject(["Database problem - cocktail delete "+err,"500"]);
+                    return;
+                }
+                if(result.affectedRows===0){
+                    reject(["Cocktail Not Found - app.Delete","404"]);
+                    return;
+                }
+                resolve(["Cocktail successfuly deleted","200"]);
             })
             })
         })();
