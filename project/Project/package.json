@@ -2,6 +2,7 @@
   "dependencies": {
     "chai": "^5.1.2",
     "cocktailsapi": "file:",
+    "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "mysql2": "^3.11.3",
     "npm": "^10.9.0"
@@ -12,7 +13,7 @@
   "description": "Project created for Solvro recrutation",
   "main": "src/index.js",
   "scripts": {
-    "test":"mocha",
+    "test": "mocha",
     "dev": "nodemon index"
   },
   "author": "Kajetan Plewa",

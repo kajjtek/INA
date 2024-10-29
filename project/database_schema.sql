@@ -12,7 +12,7 @@ CREATE TABLE ingredients (
   name varchar(255) not null,
   description varchar(255) not null,
   alcohol bool not null,
-  image BLOB,
+  image varchar(255),
   PRIMARY KEY  (ingredient_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -20,7 +20,6 @@ CREATE TABLE cocktails_ingredients (
   cocktail_id int NOT NULL,
   name varchar(255) not null,
   ml int not null,
-  alcohol bool not null,
   ingredient_id int not null,
   primary key(cocktail_id),
   foreign key(cocktail_id) references cocktails(cocktail_id)

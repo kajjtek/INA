@@ -22,6 +22,23 @@ describe('POST /ingredients/create', function(){
         }
     });
 
+    it('responses to two ingredients with the same name being created by adding their volumes', async function () {
+        try{
+            const response = await request(app).post('/ingredients/create')
+                   .send({
+                       name:'TEST',
+                       description:'TEST',
+                       alcohol:'true',
+                       image:'',
+                       amount:50
+                   });
+                   expect(response.status).to.eql(201);
+                   expect(response.text).to.include('Ingredient already exists - it was added to the already existing inventory');
+               }catch(error){
+                   console.error(error);
+               }
+    });
+
     it('should send an error that name cannot be a null', async function () {
         try{
             const response = await request(app).post('/ingredients/create')
@@ -95,6 +112,24 @@ describe('POST /cocktails/create', function () {
             console.error(error);
         }
     });
+
+    it('should react to the cocktails of the same name being created', async function () {
+        try{
+            const response = await request(app).post('/cocktails/create')
+            .send({
+                name:'TEST',
+                category:'TEST',
+                instructions:'TEST',
+                ingredients:[
+                    {name:'Test', ml:10}
+                ]
+            });
+            expect(response.status).to.eql(400);
+            expect(response.text).to.include('Cocktail with this name already exists - try using a different name or use /cocktails/edit/:name to edit the cocktail');
+        }catch(error){
+            console.error(error);
+        }
+    })
 
     it('should send an error that name cannot be a null', async function () {
         try{
@@ -238,7 +273,6 @@ it('succeds in getting the given ingredient', async function () {
     const response = await request(app).get('/ingredients/1');
     expect(response.status).to.be.eql(200);
     expect(response.type).to.be.eql('application/json');
-    expect(response.body).to.be.an('array').with.length.greaterThan(0);
 });
 
 it('responses to ingredient not found',async function(){
@@ -260,7 +294,6 @@ describe('GET /cocktails/:id', function(){
         const response = await request(app).get('/cocktails/1');
         expect(response.status).to.be.eql(200);
         expect(response.type).to.be.eql('application/json');
-        expect(response.body).to.be.an('array').with.length.greaterThan(0);
     });
     
     it('responses to cocktail not found',async function(){

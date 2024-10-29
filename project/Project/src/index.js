@@ -1,11 +1,14 @@
-import express, { json } from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
+import express, { json, query } from 'express';
 const app = express();
 import { createConnection } from 'mysql2';
 
+
 const database = createConnection({
-    host:'localhost',
-    user:'root',
-    password:'0606',
+    host:process.env.DB_HOST,
+    user:process.env.DB_NAME,
+    password:process.env.DB_PASSWORD,
     database: 'solvrorecrutation'
 });
 
@@ -23,34 +26,139 @@ export default app;
 const PORT = process.env.PORT || '8080';
 app.listen(PORT, ()=>console.log('Server is running ' + PORT));
 
-app.get('/cocktails', (req,res)=>{
-database.query('SELECT * from cocktails', (err,result)=>{
-    if(err){
-        console.error("query is wrong: ",err);
-        return res.status(500).send("database error");
+function queryConstructor(category, order, direction, query, WhereExists){
+    if(category){
+        if(!WhereExists){
+            query+=" WHERE category=? ";
+        }
+        else{
+            query+=" AND category=? "
+        }
     }
-    if(result.length==0){
-        console.error("The table is empty");
-        res.status(404).send('No cocktails have been created');
-        return;
+    if(order){
+        query+=" ORDER BY "+order;
     }
-    res.status(200).json(result);
+    if(direction){
+        query+=" "+direction;
+    }
+    return(query);
+}
+
+function NumberOfCocktails(query, category){
+    return new Promise ((resolve,reject)=>{
+        database.query(query, category,(err,result)=>{
+            if(err){
+                console.error("query is wrong: ",err);
+                reject(['query is wrong',"500"]);
+                return;
+            }
+            if(result.length==0){
+                console.error("The table is empty");
+                reject(['No such cocktails have been created',"404"]);
+                return;
+            }
+            resolve(result.length);
+    });
 })
+}
+
+app.get('/cocktails', (req,res)=>{
+    const { category, order, direction } = req.query;
+
+(async () => {
+    try{
+    var konkatenacja=[];
+    var i =1;
+    var Id = 1;
+    var query = 'SELECT * from cocktails '
+    if(category||order||direction){
+        query = queryConstructor(category,order,direction,query,false);
+    }
+    const CountCocktails = await NumberOfCocktails(query,category);
+    while(i<=CountCocktails){
+        query = queryConstructor(category,order,direction,'SELECT * from cocktails WHERE cocktail_id=? ',true);
+        if(await doesCocktailExistID(Id,query, category)){
+            const cocktailResult = await getCocktailOfId(Id);
+            const ingredient_cocktailResult = await getCocktail_IngredientOfId(Id);
+            const result = {
+                cocktail_id:cocktailResult[0],
+                name: cocktailResult[1],
+                category: cocktailResult[2],
+                instructions: cocktailResult[3],
+                ingredients: [ingredient_cocktailResult] 
+            }
+            konkatenacja.push(result);
+            i++;
+        }
+        Id++;
+    }
+    res.status(200).send(konkatenacja);}
+    catch(error){
+        console.error(error[0]);
+        res.status(parseInt(error[1])).send(error[0]);
+    }
+})();
 });
 
-app.get('/cocktails/:id', (req,res)=>{
-    database.query('SELECT * from cocktails WHERE cocktail_id=?',parseInt(req.params.id) ,(err,result)=>{
-        if(err){
-            console.error("query is wrong: ",err);
-            return res.status(500).send("database error");
-        }
-        if(result.length==0){
-            console.error("Cocktail wasnt found");
-            res.status(404).send('There isnt any cocktail with the requested id: '+parseInt(req.params.id));
+function getCocktailOfId(Id){
+    return new Promise((resolve,reject)=>{
+
+        database.query('SELECT cocktail_id,name,category,instructions from cocktails WHERE cocktail_id=?',Id ,(err,result)=>{
+            if(err){
+                console.error("query is wrong: ",err);
+                reject(['database error',"500"]);
+                return;
+            }
+            if(result.length==0){
+                console.error("Cocktail wasnt found");
+                reject(['There isnt any ingredient_cocktail with the requested id',"404"]);
+                return;
+            }
+            console.log(result[0].cocktail_id);
+            resolve([result[0].cocktail_id,result[0].name,result[0].category,result[0].instructions]);
             return;
+    });
+})
+}
+
+function getCocktail_IngredientOfId(Id){
+    return new Promise((resolve,reject)=>{
+        database.query('SELECT name, ml from cocktails_ingredients WHERE cocktail_id=?',Id ,(err,result)=>{
+            if(err){
+                console.error("query is wrong: ",err);
+                reject(['database error',"500"]);
+                return;
+            }
+            if(result.length==0){
+                console.error("ingredient_cocktail wasnt found");
+                reject(['There isnt any ingredient_cocktail with the requested id',"404"]);
+                return;
+            }
+            resolve(result);
+            return;
+    });
+})
+}
+
+app.get('/cocktails/:id', (req,res)=>{
+    (async () => {
+        try{
+        const cocktailResult = await getCocktailOfId(req.params.id);
+        const ingredient_cocktailResult = await getCocktail_IngredientOfId(req.params.id);
+        const result = {
+            cocktail_id:cocktailResult[0],
+                cocktailname: cocktailResult[1],
+                cocktail_category: cocktailResult[2],
+                cocktail_instructions: cocktailResult[3],
+                ingredients: [ingredient_cocktailResult] 
         }
+        console.log(result);
         res.status(200).json(result);
-    })
+    }catch(error){
+        console.error(error[0]);
+        res.status(parseInt(error[1])).send(error[0]);
+    }
+    })();
 });
 
 app.get('/ingredients', (req,res)=>{
@@ -176,6 +284,47 @@ function doesIngredientExist(name){
     });
 }
 
+function doesCocktailExist(name){
+    return new Promise((resolve,reject)=>{
+        
+        const query2 = 'SELECT name, cocktail_id from cocktails WHERE name=?';
+        database.query(query2,name, (err,result)=>{
+            if(err){
+                reject(["Database error during the cocktails searching phase "+name,"500"]);
+                return;
+            }
+            if(result.length===0){
+                resolve(false);
+                return;
+            }
+            resolve(true);
+        });
+   
+});
+}
+
+function doesCocktailExistID(Id, query, category){
+    return new Promise((resolve,reject)=>{
+        let tab = [Id];
+        if(category){
+            tab.push(category);
+        }
+        // const query2 = 'SELECT name, cocktail_id from cocktails WHERE cocktail_id=?';
+        database.query(query,tab, (err,result)=>{
+            if(err){
+                reject(["Database error during the cocktails searching phase "+Id,"500"]);
+                return;
+            }
+            if(result.length===0){
+                resolve(false);
+                return;
+            }
+            resolve(true);
+        });
+   
+});
+}
+
 function cocktailSearching(name){
     return new Promise((resolve,reject)=>{
         
@@ -191,7 +340,6 @@ function cocktailSearching(name){
                     return;
                 }
                 resolve(result[0].cocktail_id);
-                //moze zakodowac jako array z tym tekstem i id wyszukanym
             });
        
     });
@@ -299,6 +447,9 @@ app.post('/cocktails/create', (req,res)=>{
 
         async function createCocktail(){
             try{
+                if(await doesCocktailExist(name)){
+                    res.status(400).send("Cocktail with this name already exists - try using a different name or use /cocktails/edit/:name to edit the cocktail");
+                }else{
                 for(const x of ingredients){
                     const searchingResult = await ingredientSearching(x.name,x.ml,'cocktails');
                     console.log(searchingResult[0]);
@@ -316,7 +467,7 @@ app.post('/cocktails/create', (req,res)=>{
                     console.log(ingredientMLEdit);
                 }
                 res.status(201).send("Cocktail sucessfully created");
-                console.log("Cocktail successfully created");
+                console.log("Cocktail successfully created");}
             }
             catch(error){
                 console.error(error[0]);
@@ -346,7 +497,6 @@ app.post('/ingredients/create', async(req,res)=>{
         try{
         IngredientExsit = await doesIngredientExist(name);
         console.log(IngredientExsit);
-//SPRAWDZ CZY ISTNIEJE JESLI TAK TO DODAJ AMOUNT DO SIEBIE
         if(!IngredientExsit){
             const query = 'INSERT INTO ingredients(name,description,alcohol,image,amount) VALUES (?,?,?,?,?)';
 
@@ -366,7 +516,7 @@ app.post('/ingredients/create', async(req,res)=>{
                 console.error("query wrong - alcohol cannot be a null");
                 res.status(400).send("Alcohol cannot be a null");
             }
-            return;//to usprawnic
+            return;
         }
             console.log('Ingredient successfuly created');
             res.status(201).send('Ingredient '+name+' was successfully created');
@@ -411,7 +561,7 @@ app.put('/ingredients/edit/:name', (req,res)=>{
         updatingIngredient();
 
 });
-//jak nie znajdzie to pokazuje success
+
 app.put('/cocktails/edit/:name', (req,res)=>{
         const name = req.body.name||null;
         const category = req.body.category||null;
