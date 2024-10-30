@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: index.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: index.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * Dokumentacja projektu na rekrutacje do KN Solvro by Kajetan Plewa
  * Parę moich komentarzy co do projektu. Na przyszłość - powinienem go lepiej rozplanować bo konstrukcja bazy danych(mimo, że ma swoje benefity)
  * mocno skomplikowała kod. Napewno niepotrzebne też są oddzielne GETy do id, gdyż mozna by to bylo rozwiazac przy pomocy filtrowania. Sortowanie też
@@ -75,7 +103,7 @@ function queryConstructor(category, order, direction, query, WhereExists){
  * (pozbyciu sie tabeli wsipierajacej i dodaniu kolumny ingredients z typem array)
  * @param {string} query - Zapytanie SQL do wykonania.
  * @param {string} category - Kategoria koktajli.
- * @returns {Promise<number>} Liczba koktajli.
+ * @returns {Promise&lt;number>} Liczba koktajli.
  * @throws {Array} W przypadku błędu wykonania zapytania zwraca tablicę z błędem i kodem statusu.
  */
 function NumberOfCocktails(query, category){
@@ -116,7 +144,7 @@ app.get('/cocktails', (req,res)=>{
         query = queryConstructor(category,order,direction,query,false);
     }
     const CountCocktails = await NumberOfCocktails(query,category);
-    while(i<=CountCocktails){
+    while(i&lt;=CountCocktails){
         query = queryConstructor(category,order,direction,'SELECT * from cocktails WHERE cocktail_id=? ',true);
         if(await doesCocktailExistID(Id,query, category)){
             const cocktailResult = await getCocktailOfId(Id);
@@ -145,7 +173,7 @@ app.get('/cocktails', (req,res)=>{
 /**
  * Funkcja asynchroniczna pobierająca dane o koktajlu o podanym ID.
  * @param {number} Id - ID koktajlu.
- * @returns {Promise<Array>} Tablica zawierająca informacje o koktajlu.
+ * @returns {Promise&lt;Array>} Tablica zawierająca informacje o koktajlu.
  * @throws {Array} W przypadku błędu zwraca tablicę z błędem i kodem statusu.
  */
 function getCocktailOfId(Id){
@@ -172,7 +200,7 @@ function getCocktailOfId(Id){
 /**
  * Pobiera listę składników dla koktajlu o podanym ID.
  * @param {number} Id - ID koktajlu.
- * @returns {Promise<Array>} Lista składników z ilością.
+ * @returns {Promise&lt;Array>} Lista składników z ilością.
  */
 function getCocktail_IngredientOfId(Id){
     return new Promise((resolve,reject)=>{
@@ -265,7 +293,7 @@ app.get('/ingredients/:id', (req,res)=>{
     /**
  * Przeszukuje tabelę wspierającą składniki koktajlu na podstawie jego ID.
  * @param {number} Id - ID koktajlu.
- * @returns {Promise<Array>} Lista nazw składników.
+ * @returns {Promise&lt;Array>} Lista nazw składników.
  * @throws {Array} Błąd, jeśli składnik nie zostanie znaleziony.
  */
 function supportingTableIngredientsSearch(Id){
@@ -290,7 +318,7 @@ function supportingTableIngredientsSearch(Id){
 /**
  * Znajduje ilość składnika w magazynie na podstawie jego nazwy.
  * @param {string} name - Nazwa składnika.
- * @returns {Promise<number>} Ilość składnika w magazynie.
+ * @returns {Promise&lt;number>} Ilość składnika w magazynie.
  * @throws {Array} Błąd, jeśli składnik nie zostanie znaleziony.
  */
 function findIngredientAmount(name){
@@ -318,7 +346,7 @@ function findIngredientAmount(name){
  * @param {string} name - Nazwa składnika.
  * @param {number} ml - Ilość składnika w mililitrach.
  * @param {string} type - Typ operacji (cocktails lub cocktails_create).
- * @returns {Promise<Array>} Informacje o składniku lub jego ID.
+ * @returns {Promise&lt;Array>} Informacje o składniku lub jego ID.
  * @throws {Array} Błąd, jeśli składnik nie zostanie znaleziony lub brakuje go w wystarczającej ilości.
  */
 function ingredientSearching(name,ml,type){
@@ -334,7 +362,7 @@ function ingredientSearching(name,ml,type){
                     reject(["The ingredient required to creata a cocktail was not found "+name,"404"]);
                     return;
                 }
-                if(result.amount<ml&&type=='cocktails'){
+                if(result.amount&lt;ml&amp;&amp;type=='cocktails'){
                     reject(["Nie wystarczajaco skladnika "+name,"400"]);
                     return;
                 }
@@ -356,7 +384,7 @@ function ingredientSearching(name,ml,type){
 /**
  * Sprawdza, czy składnik o podanej nazwie istnieje.
  * @param {string} name - Nazwa składnika.
- * @returns {Promise<boolean>} True, jeśli składnik istnieje.
+ * @returns {Promise&lt;boolean>} True, jeśli składnik istnieje.
  */
 function doesIngredientExist(name){
     return new Promise((resolve,reject)=>{
@@ -385,7 +413,7 @@ function doesIngredientExist(name){
  * @param {number} Id - ID koktajlu.
  * @param {string} query - Zapytanie SQL do sprawdzenia.
  * @param {string} category - Kategoria koktajlu.
- * @returns {Promise<boolean>} True, jeśli koktajl istnieje.
+ * @returns {Promise&lt;boolean>} True, jeśli koktajl istnieje.
  */
 function doesCocktailExist(name){
     return new Promise((resolve,reject)=>{
@@ -409,7 +437,7 @@ function doesCocktailExist(name){
 /**
  * Sprawdza, czy koktajl o podanej nazwie istnieje.
  * @param {string} name - Nazwa koktajlu.
- * @returns {Promise<boolean>} True, jeśli koktajl istnieje.
+ * @returns {Promise&lt;boolean>} True, jeśli koktajl istnieje.
  */
 function doesCocktailExistID(Id, query, category){
     return new Promise((resolve,reject)=>{
@@ -435,7 +463,7 @@ function doesCocktailExistID(Id, query, category){
 /**
  * Pobiera ID koktajlu na podstawie jego nazwy.
  * @param {string} name - Nazwa koktajlu.
- * @returns {Promise<number>} ID koktajlu.
+ * @returns {Promise&lt;number>} ID koktajlu.
  */
 function cocktailSearching(name){
     return new Promise((resolve,reject)=>{
@@ -462,7 +490,7 @@ function cocktailSearching(name){
  * @param {string} name - Nazwa koktajlu.
  * @param {string} category - Kategoria koktajlu.
  * @param {string} instructions - Instrukcje przygotowania koktajlu.
- * @returns {Promise<Array>} Wynik wstawienia oraz ID nowego koktajlu.
+ * @returns {Promise&lt;Array>} Wynik wstawienia oraz ID nowego koktajlu.
  */
 function insertingCocktail(name,category,instructions){
     return new Promise((resolve,reject)=>{
@@ -495,7 +523,7 @@ function insertingCocktail(name,category,instructions){
  * @param {string} name - Nazwa składnika.
  * @param {number} ml - Ilość składnika w mililitrach.
  * @param {number} ingID - ID składnika.
- * @returns {Promise<string>} Wynik operacji.
+ * @returns {Promise&lt;string>} Wynik operacji.
  */
 function insertingSupportingTable(insertedID,name,ml,ingID){
     return new Promise((resolve,reject)=>{
@@ -517,7 +545,7 @@ function insertingSupportingTable(insertedID,name,ml,ingID){
  * @param {Array} ArrayOfEdits - Tablica edycji do wykonania.
  * @param {string} ObjectName - Nazwa obiektu do edycji.
  * @param {number} ObjectID - ID obiektu (opcjonalne).
- * @returns {Promise<Array>} Wynik aktualizacji i kod statusu.
+ * @returns {Promise&lt;Array>} Wynik aktualizacji i kod statusu.
  */
 function updatingTable(type,ArrayOfEdits, ObjectName, ObjectID){
     var ToBeEdited=[];
@@ -543,10 +571,10 @@ function updatingTable(type,ArrayOfEdits, ObjectName, ObjectID){
         wherestatement =' WHERE cocktails_ingredients.name=? AND cocktails_ingredients.cocktail_id=?';
         ToBeEdited.push(ObjectID);
     }
-    for(let i=0;i<CountOfEdits;i++){
+    for(let i=0;i&lt;CountOfEdits;i++){
         // query+=' cocktails.${NamesOfEdits[i]}=? ';
         query+= NamesOfEdits[i]+' = ? ';
-        if(i<CountOfEdits-1){
+        if(i&lt;CountOfEdits-1){
             query+=" , ";
         }
     }
@@ -602,7 +630,7 @@ app.post('/cocktails/create', (req,res)=>{
                 const insertingCocktailResult = await insertingCocktail(name,category,instructions);
                 console.log(insertingCocktailResult[0]);
                 insertedID=insertingCocktailResult[1];
-                for(let i=0;i<ingredients.length;i++){
+                for(let i=0;i&lt;ingredients.length;i++){
                     const insertingSupportingTableResult = await insertingSupportingTable(insertedID,ingredients[i].name,ingredients[i].ml,ingID[i]);
                     console.log(insertingSupportingTableResult);
                     let ML = await ingredientSearching(ingredients[i].name,0,'cocktails_create');
@@ -1082,4 +1110,26 @@ function resultintegerSorter(tab,order){
         return (a[order]-b[order]);
     });
     return tab;
-}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#NumberOfCocktails">NumberOfCocktails</a></li><li><a href="global.html#cocktailSearching">cocktailSearching</a></li><li><a href="global.html#database">database</a></li><li><a href="global.html#doesCocktailExist">doesCocktailExist</a></li><li><a href="global.html#doesCocktailExistID">doesCocktailExistID</a></li><li><a href="global.html#doesIngredientExist">doesIngredientExist</a></li><li><a href="global.html#findIngredientAmount">findIngredientAmount</a></li><li><a href="global.html#getCocktailOfId">getCocktailOfId</a></li><li><a href="global.html#getCocktail_IngredientOfId">getCocktail_IngredientOfId</a></li><li><a href="global.html#ingredientSearching">ingredientSearching</a></li><li><a href="global.html#insertingCocktail">insertingCocktail</a></li><li><a href="global.html#insertingSupportingTable">insertingSupportingTable</a></li><li><a href="global.html#queryConstructor">queryConstructor</a></li><li><a href="global.html#resultSorter">resultSorter</a></li><li><a href="global.html#resultintegerSorter">resultintegerSorter</a></li><li><a href="global.html#resultstringSorter">resultstringSorter</a></li><li><a href="global.html#supportingTableIngredientsSearch">supportingTableIngredientsSearch</a></li><li><a href="global.html#updatingTable">updatingTable</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Oct 30 2024 22:37:12 GMT+0100 (czas środkowoeuropejski standardowy)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

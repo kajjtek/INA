@@ -449,8 +449,3 @@ describe('DELETE /cocktails/deleteAll',function(){
         expect(response.text).to.include('Delete ALL');
     });
 });
-//pomyslec nad tym co sie stanie jak dodajemy ten sam koktajl + dodac testowanie tego
-//POPRAWIC GET
-//FILTRY I SORTOWANIE
-//DOKUMENTACJA
-//USPRAWNIC KOD
