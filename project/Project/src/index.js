@@ -15,6 +15,7 @@ const database = createConnection({
 database.connect((err)=>{
     if(err){
         console.error("Nie udalo sie polaczyc z baza danych, " + err);
+        console.log(process.env.DB_NAME,process.env.DB_PASSWORD);
         return;
     }
     console.log("Polaczona z baza danych");
@@ -92,6 +93,7 @@ app.get('/cocktails', (req,res)=>{
         }
         Id++;
     }
+    konkatenacja=resultSorter(konkatenacja,order,direction);
     res.status(200).send(konkatenacja);}
     catch(error){
         console.error(error[0]);
@@ -309,7 +311,6 @@ function doesCocktailExistID(Id, query, category){
         if(category){
             tab.push(category);
         }
-        // const query2 = 'SELECT name, cocktail_id from cocktails WHERE cocktail_id=?';
         database.query(query,tab, (err,result)=>{
             if(err){
                 reject(["Database error during the cocktails searching phase "+Id,"500"]);
@@ -718,11 +719,6 @@ app.delete('/cocktails/deleteAll',(req,res)=>{
                         reject(["Database problem - cocktail_ingredients deleteALL "+err,"500"]);
                         return;
                     }
-                    // if(result.length===0){
-                    //     reject(["Cocktails_ingredients Not Found - app.Delete","404"]);
-                    //     return;
-                    // }
-                    // resolve(["Cocktails_ingredients successfuly deleted","200"]);
                     console.log('supporting table ALL deleted');
                     resolve();
                 }) 
@@ -735,11 +731,6 @@ app.delete('/cocktails/deleteAll',(req,res)=>{
                     reject(["Database problem - cocktail delete "+err,"500"]);
                     return;
                 }
-                // if(result.length===0){
-                //     reject(["Cocktails Not Found - app.DeleteALL","404"]);
-                //     return;
-                // }
-                // resolve(["Cocktails successfuly deleted","200"]);
                 console.log("all cocktails deleted");
                 resolve();
             })
@@ -843,3 +834,37 @@ app.delete('/cocktails/deletename/:name',(req,res)=>{
     }
 })();
 });
+
+function resultSorter(tab,order,direction){
+if(order=='instructions'||order=='category'){
+    tab = resultstringSorter(tab,order,direction);
+}else if(order=='cocktail_id'){
+    tab = resultintegerSorter(tab,order,direction);
+}
+if(direction=='ASC'||direction=='asc'){
+    tab.reverse();
+}
+return tab;
+}
+
+function resultstringSorter(tab,order){
+    tab.sort((a,b)=>{
+        const aName = a[order].toUpperCase();
+        const bName = b[order].toUpperCase();
+        if(aName>bName){
+            return 1;
+        }
+        if(bName>aName){
+            return -1;
+        }
+        return 0;
+    });
+    return tab;
+}
+
+function resultintegerSorter(tab,order){
+    tab.sort((a,b)=>{
+        return (a[order]-b[order]);
+    });
+    return tab;
+}
