@@ -1,12 +1,16 @@
 package sem3tp;
-
+//Klasa odpowiada za interfejs konsolowy i wzywanie odpowiednich funkcji
 import java.util.Scanner;
 
 public class Controller {
-    public Library library;
+//    public Library library;
+    public BookStorage bookStorage;
+    public UserStorage userStorage;
 
-    Controller(Library library){
-        this.library=library;
+    Controller(){
+//        this.library=library;
+        this.bookStorage=new BookStorage();
+        this.userStorage=new UserStorage();
     }
 
     public void start(){
@@ -29,55 +33,90 @@ public class Controller {
         try{
             switch (Integer.parseInt(scanner.nextLine())) {
                 case 1:
-                    library.showAllUsers();
+                    userStorage.findAll();
                     break;
                 case 2:
-                    library.showAllBooks();
+                    bookStorage.findAll();
                     break;
                 case 3:
                     System.out.println("Input the name of the user you are interested in finding");
-                    library.userStorage.findByName(scanner.nextLine());
-                    library.showUser(scanner.nextLine());
+                    try {
+                        User temp = userStorage.findByName(scanner.nextLine());
+                        if(temp==null)throw new Exception("User not found");
+                        temp.print();
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 4:
                     System.out.println("Input the name of the book you are interested in finding");
-                    library.showBook(scanner.nextLine());
+                    try{
+                        Book temp = bookStorage.findByName(scanner.nextLine());
+                        if (temp == null) {
+                            throw new Exception("The book does not exist");
+                        }
+                        temp.print();
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 5:
                     System.out.println("Input the name of the user you are interested in creating");
-                    library.createUser(scanner.nextLine());
+                    userStorage.add(scanner.nextLine());
                     break;
                 case 6:
                     System.out.println("Input the name of the book you are interested in creating");
-                    library.createBook(scanner.nextLine());
+                    bookStorage.add(scanner.nextLine());
                     break;
                 case 7:
                     System.out.println("Input the name of the book copy of which you are interested in creating");
-                    library.createCopy(scanner.nextLine());
+                    try {
+                        Book temp = bookStorage.findByName(scanner.nextLine());
+                        if(temp==null)throw new Exception("Book not found");
+                        temp.createCopy();
+                    }catch (Exception e){
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 8:
                     System.out.println("Input the name of the book you are interested in borrowing");
                     String bookName = scanner.nextLine();
                     System.out.println("Input the user that borrows the copy");
                     String username = scanner.nextLine();
-                    library.borrowCopy(bookName, username);
+                    try {
+                        User tempUser = userStorage.findByName(username);
+                        if(tempUser==null)throw new Exception("User not found");
+                        Book temp = bookStorage.findByName(bookName);
+                        if(temp==null)throw new Exception("Book not found");
+                        temp.borrow(tempUser);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 9:
                     System.out.println("Input the name of the book copy of which you are interested in finding");
                     String copyName = scanner.nextLine();
                     System.out.println("Input the id of the book copy of which you are interested in finding");
                     int copyId = Integer.parseInt(scanner.nextLine());
-                    library.showCopy(copyName, copyId);
+                    try{
+                        Book temp = bookStorage.findByName(copyName);
+                        if (temp == null) {
+                            throw new Exception("The book does not exist");
+                        }
+                        temp.showCopy(copyId);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 default:
                     throw new Exception("Input a number between 1 and 9");
             }
-            System.out.println("Click enter to continue");
-            scanner.nextLine();
+            System.out.println("Click enter to continue, type exit to exit");
+            String line = scanner.nextLine();
+            if("exit".equals(line))System.exit(0);
             welcomeScreen();
         }catch(Exception e){
-            System.out.println(e.toString());
-            return;
+            System.out.println(e.getMessage());
         }
     }
 }

@@ -1,5 +1,5 @@
 package sem3tp;
-
+//Implementacja Storage dla copy
 import java.util.ArrayList;
 
 public class CopyStorage {
@@ -9,7 +9,17 @@ public class CopyStorage {
         this.copyArrayList = new ArrayList<>();
     }
 
-    public Copy borrow(){
+    public void borrow(User user){
+        try {
+            Copy temp = this.isBorrowable();
+            if(temp==null)throw new Exception("There is no copy that can be borrowed");
+            temp.borrow(user);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public Copy isBorrowable(){
         for(Copy copy:copyArrayList){
             if(!copy.isBorrowed){
                 return copy;

@@ -1,7 +1,7 @@
 package sem3tp;
 
 import java.util.ArrayList;
-
+//Implementacja Storage dla Book
 public class BookStorage implements Storage<Book>{
     private final ArrayList<Book> bookArrayList;
 

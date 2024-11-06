@@ -1,0 +1,38 @@
+@startuml
+
+actor "Użytkownik" as User
+actor "Administrator" as Admin
+
+rectangle "System Biblioteki" {
+    usecase "Zarządzanie użytkownikami" as UC1
+    usecase "Dodanie użytkownika" as UC2
+    usecase "Wyświetlenie wszystkich użytkowników" as UC3
+    usecase "Wyszukiwanie użytkownika" as UC4
+
+    usecase "Zarządzanie książkami" as UC5
+    usecase "Dodanie książki" as UC6
+    usecase "Wyświetlenie wszystkich książek" as UC7
+    usecase "Wyszukiwanie książki" as UC8
+
+    usecase "Zarządzanie kopiami książek" as UC9
+    usecase "Tworzenie kopii książki" as UC10
+    usecase "Wyświetlenie kopii książek" as UC11
+
+    usecase "Wypożyczenie książki" as UC12
+}
+
+User -- UC1
+User -- UC5
+User -- UC9
+User -- UC12
+
+Admin -- UC2
+Admin -- UC3
+Admin -- UC4
+Admin -- UC6
+Admin -- UC7
+Admin -- UC8
+Admin -- UC10
+Admin -- UC11
+
+@enduml

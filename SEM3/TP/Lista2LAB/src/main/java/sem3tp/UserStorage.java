@@ -1,7 +1,7 @@
 package sem3tp;
 
 import java.util.ArrayList;
-
+//Implementacja Storage dla User
 public class UserStorage implements Storage<User>{
     private final ArrayList<User> userArrayList;
 

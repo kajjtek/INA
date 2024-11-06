@@ -10,7 +10,7 @@ public class User {
     User(int numberOfUsers,String name){
         this.id=numberOfUsers+1;
         this.username=name;
-        this.borrowedCopies=new ArrayList<Copy>();
+        this.borrowedCopies=new ArrayList<>();
     }
 
     public void print(){

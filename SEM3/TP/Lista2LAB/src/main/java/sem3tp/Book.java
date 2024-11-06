@@ -1,6 +1,5 @@
 package sem3tp;
 
-import java.util.ArrayList;
 
 public class Book {
     public int id;
@@ -18,13 +17,7 @@ public class Book {
     }
 
     public void borrow(User user){
-        try {
-            Copy temp = copyStorage.borrow();
-            if(temp==null)throw new Exception("There is no copy that can be borrowed");
-            temp.borrow(user);
-        }catch (Exception e){
-            System.out.println(e.toString());
-        }
+        copyStorage.borrow(user);
     }
 
     public void createCopy(){

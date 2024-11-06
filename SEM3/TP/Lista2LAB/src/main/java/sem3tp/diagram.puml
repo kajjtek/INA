@@ -1,0 +1,79 @@
+@startuml
+
+interface Storage<T> {
+    +add(name: String)
+    +findByName(name: String): T
+    +findAll()
+}
+
+class Book {
+    -id: int
+    -name: String
+    -copyStorage: CopyStorage
+    +Book(numberOfBooks: int, name: String)
+    +print()
+    +borrow(user: User)
+    +createCopy()
+    +showCopy(Id: int)
+}
+
+class Copy {
+    -id: int
+    -bookId: int
+    -isBorrowed: boolean
+    +Copy(numberOfCopies: int, bookId: int)
+    +print()
+    +borrow(user: User)
+}
+
+class CopyStorage {
+    -copyArrayList: ArrayList<Copy>
+    +CopyStorage()
+    +borrow(user: User): void
+    +add(Id: int)
+    +findById(Id: int): Copy
+    +isBorrowable(): Copy
+}
+
+class User {
+    -id: int
+    -username: String
+    -borrowedCopies: ArrayList<Copy>
+    +User(numberOfUsers: int, name: String)
+    +print()
+}
+
+class BookStorage {
+    -bookArrayList: ArrayList<Book>
+    +BookStorage()
+    +add(name: String)
+    +findByName(name: String): Book
+    +findAll()
+}
+
+class UserStorage {
+    -userArrayList: ArrayList<User>
+    +UserStorage()
+    +add(name: String)
+    +findByName(name: String): User
+    +findAll()
+}
+
+class Controller {
+    -bookStorage: BookStorage
+    -userStorage: UserStorage
+    +Controller()
+    +start()
+    +welcomeScreen()
+}
+
+BookStorage --> "1" Book : contains >
+UserStorage --> "1" User : contains >
+CopyStorage --> "1" Copy : contains >
+User "1" -- "0..*" Copy : borrows >
+
+Controller --> BookStorage : manages >
+Controller --> UserStorage : manages >
+Book --> CopyStorage : manages >
+
+@enduml
