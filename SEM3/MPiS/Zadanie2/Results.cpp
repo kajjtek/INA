@@ -1,6 +1,26 @@
 #include <iostream>
 #include "Results.h"
 
+        int Results::returnatLeastOne(){
+            return this->atLeastOne;
+        }
+
+        int Results::returnatLeastTwo(){
+            return this->atLeastTwo;
+        }
+        
+        int Results::returnfirstCollision(){
+            return this->firstCollision;
+        }
+        
+        int Results::returnemptyBoxes(){
+            return this->emptyBoxes;
+        }
+
+        int Results::returnDifference(){
+            return this->difference;
+        }
+
         void Results::setfirstCollision(int m){
             this->firstCollision=m;
         }

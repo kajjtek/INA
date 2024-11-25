@@ -7,7 +7,18 @@
 
 using namespace std;
 
+        void Simulation::reset(){
+            populateBoxes();
+            this->index_m = 1;
+            this->oneball = 0;
+            this->twoball = 0; 
+            this->flagone = 0;
+            this->flagtwo = 0;
+            this->recorder = 0;
+        }
+
         void Simulation::populateBoxes(){
+            this->boxes.clear();
             this->boxes.resize(this->n,0);
         }
 
@@ -39,16 +50,13 @@ using namespace std;
             this->recorder++;
         }
 
-        void Simulation::setM(int x){
-            this->m=x;
-        }
 
-        void Simulation::executeSimulation(){
+        Results Simulation::executeSimulation(){
             Results results;
             std::random_device rd;
             std::mt19937 generator(rd());
             std::uniform_int_distribution<int> distribution(0, (this->n)-1);
-            while (this->index_m <= this->m)
+            while (this->twoball < this->n)
             {
                 int temp = distribution(generator);
                 this->boxes[temp]++;
@@ -72,9 +80,12 @@ using namespace std;
                     incrementSecondFlag();
                     results.setatLeastTwo(this->index_m);
                 }
+                if(this->index_m==this->n){
+                    results.setemptyBoxes(this->n-this->oneball);
+                }
                 incrementIndex_M();
             }
             results.setDifference();
-            results.printResults();
+            return results;
         }
         

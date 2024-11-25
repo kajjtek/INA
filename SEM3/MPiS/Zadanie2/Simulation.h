@@ -7,7 +7,6 @@ class Simulation {
     private:
         int index_m = 1;
         int n;
-        int m;
         int oneball = 0;
         int twoball = 0;
         std::vector<int> boxes; 
@@ -17,13 +16,13 @@ class Simulation {
 
     public:
 
+        void reset();
+
         void populateBoxes();
 
         void incrementIndex_M();
 
         void setN(int n);
-        
-        void setM(int n);
         
         void incrementOneBall();
 
@@ -35,7 +34,7 @@ class Simulation {
 
         void incrementRecorder();
 
-        void executeSimulation();
+        Results executeSimulation();
     
 };
 

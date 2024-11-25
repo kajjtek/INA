@@ -10,6 +10,17 @@ class Results {
         int difference=0;
 
     public:
+
+        int returnfirstCollision();
+
+        int returnemptyBoxes();
+
+        int returnatLeastOne();
+
+        int returnatLeastTwo();
+
+        int returnDifference();
+
         void setfirstCollision(int m);
         
         void setemptyBoxes(int m);

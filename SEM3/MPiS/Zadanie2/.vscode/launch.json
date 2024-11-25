@@ -1,28 +1,25 @@
 {
     "version": "0.2.0",
     "configurations": [
-        {
-            "name": "Debug C++ Program",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/main",
-            "args": [],
-            "stopAtEntry": true,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,  // Try true if internal console causes issues
-            "MIMode": "gdb",
-            "miDebuggerPath": "C:/msys64/ucrt64/bin/gdb.exe",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ],
-            "sourceFileMap": {
-                "/path/to/your/sources": "${workspaceFolder}"
-            }
-        }
+      {
+        "name": "Debug with LLDB",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/simulation", // Path to your compiled binary
+        "args": [], // Add program arguments if needed
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}", // Set working directory
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "lldb", // Specify LLDB
+        "setupCommands": [
+          {
+            "description": "Enable pretty-printing for STL containers",
+            "text": "-enable-pretty-printing",
+            "ignoreFailures": true
+          }
+        ]
+      }
     ]
-}
+  }
+  
