@@ -51,9 +51,23 @@ int doesExist(char **args, char *sign){
  }
 }
 
+int isBackground(char** cmd)
+{
+ int i;
+ for(i=0; cmd[i]!=NULL;i++)
+ {
+  if(strcmp(cmd[i],"&")==0)
+  {
+     cmd[i]=NULL;
+     return 1;
+  }
+ }
+ return 0;
+}
+
 int lsh_execute(char ***commands)
 {
- int i,j, cmd_num=0,pipe_num=0;
+ int i,j, cmd_num=0,pipe_num=0,background;
  pid_t pid;
 
  if(commands[0] == NULL)
@@ -65,6 +79,8 @@ int lsh_execute(char ***commands)
  {
   cmd_num++;
  }
+
+ background=isBackground(commands[cmd_num-1]);
 
  pipe_num = cmd_num-1;
  int pd_dir[pipe_num][2];
@@ -134,6 +150,19 @@ int lsh_execute(char ***commands)
      dup2(fd_err,STDERR_FILENO);
      close(fd_err);
     }
+    else if(strcmp(commands[i][j],"&>")==0)
+    {
+     int fd_both;
+     commands[i][j]=NULL;
+     if((fd_both=open(commands[i][j+1], O_WRONLY|O_CREAT|O_RDONLY,0644))==-1)
+     {
+      perror("descriptor create problem");
+      exit(EXIT_FAILURE);
+     }
+     dup2(fd_both,STDOUT_FILENO);
+     dup2(fd_both,STDERR_FILENO);
+     close(fd_both);;
+    }
    }
 
    for(j=0;j<pipe_num;j++)
@@ -157,16 +186,24 @@ int lsh_execute(char ***commands)
    exit(EXIT_FAILURE);
   }
  }
- for(j=0;j<pipe_num;j++)
- {
-  close(pd_dir[j][0]);
-  close(pd_dir[j][1]);
- }
 
- for(j=0;j<cmd_num;j++)
- {
-  wait(NULL);
- }
+ for(j=0;j<pipe_num;j++)
+   {
+    close(pd_dir[j][0]);
+    close(pd_dir[j][1]);
+   }
+   if(!background)
+   {
+    for(i=0;i<cmd_num;i++)
+    {
+     wait(NULL);
+    }
+   }
+   else
+   {
+    printf("Background process started: %d\n",pid);
+   }
+
  return 1;
 }
 
