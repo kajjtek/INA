@@ -1,5 +1,8 @@
 global _start
 
+section .data
+newline db 0xA
+
 section .bss
 	buffer resb 100;
 	result resb 100;
@@ -80,6 +83,12 @@ end:
 	mov edx, ebx
 	mov ebx, 1
 	mov ecx, result
+	int 0x80
+
+	mov eax, 4
+	mov edx, ebx
+	mov ebx, 1
+	lea ecx, [newline]
 	int 0x80
 
 	mov eax, 1
