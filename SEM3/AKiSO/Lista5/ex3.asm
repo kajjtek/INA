@@ -78,6 +78,7 @@ check_done:
 print_int_to_ascii:
 	push ebp
 	mov ebp, esp
+	xor ebx, ebx
 	jmp convert_ascii
 
 convert_ascii:

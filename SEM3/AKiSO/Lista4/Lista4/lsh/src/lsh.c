@@ -9,6 +9,11 @@
 #include "reader.h"
 #include "pipe.h"
 
+void sigint_handler(int dummy)
+{
+ write(STDOUT_FILENO, "\nprogram to be terminated\n", 31);
+}
+
 int lsh_launch(char **args){
   pid_t pid, wpid;
   int status;
@@ -98,6 +103,7 @@ int lsh_execute(char ***commands)
   pid = fork();
   if(pid==0)
   {
+   signal(SIGINT, SIG_DFL);
    if(i>0){
     if(dup2(pd_dir[i-1][0],STDIN_FILENO)==-1)
     {
@@ -214,7 +220,7 @@ void lsh_loop(){
   int status;
 
   do {
-	printf("lsh > ");
+	printf("lsh : ");
 	line = lsh_line_reader(); //calls line reader from "reader.h"
 	args = lsh_line_splitter(line); //calls spliiter from "parser.h"
 	commands = pipe_splitter(args);
@@ -228,6 +234,7 @@ void lsh_loop(){
 
 int main(int argc, char **argv){
 
+  signal(SIGINT, sigint_handler);
   lsh_loop();
 
 
