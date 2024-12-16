@@ -17,7 +17,7 @@ _start:
 	call print_int_to_ascii
 
 main_loop:
-	cmp esi, 1000  ; MAX value 1000
+	cmp esi, 100000  ; MAX value 1000
 	je main_done
 	inc esi
 
