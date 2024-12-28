@@ -1,6 +1,18 @@
 #include <iostream>
 #include "Results.h"
 
+        void Results::printMaxValue(){
+            std::cout << "Max value at this point is: " << this->maxValue << std::endl;
+        }
+
+        void Results::setMaxValue(int x){
+            this->maxValue=x;
+        }
+
+        int Results::returnMaxValue(){
+            return this->maxValue;
+        }
+
         int Results::returnatLeastOne(){
             return this->atLeastOne;
         }
