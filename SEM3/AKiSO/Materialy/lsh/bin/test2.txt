@@ -1,0 +1,9 @@
+Kajetan Plewa - LSH terminal project
+Handles base programms, structure: command args
+Following programms are buint in the shell:
+   cd
+   help
+   exit
+Other programs under man command
+jtek 82368 Dec  3 17:16 lsh
+total 48

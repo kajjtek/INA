@@ -8,8 +8,11 @@ class Results {
         int atLeastOne=0;
         int atLeastTwo=0;
         int difference=0;
+        int maxValue=0;
 
     public:
+
+        void printMaxValue();
 
         int returnfirstCollision();
 
@@ -21,6 +24,8 @@ class Results {
 
         int returnDifference();
 
+        int returnMaxValue();
+
         void setfirstCollision(int m);
         
         void setemptyBoxes(int m);
@@ -30,6 +35,8 @@ class Results {
         void setatLeastTwo(int m);
 
         void setDifference();
+
+        void setMaxValue(int x);
 
         void printResults();
     

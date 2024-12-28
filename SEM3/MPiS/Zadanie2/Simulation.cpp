@@ -15,6 +15,7 @@ using namespace std;
             this->flagone = 0;
             this->flagtwo = 0;
             this->recorder = 0;
+            this->maxIndex=0;
         }
 
         void Simulation::populateBoxes(){
@@ -48,6 +49,12 @@ using namespace std;
 
         void Simulation::incrementRecorder(){
             this->recorder++;
+        }
+
+        void Simulation::verifyMax(int index){
+            if(this->boxes[index]>this->boxes[this->maxIndex]){
+                this->maxIndex=index;
+            }
         }
 
 
@@ -89,3 +96,34 @@ using namespace std;
             return results;
         }
         
+int Simulation::MinimumInsertion(int d, std::mt19937& gen, std::uniform_int_distribution<int>& dis){
+            int minimumValue=INT_MAX;
+            int minIndex;
+            for (int i = 0; i < d; i++)
+            {
+                int temp = dis(gen);
+                if(this->boxes[temp]<minimumValue){
+                    minimumValue=this->boxes[temp];
+                    minIndex=temp;
+                }
+            }
+            return minIndex;
+}       
+
+Results Simulation::executeSimulationEX3(){
+            Results results;
+            std::random_device rd;
+            std::mt19937 generator(rd());
+            std::uniform_int_distribution<int> distribution(0, (this->n)-1);
+            while (this->index_m <= this->n)
+            {
+                int temp = MinimumInsertion(1, generator, distribution);
+                this->boxes[temp]++;
+                verifyMax(temp);
+                if(this->index_m==this->n){
+                    results.setMaxValue(this->boxes[this->maxIndex]);
+                }
+                incrementIndex_M();
+            }
+            return results;
+        }
