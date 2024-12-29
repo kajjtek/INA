@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
         Creator creator = Creator.getInstance();
         BoardBuilder builder = creator.createBoardBuilder(5);
-        BoardBase base = builder.build(5);
+        BoardBase base = builder.build();
         System.out.println("udalo sie stworzyc baze boarda");
     }
 }

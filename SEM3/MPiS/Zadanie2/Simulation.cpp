@@ -7,6 +7,9 @@
 
 using namespace std;
 
+            std::random_device rd;
+            std::mt19937 generator(rd());
+
         void Simulation::reset(){
             populateBoxes();
             this->index_m = 1;
@@ -29,6 +32,7 @@ using namespace std;
 
         void Simulation::setN(int x){
             this->n=x;
+            std::uniform_int_distribution<int> distribution(0, (this->n)-1);
         }
         
         void Simulation::incrementOneBall(){
@@ -60,8 +64,6 @@ using namespace std;
 
         Results Simulation::executeSimulation(){
             Results results;
-            std::random_device rd;
-            std::mt19937 generator(rd());
             std::uniform_int_distribution<int> distribution(0, (this->n)-1);
             while (this->twoball < this->n)
             {
@@ -96,12 +98,12 @@ using namespace std;
             return results;
         }
         
-int Simulation::MinimumInsertion(int d, std::mt19937& gen, std::uniform_int_distribution<int>& dis){
+int Simulation::MinimumInsertion(int d, std::uniform_int_distribution<int> dis){
             int minimumValue=INT_MAX;
             int minIndex;
             for (int i = 0; i < d; i++)
             {
-                int temp = dis(gen);
+                int temp = dis(generator);
                 if(this->boxes[temp]<minimumValue){
                     minimumValue=this->boxes[temp];
                     minIndex=temp;
@@ -112,12 +114,10 @@ int Simulation::MinimumInsertion(int d, std::mt19937& gen, std::uniform_int_dist
 
 Results Simulation::executeSimulationEX3(){
             Results results;
-            std::random_device rd;
-            std::mt19937 generator(rd());
             std::uniform_int_distribution<int> distribution(0, (this->n)-1);
             while (this->index_m <= this->n)
             {
-                int temp = MinimumInsertion(1, generator, distribution);
+                int temp = MinimumInsertion(1, distribution);
                 this->boxes[temp]++;
                 verifyMax(temp);
                 if(this->index_m==this->n){

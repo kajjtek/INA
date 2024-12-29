@@ -13,7 +13,7 @@ import sem3tp.Storage.PoleStorage;
 public class BoardBuilder implements Builder{
     Creator creator;
     Mover mover;
-    int maxPoles;
+    int maxPoles, layers_num;
     Directions[] possibleMoves = {Directions.East,Directions.West,Directions.NorthEast, Directions.NorthWest, Directions.SouthEast, Directions.SouthWest};
 
     public BoardBuilder(int layers){
@@ -22,6 +22,7 @@ public class BoardBuilder implements Builder{
     }
 
     public void findMaxPoles(int layers_num){
+        this.layers_num=layers_num;
         int suma=1;
         for(int i=2;i<=layers_num;i++){
             suma+=6*(i-1);
@@ -30,7 +31,7 @@ public class BoardBuilder implements Builder{
     }
 
     @Override
-    public BoardBase build(int layers_num) {
+    public BoardBase build() {
         BoardBase boardBase = new BoardBase();
         PoleStorage poleList = new PoleStorage();
         findMaxPoles(layers_num);
