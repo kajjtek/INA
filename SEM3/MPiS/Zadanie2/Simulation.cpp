@@ -117,7 +117,7 @@ Results Simulation::executeSimulationEX3(){
             std::uniform_int_distribution<int> distribution(0, (this->n)-1);
             while (this->index_m <= this->n)
             {
-                int temp = MinimumInsertion(1, distribution);
+                int temp = MinimumInsertion(2, distribution);
                 this->boxes[temp]++;
                 verifyMax(temp);
                 if(this->index_m==this->n){

@@ -12,7 +12,7 @@ int main(){
     int type;
     std:: cin >> type;
     CSVwriter writer(type);
-    for(int k=1000; k<= 100000; k+=1000){
+    for(int k=10000; k<= 1000000; k+=10000){
         writer.setN(k);
         simulation.setN(k);
         for (int i = 0; i < 50; i++){
