@@ -25,7 +25,7 @@ int main(){
         origin.createChildren(n);
         for (int k = 0; k < 50; k++)
         {
-            writer.setResults(origin.execute());
+            writer.setResults(origin.findTrend());
             writer.writeFile();
             origin.resetCounter();
             origin.resetChildren();

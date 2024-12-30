@@ -34,7 +34,7 @@ void CSVwriter::writeFile(){
 
 CSVwriter::CSVwriter()
 {
-    file.open("Communication_2.csv");
+    file.open("Communication_3_05.csv");
     if(file.is_open()){
         file << "Stations, Procedures executed\n";
     }else{
