@@ -1,0 +1,653 @@
+From a824ede894b1f8f6784d5deea6fd56aebdfb4a5b Mon Sep 17 00:00:00 2001
+From: kajtekog <kaj.plw24@gmail.com>
+Date: Sun, 12 Jan 2025 16:52:40 +0000
+Subject: [PATCH] lista6_full
+
+---
+ Makefile            |   6 +-
+ exec.c              |   5 +
+ lista6_zad1_2.patch | 269 ++++++++++++++++++++++++++++++++++++++++++++
+ proc.c              |  10 +-
+ syscall.c           |   5 +-
+ syscall.h           |   2 +
+ sysproc.c           |  14 +++
+ testex2.c           |  16 +++
+ testvm.c            |  18 +++
+ user.h              |   3 +-
+ usys.S              |   2 +
+ vm.c                |  61 ++++++++++
+ xv6.patch           |  29 +++++
+ 13 files changed, 435 insertions(+), 5 deletions(-)
+ create mode 100644 lista6_zad1_2.patch
+ create mode 100644 testex2.c
+ create mode 100644 testvm.c
+ create mode 100644 xv6.patch
+
+diff --git a/Makefile b/Makefile
+index 09d790c..60d0dde 100644
+--- a/Makefile
++++ b/Makefile
+@@ -76,7 +76,7 @@ AS = $(TOOLPREFIX)gas
+ LD = $(TOOLPREFIX)ld
+ OBJCOPY = $(TOOLPREFIX)objcopy
+ OBJDUMP = $(TOOLPREFIX)objdump
+-CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer
++CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -mno-sse -ggdb -m32 -fno-omit-frame-pointer
+ CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
+ ASFLAGS = -m32 -gdwarf-2 -Wa,-divide
+ # FreeBSD ld wants ``elf_i386_fbsd''
+@@ -116,6 +116,7 @@ entryother: entryother.S
+ 
+ initcode: initcode.S
+ 	$(CC) $(CFLAGS) -nostdinc -I. -c initcode.S
++	$(OBJCOPY) --remove-section .note.gnu.property initcode.o
+ 	$(LD) $(LDFLAGS) -N -e start -Ttext 0 -o initcode.out initcode.o
+ 	$(OBJCOPY) -S -O binary initcode.out initcode
+ 	$(OBJDUMP) -S initcode.o > initcode.asm
+@@ -146,6 +147,7 @@ vectors.S: vectors.pl
+ ULIB = ulib.o usys.o printf.o umalloc.o
+ 
+ _%: %.o $(ULIB)
++	$(OBJCOPY) --remove-section .note.gnu.property ulib.o
+ 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
+ 	$(OBJDUMP) -S $@ > $*.asm
+ 	$(OBJDUMP) -t $@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $*.sym
+@@ -173,6 +175,8 @@ UPROGS=\
+ 	_init\
+ 	_kill\
+ 	_ln\
++	_testvm\
++	_testex2\
+ 	_ls\
+ 	_mkdir\
+ 	_rm\
+diff --git a/exec.c b/exec.c
+index b40134f..fc5b73e 100644
+--- a/exec.c
++++ b/exec.c
+@@ -60,6 +60,7 @@ exec(char *path, char **argv)
+   end_op();
+   ip = 0;
+ 
++
+   // Allocate two pages at the next page boundary.
+   // Make the first inaccessible.  Use the second as the user stack.
+   sz = PGROUNDUP(sz);
+@@ -101,6 +102,10 @@ exec(char *path, char **argv)
+   curproc->tf->esp = sp;
+   switchuvm(curproc);
+   freevm(oldpgdir);
++  cprintf("exec - pgdir %x\n",curproc->pgdir);
++  vmprint(curproc->pgdir);
++
++
+   return 0;
+ 
+  bad:
+diff --git a/lista6_zad1_2.patch b/lista6_zad1_2.patch
+new file mode 100644
+index 0000000..c505c45
+--- /dev/null
++++ b/lista6_zad1_2.patch
+@@ -0,0 +1,269 @@
++diff --git a/Makefile b/Makefile
++index 09d790c..60d0dde 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -76,7 +76,7 @@ AS = $(TOOLPREFIX)gas
++ LD = $(TOOLPREFIX)ld
++ OBJCOPY = $(TOOLPREFIX)objcopy
++ OBJDUMP = $(TOOLPREFIX)objdump
++-CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer
+++CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -mno-sse -ggdb -m32 -fno-omit-frame-pointer
++ CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
++ ASFLAGS = -m32 -gdwarf-2 -Wa,-divide
++ # FreeBSD ld wants ``elf_i386_fbsd''
++@@ -116,6 +116,7 @@ entryother: entryother.S
++ 
++ initcode: initcode.S
++ 	$(CC) $(CFLAGS) -nostdinc -I. -c initcode.S
+++	$(OBJCOPY) --remove-section .note.gnu.property initcode.o
++ 	$(LD) $(LDFLAGS) -N -e start -Ttext 0 -o initcode.out initcode.o
++ 	$(OBJCOPY) -S -O binary initcode.out initcode
++ 	$(OBJDUMP) -S initcode.o > initcode.asm
++@@ -146,6 +147,7 @@ vectors.S: vectors.pl
++ ULIB = ulib.o usys.o printf.o umalloc.o
++ 
++ _%: %.o $(ULIB)
+++	$(OBJCOPY) --remove-section .note.gnu.property ulib.o
++ 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
++ 	$(OBJDUMP) -S $@ > $*.asm
++ 	$(OBJDUMP) -t $@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $*.sym
++@@ -173,6 +175,8 @@ UPROGS=\
++ 	_init\
++ 	_kill\
++ 	_ln\
+++	_testvm\
+++	_testex2\
++ 	_ls\
++ 	_mkdir\
++ 	_rm\
++diff --git a/exec.c b/exec.c
++index b40134f..fc5b73e 100644
++--- a/exec.c
+++++ b/exec.c
++@@ -60,6 +60,7 @@ exec(char *path, char **argv)
++   end_op();
++   ip = 0;
++ 
+++
++   // Allocate two pages at the next page boundary.
++   // Make the first inaccessible.  Use the second as the user stack.
++   sz = PGROUNDUP(sz);
++@@ -101,6 +102,10 @@ exec(char *path, char **argv)
++   curproc->tf->esp = sp;
++   switchuvm(curproc);
++   freevm(oldpgdir);
+++  cprintf("exec - pgdir %x\n",curproc->pgdir);
+++  vmprint(curproc->pgdir);
+++
+++
++   return 0;
++ 
++  bad:
++diff --git a/proc.c b/proc.c
++index 806b1b1..c594c38 100644
++--- a/proc.c
+++++ b/proc.c
++@@ -6,7 +6,6 @@
++ #include "x86.h"
++ #include "proc.h"
++ #include "spinlock.h"
++-
++ struct {
++   struct spinlock lock;
++   struct proc proc[NPROC];
++@@ -231,8 +230,12 @@ exit(void)
++   struct proc *p;
++   int fd;
++ 
+++  cprintf("exit - pgdir %x\n", curproc->pgdir);
+++  vmprint(curproc->pgdir);
+++
+++
++   if(curproc == initproc)
++-    panic("init exiting");
+++  panic("init exiting");
++ 
++   // Close all open files.
++   for(fd = 0; fd < NOFILE; fd++){
++@@ -242,6 +245,8 @@ exit(void)
++     }
++   }
++ 
+++
+++
++   begin_op();
++   iput(curproc->cwd);
++   end_op();
++@@ -252,6 +257,7 @@ exit(void)
++   // Parent might be sleeping in wait().
++   wakeup1(curproc->parent);
++ 
+++
++   // Pass abandoned children to init.
++   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
++     if(p->parent == curproc){
++diff --git a/syscall.c b/syscall.c
++index ee85261..7848ddf 100644
++--- a/syscall.c
+++++ b/syscall.c
++@@ -103,7 +103,8 @@ extern int sys_unlink(void);
++ extern int sys_wait(void);
++ extern int sys_write(void);
++ extern int sys_uptime(void);
++-
+++extern int sys_usedvp(void);
+++extern int sys_usedpp(void);
++ static int (*syscalls[])(void) = {
++ [SYS_fork]    sys_fork,
++ [SYS_exit]    sys_exit,
++@@ -126,6 +127,8 @@ static int (*syscalls[])(void) = {
++ [SYS_link]    sys_link,
++ [SYS_mkdir]   sys_mkdir,
++ [SYS_close]   sys_close,
+++[SYS_usedvp]  sys_usedvp,
+++[SYS_usedpp]  sys_usedpp
++ };
++ 
++ void
++diff --git a/syscall.h b/syscall.h
++index bc5f356..913658f 100644
++--- a/syscall.h
+++++ b/syscall.h
++@@ -20,3 +20,5 @@
++ #define SYS_link   19
++ #define SYS_mkdir  20
++ #define SYS_close  21
+++#define SYS_usedvp 22
+++#define SYS_usedpp 23
++diff --git a/sysproc.c b/sysproc.c
++index 0686d29..333c2d6 100644
++--- a/sysproc.c
+++++ b/sysproc.c
++@@ -7,6 +7,20 @@
++ #include "mmu.h"
++ #include "proc.h"
++ 
+++//returns the number of virtual pages
+++int
+++sys_usedvp(void)
+++{
+++ return vm_usedvp(myproc());
+++}
+++
+++//return the number of pages on physical memory
+++int
+++sys_usedpp(void)
+++{
+++ return vm_usedpp(myproc());
+++}
+++
++ int
++ sys_fork(void)
++ {
++diff --git a/user.h b/user.h
++index 4f99c52..a51813b 100644
++--- a/user.h
+++++ b/user.h
++@@ -23,7 +23,8 @@ int getpid(void);
++ char* sbrk(int);
++ int sleep(int);
++ int uptime(void);
++-
+++int usedvp(void);
+++int usedpp(void);
++ // ulib.c
++ int stat(const char*, struct stat*);
++ char* strcpy(char*, const char*);
++diff --git a/usys.S b/usys.S
++index 8bfd8a1..4b8bb3e 100644
++--- a/usys.S
+++++ b/usys.S
++@@ -29,3 +29,5 @@ SYSCALL(getpid)
++ SYSCALL(sbrk)
++ SYSCALL(sleep)
++ SYSCALL(uptime)
+++SYSCALL(usedvp)
+++SYSCALL(usedpp)
++diff --git a/vm.c b/vm.c
++index 7134cff..dacc5bc 100644
++--- a/vm.c
+++++ b/vm.c
++@@ -7,6 +7,43 @@
++ #include "proc.h"
++ #include "elf.h"
++ 
+++
+++
+++int vm_usedvp(struct proc *process)
+++{
+++ uint size = process->sz;
+++ if(size>=KERNBASE)
+++ {
+++  size = KERNBASE;
+++ }
+++
+++ return size/PGSIZE;
+++}
+++
+++//ZAWADA SO L6/EX1
+++void vmprint(pde_t *pgdir)
+++{
+++ for(int i=0; i<512; i++)
+++ {
+++  pde_t pde = pgdir[i];
+++  if(pde & PTE_P)
+++  {
+++   pte_t *pagetable = (pte_t*)P2V(PTE_ADDR(pde));
+++   cprintf(".. %d: pde %x pa %x\n",i,pagetable,pde);
+++   for(int j=0;j<1024;j++)
+++   {
+++    pte_t pte = pagetable[j];
+++    if(pte & PTE_P)
+++    {
+++     unsigned int physical_address = PTE_ADDR(pte);
+++     cprintf(".. .. %d: pte %x pa %x\n",j,pte,physical_address);
+++    }
+++   }
+++  }
+++ }
+++}
+++
+++
++ extern char data[];  // defined by kernel.ld
++ pde_t *kpgdir;  // for use in scheduler()
++ 
++@@ -54,6 +91,29 @@ walkpgdir(pde_t *pgdir, const void *va, int alloc)
++   return &pgtab[PTX(va)];
++ }
++ 
+++
+++
+++int vm_usedpp(struct proc *process)
+++{
+++ int sum = 0;
+++ pde_t *pgdir = process->pgdir;
+++ uint size = process->sz;
+++ if(size>=KERNBASE)
+++ {
+++  size = KERNBASE;
+++ }
+++
+++ for(uint i=0; i<size; i+=PGSIZE)
+++ {
+++  pte_t *pte = walkpgdir(pgdir, (const void *)i, 0);
+++  if(*pte & PTE_P)
+++  {
+++   sum++;
+++  }
+++ }
+++ return sum;
+++}
+++
++ // Create PTEs for virtual addresses starting at va that refer to
++ // physical addresses starting at pa. va and size might not
++ // be page-aligned.
++@@ -392,3 +452,4 @@ copyout(pde_t *pgdir, uint va, void *p, uint len)
++ //PAGEBREAK!
++ // Blank page.
++ 
+++
+diff --git a/proc.c b/proc.c
+index 806b1b1..c594c38 100644
+--- a/proc.c
++++ b/proc.c
+@@ -6,7 +6,6 @@
+ #include "x86.h"
+ #include "proc.h"
+ #include "spinlock.h"
+-
+ struct {
+   struct spinlock lock;
+   struct proc proc[NPROC];
+@@ -231,8 +230,12 @@ exit(void)
+   struct proc *p;
+   int fd;
+ 
++  cprintf("exit - pgdir %x\n", curproc->pgdir);
++  vmprint(curproc->pgdir);
++
++
+   if(curproc == initproc)
+-    panic("init exiting");
++  panic("init exiting");
+ 
+   // Close all open files.
+   for(fd = 0; fd < NOFILE; fd++){
+@@ -242,6 +245,8 @@ exit(void)
+     }
+   }
+ 
++
++
+   begin_op();
+   iput(curproc->cwd);
+   end_op();
+@@ -252,6 +257,7 @@ exit(void)
+   // Parent might be sleeping in wait().
+   wakeup1(curproc->parent);
+ 
++
+   // Pass abandoned children to init.
+   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+     if(p->parent == curproc){
+diff --git a/syscall.c b/syscall.c
+index ee85261..7848ddf 100644
+--- a/syscall.c
++++ b/syscall.c
+@@ -103,7 +103,8 @@ extern int sys_unlink(void);
+ extern int sys_wait(void);
+ extern int sys_write(void);
+ extern int sys_uptime(void);
+-
++extern int sys_usedvp(void);
++extern int sys_usedpp(void);
+ static int (*syscalls[])(void) = {
+ [SYS_fork]    sys_fork,
+ [SYS_exit]    sys_exit,
+@@ -126,6 +127,8 @@ static int (*syscalls[])(void) = {
+ [SYS_link]    sys_link,
+ [SYS_mkdir]   sys_mkdir,
+ [SYS_close]   sys_close,
++[SYS_usedvp]  sys_usedvp,
++[SYS_usedpp]  sys_usedpp
+ };
+ 
+ void
+diff --git a/syscall.h b/syscall.h
+index bc5f356..913658f 100644
+--- a/syscall.h
++++ b/syscall.h
+@@ -20,3 +20,5 @@
+ #define SYS_link   19
+ #define SYS_mkdir  20
+ #define SYS_close  21
++#define SYS_usedvp 22
++#define SYS_usedpp 23
+diff --git a/sysproc.c b/sysproc.c
+index 0686d29..333c2d6 100644
+--- a/sysproc.c
++++ b/sysproc.c
+@@ -7,6 +7,20 @@
+ #include "mmu.h"
+ #include "proc.h"
+ 
++//returns the number of virtual pages
++int
++sys_usedvp(void)
++{
++ return vm_usedvp(myproc());
++}
++
++//return the number of pages on physical memory
++int
++sys_usedpp(void)
++{
++ return vm_usedpp(myproc());
++}
++
+ int
+ sys_fork(void)
+ {
+diff --git a/testex2.c b/testex2.c
+new file mode 100644
+index 0000000..05bbeb3
+--- /dev/null
++++ b/testex2.c
+@@ -0,0 +1,16 @@
++#include "types.h"
++#include "user.h"
++
++int main(void)
++{
++ printf(1, "Number of virtual pages in a process and the number of pages in physical memory will be shown\n");
++ printf(1, "usedvp : %d\n", usedvp());
++ printf(1, "usedpp: %d\n", usedpp());
++
++ sbrk(4096);
++ printf(1, "After allocating a new page\n");
++ printf(1, "usedvp: %d\n", usedpp());
++ printf(1, "usedpp: %d\n", usedpp());
++
++ exit();
++}
+diff --git a/testvm.c b/testvm.c
+new file mode 100644
+index 0000000..53391ae
+--- /dev/null
++++ b/testvm.c
+@@ -0,0 +1,18 @@
++#include "types.h"
++#include "user.h"
++
++int main()
++{
++ for(int i=0; i<5; i++)
++ {
++  if(sbrk(4096) == -1)
++  {
++   printf(1,"allocation failed\n");
++   exit();
++  }
++ }
++ printf(1,"Memory allocated\n");
++ printf(1,"----------------\n");
++
++ exit();
++}
+diff --git a/user.h b/user.h
+index 4f99c52..a51813b 100644
+--- a/user.h
++++ b/user.h
+@@ -23,7 +23,8 @@ int getpid(void);
+ char* sbrk(int);
+ int sleep(int);
+ int uptime(void);
+-
++int usedvp(void);
++int usedpp(void);
+ // ulib.c
+ int stat(const char*, struct stat*);
+ char* strcpy(char*, const char*);
+diff --git a/usys.S b/usys.S
+index 8bfd8a1..4b8bb3e 100644
+--- a/usys.S
++++ b/usys.S
+@@ -29,3 +29,5 @@ SYSCALL(getpid)
+ SYSCALL(sbrk)
+ SYSCALL(sleep)
+ SYSCALL(uptime)
++SYSCALL(usedvp)
++SYSCALL(usedpp)
+diff --git a/vm.c b/vm.c
+index 7134cff..dacc5bc 100644
+--- a/vm.c
++++ b/vm.c
+@@ -7,6 +7,43 @@
+ #include "proc.h"
+ #include "elf.h"
+ 
++
++
++int vm_usedvp(struct proc *process)
++{
++ uint size = process->sz;
++ if(size>=KERNBASE)
++ {
++  size = KERNBASE;
++ }
++
++ return size/PGSIZE;
++}
++
++//ZAWADA SO L6/EX1
++void vmprint(pde_t *pgdir)
++{
++ for(int i=0; i<512; i++)
++ {
++  pde_t pde = pgdir[i];
++  if(pde & PTE_P)
++  {
++   pte_t *pagetable = (pte_t*)P2V(PTE_ADDR(pde));
++   cprintf(".. %d: pde %x pa %x\n",i,pagetable,pde);
++   for(int j=0;j<1024;j++)
++   {
++    pte_t pte = pagetable[j];
++    if(pte & PTE_P)
++    {
++     unsigned int physical_address = PTE_ADDR(pte);
++     cprintf(".. .. %d: pte %x pa %x\n",j,pte,physical_address);
++    }
++   }
++  }
++ }
++}
++
++
+ extern char data[];  // defined by kernel.ld
+ pde_t *kpgdir;  // for use in scheduler()
+ 
+@@ -54,6 +91,29 @@ walkpgdir(pde_t *pgdir, const void *va, int alloc)
+   return &pgtab[PTX(va)];
+ }
+ 
++
++
++int vm_usedpp(struct proc *process)
++{
++ int sum = 0;
++ pde_t *pgdir = process->pgdir;
++ uint size = process->sz;
++ if(size>=KERNBASE)
++ {
++  size = KERNBASE;
++ }
++
++ for(uint i=0; i<size; i+=PGSIZE)
++ {
++  pte_t *pte = walkpgdir(pgdir, (const void *)i, 0);
++  if(*pte & PTE_P)
++  {
++   sum++;
++  }
++ }
++ return sum;
++}
++
+ // Create PTEs for virtual addresses starting at va that refer to
+ // physical addresses starting at pa. va and size might not
+ // be page-aligned.
+@@ -392,3 +452,4 @@ copyout(pde_t *pgdir, uint va, void *p, uint len)
+ //PAGEBREAK!
+ // Blank page.
+ 
++
+diff --git a/xv6.patch b/xv6.patch
+new file mode 100644
+index 0000000..671aacd
+--- /dev/null
++++ b/xv6.patch
+@@ -0,0 +1,29 @@
++diff --git a/Makefile b/Makefile
++index 09d790c..3f4dbb7 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -76,7 +76,7 @@ AS = $(TOOLPREFIX)gas
++ LD = $(TOOLPREFIX)ld
++ OBJCOPY = $(TOOLPREFIX)objcopy
++ OBJDUMP = $(TOOLPREFIX)objdump
++-CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer
+++CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -mno-sse -ggdb -m32 -fno-omit-frame-pointer
++ CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
++ ASFLAGS = -m32 -gdwarf-2 -Wa,-divide
++ # FreeBSD ld wants ``elf_i386_fbsd''
++@@ -116,6 +116,7 @@ entryother: entryother.S
++ 
++ initcode: initcode.S
++ 	$(CC) $(CFLAGS) -nostdinc -I. -c initcode.S
+++	$(OBJCOPY) --remove-section .note.gnu.property initcode.o
++ 	$(LD) $(LDFLAGS) -N -e start -Ttext 0 -o initcode.out initcode.o
++ 	$(OBJCOPY) -S -O binary initcode.out initcode
++ 	$(OBJDUMP) -S initcode.o > initcode.asm
++@@ -146,6 +147,7 @@ vectors.S: vectors.pl
++ ULIB = ulib.o usys.o printf.o umalloc.o
++ 
++ _%: %.o $(ULIB)
+++	$(OBJCOPY) --remove-section .note.gnu.property ulib.o
++ 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
++ 	$(OBJDUMP) -S $@ > $*.asm
++ 	$(OBJDUMP) -t $@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $*.sym
+-- 
+2.43.0
+
