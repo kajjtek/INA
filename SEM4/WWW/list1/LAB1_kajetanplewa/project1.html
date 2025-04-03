@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Kajetan Plewa Portfolio</title>
+        <meta charset="UTF-8">
+        <meta name="description" content="Personal website containing my projects">
+        <meta name="author" content="Kajetan Plewa">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="theme-color" content="#fbf9f2">
+        <link rel="stylesheet" href="styles.css" />
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet" />
+    </head>
+    <body class="project_container">
+        <div class="left">
+            
+            <figure class="mlody_kajtek">
+                <figcaption>young me year 2009</figcaption>
+                <a href="./main.html"><img src="/Users/kajtek/Downloads/DSC05006.jpg" class="mlody_kajtek" alt="mlody kajtek"></a>
+            </figure>
+            <h1>KAJETAN PLEWA</h1>
+            <p class="bio_text">
+                check my socials
+                <br>
+                facebook:<a class="normal_links" href="https://www.facebook.com/kajetan.plewa/">fb.com/kajetan.plewa</a><br>
+                github:<a class="normal_links" href="https://github.com/kajjtek">github.com/kajjtek</a><br>
+                email:kaj.plw24@gmail.com
+            </p>
+
+        </div>
+        <div class="middle_project">
+            <section><a class="normal_links" href="./project.html">left</a> <a class="normal_links" href="./project2.html">right</a><br></section> 
+            <h2>Politykle</h2>
+            <figure>
+                <img src="./sejm.png" alt="logo sejmu">
+                <figcaption>Logo Sejmu</figcaption>
+            </figure>
+            <pre class="code_block">
+                <code class="language-java">
+    public String dehash(String password,byte[] salt, int iterations) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        KeySpec spec = new PBEKeySpec(password.toCharArray(),salt,iterations, 128);
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        byte[] inputHash = factory.generateSecret(spec).getEncoded();
+        return Arrays.toString(inputHash);
+    }
+
+    public Package hash(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+
+        KeySpec spec = new PBEKeySpec(password.toCharArray(),salt,65536, 128);
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        byte[] hash = factory.generateSecret(spec).getEncoded();
+        return new Package(Arrays.toString(hash),65536,salt);
+    }
+                </code>
+            </pre>
+        </div>
+        <div class="right_project">
+            <br><br>
+            <h2>About the project</h2>
+            <p>Politykle is an educational game designed to engage users in learning about Polish politics through an interactive and entertaining experience. Inspired by the popular game format of loldle.net, Politykle offers three distinct game modes, each focusing on different aspects of Polish political knowledge, including politicians, political parties, and election results. The project was developed with the goal of educating users in preparation for the upcoming 2025 Presidential Elections.</p>
+                <ul>Game Modes: 
+                    <li>Guess the Politician: The game randomly selects a politician based on the chosen difficulty level (Easy, Medium, or Hard).
+                        Players guess the politician by comparing attributes such as age, political party, and other criteria.
+                        Feedback is provided for each guess, indicating whether the player is correct, needs to guess higher, or lower.</li>
+                    <li>Guess the Party:<br>The game randomly selects a political party and presents the player with a politician from that party. Players must guess the party by entering its abbreviation.</li>
+                    <li>Guess the Election:<br>The game randomly selects an election event and displays a political party along with its election result. Players guess the election based on the provided information.</li>
+                    <li>A simple, intuitive user interface</li>
+                </ul>
+                <h2>Technical Implementation</h2>
+                <p>The project features a robust and normalized relational database designed to store and manage data efficiently. The database is normalized to the Third Normal Form (3NF), ensuring minimal redundancy and maximum consistency. Key components include:
+                </p>
+                <ul>
+                    <li>Entities</li>
+                    <li>Relationships</li>
+                </ul>
+                <p>Triggers and security</p>
+                <ul>
+                    <li>Before Delete Triggers: Automatically remove related records from junction tables when a politician, party, position, or event is deleted.
+                    </li>
+                    <li>
+                        Password Hashing: User passwords are securely stored using salted hashes.
+                    </li>
+                    <li>
+                        SQL Injection Prevention: Parameterized queries are used to prevent SQL injection attacks.
+                    </li>
+                    <li>
+                        Access Control: Two user roles are supported:
+
+                        Administrators: Full CRUD (Create, Read, Update, Delete) access to all tables.
+
+                        Users: Read-only access to data necessary for gameplay.
+                    </li>
+                </ul>
+                <a href="https://github.com/kajjtek">Repository here (not available now)</a>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+    </body>
+</html>

@@ -1,0 +1,302 @@
+
+$bg-color: #fbf9f2;
+$text-color: #231f20;
+$font-family: 'Roboto Mono', monospace;
+$default-font-size: 18px;
+$default-font-weight: 400;
+$code-bg: #dedbd1;
+$border-color: #e0dcd1;
+
+
+@function theme-color($color, $amount) {
+    @if $amount > 0 {
+      @return lighten($color, $amount);
+    } @else {
+      @return darken($color, abs($amount));
+    }
+  }
+
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+@mixin grid-container($columns, $rows: 100%) {
+  display: grid;
+  grid-template-columns: $columns;
+  grid-template-rows: $rows;
+}
+
+
+%underline-effect {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1.3px;
+  background-color: black;
+}
+
+* {
+  background-color: $bg-color;
+  font-family: $font-family;
+  letter-spacing: 0;
+  font-size: $default-font-size;
+  font-weight: $default-font-weight;
+  overflow-x: auto;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-y: scroll;
+  min-height: 100vh;
+}
+
+.kaczor {
+  max-width: 100%;
+  height: fit-content;
+  object-fit: contain;
+}
+
+
+.left {
+  @include flex-center;
+  height: 100vh;
+  flex-direction: column;
+
+  a {
+    text-align: center;
+  }
+  
+  figure {
+    max-width: 80%;
+  }
+}
+
+.project_container {
+  @include grid-container(30% 35% 35%);
+  min-height: 100vh;
+}
+
+.container {
+  @include grid-container(30% 70%);
+  min-height: 100vh;
+}
+
+figure {
+  @include flex-center;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+.mlody_kajtek {
+  max-width: 80%;
+  overflow-y: hidden;
+  height: auto;
+  object-fit: contain;
+}
+
+html {
+  color: $text-color;
+}
+
+table {
+  border-collapse: separate;
+  display: table;
+  box-sizing: border-box;
+  unicode-bidi: isolate;
+  border-spacing: 15px 10px;
+  height: auto;
+//   padding-left: 0;
+//   margin-left: -15px;
+}
+
+tr, td {
+  vertical-align: top;
+  white-space: nowrap;
+  padding-right: 20px;
+  padding-bottom: 10px;
+}
+
+td {
+  position: relative;
+  display: table-cell;
+  padding-bottom: 10px;
+  white-space: normal;
+  vertical-align: top;
+  height: auto;
+}
+
+.td_id {
+  width: 20%;
+  &::after {
+    @extend %underline-effect;
+  }
+}
+
+.td_name {
+  width: 80%;
+  &::after {
+    @extend %underline-effect;
+  }
+}
+
+.bio_text {
+  line-height: 2;
+  margin: 0;
+  max-width: 100%;
+  height: auto;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  display: block;
+
+  a {
+    display: inline;
+    word-break: break-word;
+  }
+}
+
+h2 {
+  color: $text-color;
+  font-weight: bolder;
+  font-size: 24px;
+  text-align: left;
+}
+
+a, p {
+  color: $text-color;
+  font-weight: lighter;
+  text-align: left;
+  overflow: visible;
+  margin-bottom: 2px;
+  padding-bottom: 2px;
+}
+
+h1 {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+figcaption {
+  font-size: 14px;
+}
+
+.code_block {
+  background-color: $code-bg;
+  padding: 0;
+  border-radius: 6px;
+  font-family: $font-family;
+  font-size: 16px;
+  overflow-x: scroll;
+  margin: 0 0;
+  border: 1px solid $border-color;
+  tab-size: 4;
+  max-width: 100%;
+  width: 100%;
+  white-space: nowrap;
+
+  code {
+    display: block;
+    white-space: pre-wrap;
+    color: $text-color;
+  }
+}
+
+.middle_project {
+  @include flex-center;
+  justify-content: baseline;
+  min-height: 100vh;
+  flex-direction: column;
+
+  figure {
+    height: 70vh;
+    width: 100%;
+    
+    img {
+      height: 100%;
+      width: auto;
+    }
+  }
+
+  h2 {
+    margin-right: auto;
+    font-size: 26px;
+    font-weight: bold;
+  }
+
+  a {
+    word-spacing: 30px;
+    text-align: right;
+    line-height: 2;
+  }
+
+  pre {
+    code {
+      overflow-x: auto;
+    }
+  }
+  
+  .normal_links_history {
+    text-underline-offset: 8px;
+    word-spacing: normal;
+  }
+}
+
+.right_project {
+  display: block;
+  min-height: 100vh;
+
+  h2 {
+    margin-left: 10px;
+  }
+
+  p {
+    margin-left: 10px;
+    line-height: 2;
+  }
+
+  ul {
+    line-height: 2;
+    list-style-type: disc;
+  }
+}
+
+.ai {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 480px) {
+  .container,
+  .project_container {
+    @include flex-center;
+    flex-direction: column;
+    grid-template-columns: 1fr;
+  }
+
+  .right {
+    margin-left: 20px;
+    max-width: 100%;
+  }
+
+  .middle_project {
+    overflow-x: hidden;
+
+    h2 {
+      margin: auto;
+    }
+  }
+
+  .language-java {
+    all: unset;
+    margin-left: 400px;
+    color: inherit;
+  }
+}

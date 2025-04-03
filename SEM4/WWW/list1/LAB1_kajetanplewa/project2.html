@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Kajetan Plewa Portfolio</title>
+        <meta charset="UTF-8">
+        <meta name="description" content="Personal website containing my projects">
+        <meta name="author" content="Kajetan Plewa">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="theme-color" content="#fbf9f2">
+        <link rel="stylesheet" href="styles.css" />
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet" />
+    </head>
+    <body class="project_container">
+        <div class="left">
+            
+            <figure class="mlody_kajtek">
+                <figcaption>young me year 2009</figcaption>
+                <a href="./main.html"><img src="/Users/kajtek/Downloads/DSC05006.jpg" class="mlody_kajtek" alt="mlody kajtek"></a>
+            </figure>
+            <h1>KAJETAN PLEWA</h1>
+            <p class="bio_text">
+                check my socials
+                <br>
+                facebook:<a class="normal_links" href="https://www.facebook.com/kajetan.plewa/">fb.com/kajetan.plewa</a><br>
+                github:<a class="normal_links" href="https://github.com/kajjtek">github.com/kajjtek</a><br>
+                email:kaj.plw24@gmail.com
+            </p>
+
+        </div>
+        <div class="middle_project">
+            <section><a class="normal_links" href="project1.html">left</a> <a class="normal_links" href="./project.html">right</a><br></section> 
+            <h2>HOI4 MOD: Petru MODE</h2>
+            <figure>
+                <img src="./IMG_2920.jpg" alt="screen from the mod">
+                <figcaption>Screen i made when i was 13</figcaption><br>
+                <br>
+            </figure>
+            <pre class="code_block">
+                <code>
+focus_tree = {
+  id = "petru_poland"
+  country = {
+    tag = POL
+  }
+  focus = {
+    id = "petru_modernization"
+    icon = GFX_focus_petru_reform
+    prerequisite = { focus = "polish_revival" }
+    x = 10
+    y = 2
+    cost = 10
+    completion_reward = {
+      add_ideas = petrus_vision
+    }
+  }
+}
+                </code>
+            </pre>
+        </div>
+        <div class="right_project">
+            <br><br>
+            <h2>About the project</h2>
+            <p>This is rather a fun fact - this was one of the first "project" I have ever made. Unfortunately I lost the source code to that mod. Here is a quick summary of it:</p>
+            <p>This mod explores an alternate history where Polish politician Ryszard Petru (leader of the modern-era party Nowoczesna) travels back in time to 1936, becomes President of Poland, and steers the nation toward a progressive, reformist path. The mod introduces a unique narrative blending humor, political satire, and strategic gameplay, allowing players to reshape interwar Poland into a liberal democracy or a technocratic powerhouse.<br>Key Features: </p>
+                <ul>
+                    <li>Focus tree: "Petru’s Modernization": Focuses on economic liberalization, educational reforms, and technological advancements.
+                        <br> Satirical tree: "Time Traveler’s Gambit": Unlocks futuristic technologies (e.g., early computers) and absurd events (e.g., Petru debating historical figures).
+                        "Democracy First": Strengthens democratic institutions, aligns with Western allies, and avoids authoritarianism.</li>
+                    <li>Decisions & Events::<br>Economic Reforms: Implement free-market policies, privatize state industries, and attract foreign investment.<br>
+                        Political Events: Satirical events where Petru clashes with historical figures like Piłsudski or negotiates with Hitler using modern economic jargon.</li>
+                    <li>Unique Mechanics:<br>"Time Paradox": A stability penalty if Petru’s actions disrupt historical timelines too severely.</li>
+                    <li>National Spirits:<br>"Petru's Vision": Grants research bonuses and consumer goods factory efficiency.</li>
+                </ul>
+                <p>Hearts of Iron IV mods are primarily scripted in Paradox’s proprietary language. On the right an examplary code is shown (it aint the original)
+                </p>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+    </body>
+</html>

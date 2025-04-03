@@ -1,0 +1,257 @@
+                                                                                
+kajtek@192 Exercise1 % g++ -o lifo lifo.cpp                        
+kajtek@192 Exercise1 % g++ -o fifo fifo.cpp                                    
+kajtek@192 Exercise1 % ./lifo
+Input: 0
+Input: 1
+Input: 2
+Input: 3
+Input: 4
+Input: 5
+Input: 6
+Input: 7
+Input: 8
+Input: 9
+Input: 10
+Input: 11
+Input: 12
+Input: 13
+Input: 14
+Input: 15
+Input: 16
+Input: 17
+Input: 18
+Input: 19
+Input: 20
+Input: 21
+Input: 22
+Input: 23
+Input: 24
+Input: 25
+Input: 26
+Input: 27
+Input: 28
+Input: 29
+Input: 30
+Input: 31
+Input: 32
+Input: 33
+Input: 34
+Input: 35
+Input: 36
+Input: 37
+Input: 38
+Input: 39
+Input: 40
+Input: 41
+Input: 42
+Input: 43
+Input: 44
+Input: 45
+Input: 46
+Input: 47
+Input: 48
+Input: 49
+Got: 49
+Got: 48
+Got: 47
+Got: 46
+Got: 45
+Got: 44
+Got: 43
+Got: 42
+Got: 41
+Got: 40
+Got: 39
+Got: 38
+Got: 37
+Got: 36
+Got: 35
+Got: 34
+Got: 33
+Got: 32
+Got: 31
+Got: 30
+Got: 29
+Got: 28
+Got: 27
+Got: 26
+Got: 25
+Got: 24
+Got: 23
+Got: 22
+Got: 21
+Got: 20
+Got: 19
+Got: 18
+Got: 17
+Got: 16
+Got: 15
+Got: 14
+Got: 13
+Got: 12
+Got: 11
+Got: 10
+Got: 9
+Got: 8
+Got: 7
+Got: 6
+Got: 5
+Got: 4
+Got: 3
+Got: 2
+Got: 1
+Got: 0
+kajtek@192 Exercise1 % ./fifo
+Input: 0
+Input: 1
+Input: 2
+Input: 3
+Input: 4
+Input: 5
+Input: 6
+Input: 7
+Input: 8
+Input: 9
+Input: 10
+Input: 11
+Input: 12
+Input: 13
+Input: 14
+Input: 15
+Input: 16
+Input: 17
+Input: 18
+Input: 19
+Input: 20
+Input: 21
+Input: 22
+Input: 23
+Input: 24
+Input: 25
+Input: 26
+Input: 27
+Input: 28
+Input: 29
+Input: 30
+Input: 31
+Input: 32
+Input: 33
+Input: 34
+Input: 35
+Input: 36
+Input: 37
+Input: 38
+Input: 39
+Input: 40
+Input: 41
+Input: 42
+Input: 43
+Input: 44
+Input: 45
+Input: 46
+Input: 47
+Input: 48
+Input: 49
+Got: 0
+Got: 1
+Got: 2
+Got: 3
+Got: 4
+Got: 5
+Got: 6
+Got: 7
+Got: 8
+Got: 9
+Got: 10
+Got: 11
+Got: 12
+Got: 13
+Got: 14
+Got: 15
+Got: 16
+Got: 17
+Got: 18
+Got: 19
+Got: 20
+Got: 21
+Got: 22
+Got: 23
+Got: 24
+Got: 25
+Got: 26
+Got: 27
+Got: 28
+Got: 29
+Got: 30
+Got: 31
+Got: 32
+Got: 33
+Got: 34
+Got: 35
+Got: 36
+Got: 37
+Got: 38
+Got: 39
+Got: 40
+Got: 41
+Got: 42
+Got: 43
+Got: 44
+Got: 45
+Got: 46
+Got: 47
+Got: 48
+Got: 49
+kajtek@192 Exercise2 % g++ -o test linkedList.cpp      
+kajtek@192 Exercise2 % ./test
+list 1: 10 11 12 13 14 15 16 17 18 19 20 
+list 2: 20 21 22 23 24 25 26 27 28 29 30 
+value: 10next value:11
+value: 11next value:12
+value: 12next value:13
+value: 13next value:14
+value: 14next value:15
+value: 15next value:16
+value: 16next value:17
+value: 17next value:18
+value: 18next value:19
+value: 19next value:20
+value: 20next value:20
+value: 20next value:21
+value: 21next value:22
+value: 22next value:23
+value: 23next value:24
+value: 24next value:25
+value: 25next value:26
+value: 26next value:27
+value: 27next value:28
+value: 28next value:29
+value: 29next value:30
+value: 30next value:10
+4943
+9459
+kajtek@192 Exercise3 % g++ -o test doubleLinkedList.cpp
+kajtek@192 Exercise3 % ./test
+value: 0next value:1previous value: 9
+value: 1next value:2previous value: 0
+value: 2next value:3previous value: 1
+value: 3next value:4previous value: 2
+value: 4next value:5previous value: 3
+value: 5next value:6previous value: 4
+value: 6next value:7previous value: 5
+value: 7next value:8previous value: 6
+value: 8next value:9previous value: 7
+value: 9next value:0previous value: 8
+value: 0next value:1previous value: 9
+value: 1next value:2previous value: 0
+value: 2next value:3previous value: 1
+value: 3next value:4previous value: 2
+value: 4next value:5previous value: 3
+value: 5next value:6previous value: 4
+value: 6next value:7previous value: 5
+value: 7next value:8previous value: 6
+value: 8next value:9previous value: 7
+value: 9next value:0previous value: 8
+4877
+9498

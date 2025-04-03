@@ -1,0 +1,24 @@
+                                                                                
+kajtek@192 Exercise1 % tmux capture-pane -p -S'-' -E'-' -J > my-log
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
