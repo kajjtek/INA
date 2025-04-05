@@ -21,12 +21,15 @@ int main(){
     else{
         std::cerr<<"error"<<std::endl;
     }
-    std::cout<<size;
-    for(int i=0; i<size;i++){
-        std::cout<<array[i];
-        std::cerr<<array[i]<<"XXX";
-    }
+    sendArray(array,size);
 
     delete[] array;
     return 0;
+}
+
+void sendArray(int* arr, int size){
+    std::cout.write(reinterpret_cast<const char*>(&size),sizeof(size));
+    for(int i=0; i<size;i++){
+        std::cout.write(reinterpret_cast<const char*>(&arr[i]),sizeof(arr[i]));
+    }
 }

@@ -67,13 +67,10 @@ class hybridSort{
 };
 
 int* load_array(int* size){
-    std::cout<<"SiZE is: "<<*size;
-    std::cin>>*size;
-    std::cout<<"SiZE is: "<<*size;
+    std::cout.write(reinterpret_cast<char*>(size),sizeof(size));
     int* array = new int[*size];
     for(int i=0; i<*size;i++){
-        std::cin>>array[i];
-        std::cout<<array[i]<<" ";
+        std::cout.write(reinterpret_cast<char*>(&array[i]),sizeof(array[i]));
     }
     return array;
 }
