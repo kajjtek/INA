@@ -12,13 +12,13 @@ class hybridSort{
         swps = new int(0);
     }
     void hybridsort(int firstindex, int lastindex, int k, T* array){
-        if(lastindex-firstindex+1>k){
+        if(lastindex-firstindex>k){
             int pivotindex = partition(firstindex, lastindex, array);
 
-            hybridsort(firstindex, pivotindex-1, k, array);
+            hybridsort(firstindex, pivotindex, k, array);
             hybridsort(pivotindex+1, lastindex, k, array);
-        }else{
-            insertionsort(lastindex-firstindex+1, array);
+        }else if(lastindex-firstindex>0){
+            insertionsort(firstindex, lastindex, array);
         }
     }
     private:
@@ -32,18 +32,22 @@ class hybridSort{
         int i = firstindex - 1; 
         int j = lastindex+1;
         while(i<=j){
-            while(array[i]<=pivot) {i++;};
-            while(array[j]>=pivot) {j--;};
-            if(i>j) continue;
+            do
+            {
+                i++;
+            } while (array[i]<pivot);
+            do
+            {
+                j--;
+            } while (array[j]>pivot);
+            if(i>=j) return j;
             swap(&array[i],&array[j]);
-            i++;    
-            j++;
         }
         return getIndex(pivot,array, firstindex, lastindex);
     }
-    void insertionsort(int size, T* array){
-        int i = 1;
-        while(i<size){
+    void insertionsort(int left, int right, T* array){
+        int i = left+1;
+        while(i<=right){
             T x = array[i]; 
             int j=i;
             while(j>0 && array[j-1]>x){
@@ -63,10 +67,13 @@ class hybridSort{
 };
 
 int* load_array(int* size){
+    std::cout<<"SiZE is: "<<*size;
     std::cin>>*size;
+    std::cout<<"SiZE is: "<<*size;
     int* array = new int[*size];
     for(int i=0; i<*size;i++){
         std::cin>>array[i];
+        std::cout<<array[i]<<" ";
     }
     return array;
 }

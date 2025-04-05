@@ -5,23 +5,30 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug with LLDB",
+            "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/hybridsort", // Path to your compiled binary
-            "args": [], // Add program arguments if needed
+            "program": "${workspaceFolder}/a.exe",
+            "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}", // Set working directory
+            "cwd": "${fileDirname}",
             "environment": [],
             "externalConsole": true,
-            "MIMode": "lldb", // Specify LLDB
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:/msys64/ucrt64/bin/gdb.exe",
             "setupCommands": [
-              {
-                "description": "Enable pretty-printing for STL containers",
-                "text": "-enable-pretty-printing",
-                "ignoreFailures": true
-              }
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
             ]
-          }
+        }
+
     ]
 }

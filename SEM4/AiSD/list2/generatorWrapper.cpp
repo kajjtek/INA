@@ -4,10 +4,10 @@
 
 int main(){
     generator<int> gen;
-    int choice = 1;
-    // std::cin>>choice;
-    int size = 15;
-    // std::cin>>size;
+    int choice;
+    std::cin>>choice;
+    int size;
+    std::cin>>size;
     int* array = nullptr;
     if(choice==1){
         array = gen.generateRandomArray(size);
@@ -24,6 +24,7 @@ int main(){
     std::cout<<size;
     for(int i=0; i<size;i++){
         std::cout<<array[i];
+        std::cerr<<array[i]<<"XXX";
     }
 
     delete[] array;

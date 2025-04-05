@@ -1,25 +1,32 @@
 template <class T>
 class QuickSort {
     public:
-    void sort(T* array, int left, int right){
-        int pivotindex = partition(right-left+1, array);
+    void hybridsort(int firstindex, int lastindex, int k, T* array){
+        if(firstindex<lastindex){
+            int pivotindex = partition(firstindex, lastindex, array);
 
-        sort(array, left, pivotindex-1);
-        sort(array, pivotindex+1, right);
+            hybridsort(firstindex, pivotindex, k, array);
+            hybridsort(pivotindex+1, lastindex, k, array);
+        }
     }
     private:
-    int partition(int size, T* array){
-        T pivot = array[0]
-        int i = 0; 
-        int j = size-1;
+    int partition(int firstindex, int lastindex, T* array){
+        T pivot = array[firstindex];
+        int i = firstindex - 1; 
+        int j = lastindex+1;
         while(i<=j){
-            while(array[i]<=pivot) {i++};
-            while(array[j]>=pivot) {j++};
-            if(i>j) continue;
-            swap(&array[i],&array[j])
-            i++;
-            j++;
+            do
+            {
+                i++;
+            } while (array[i]<pivot);
+            do
+            {
+                j--;
+            } while (array[j]>pivot);
+            if(i>=j) return j;
+            swap(&array[i],&array[j]);
         }
+        return getIndex(pivot,array, firstindex, lastindex);
     }
     void swap(T* left, T* right){
         T temp = *left;
