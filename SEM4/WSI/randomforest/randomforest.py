@@ -43,7 +43,7 @@ x_test = x_test.reshape(-1, 784)
 # training_data = list(zip(x_train, y_train))
 # test_data = list(zip(x_test, y_test))
 
-model = RandomForestClassifier(n_estimators=100, criterion="entropy", random_state=42)
+model = RandomForestClassifier(n_estimators=100, criterion="entropy", random_seed=42)
 model.fit(X=x_train,y=y_train)
 
 y_test2 = [0,0,0,1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8,9,9,9]
