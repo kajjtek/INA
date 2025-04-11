@@ -1,0 +1,462 @@
+                                                                                
+kajtek@Air-Kajetan testing % ls
+Tester                  dualtest.cpp            koptimizer
+Tester.cpp              ex1_test                koptimizer.cpp
+Tester2                 ex1_test.cpp            my-log
+Tester2.cpp             ex3_test                mySortTest
+Tester3                 ex3_test.cpp            mysortTest.cpp
+Tester3.cpp             hybridtest.cpp
+dualtest                insertiontest.cpp
+kajtek@Air-Kajetan testing % ./ex3_test
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 22
+Number of swaps: 12
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 30
+Number of swaps: 15
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 35
+Number of swaps: 19
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 45
+Number of swaps: 25
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 44
+Number of swaps: 27
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 45
+Number of swaps: 26
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 52
+Number of swaps: 31
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 62
+Number of swaps: 35
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 60
+Number of swaps: 33
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 75
+Number of swaps: 43
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 83
+Number of swaps: 51
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 88
+Number of swaps: 51
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 97
+Number of swaps: 55
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 98
+Number of swaps: 65
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 101
+Number of swaps: 63
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 108
+Number of swaps: 64
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 121
+Number of swaps: 72
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 124
+Number of swaps: 75
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 122
+Number of swaps: 78
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 130
+Number of swaps: 82
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 139
+Number of swaps: 90
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 157
+Number of swaps: 94
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 162
+Number of swaps: 96
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 158
+Number of swaps: 96
+---------------------------
+My SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 164
+Number of swaps: 100
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1
+Number of swaps: 0
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 32
+Number of swaps: 12
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 35
+Number of swaps: 13
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 40
+Number of swaps: 15
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 45
+Number of swaps: 17
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 52
+Number of swaps: 20
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 57
+Number of swaps: 22
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 64
+Number of swaps: 25
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 71
+Number of swaps: 28
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 80
+Number of swaps: 32
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 83
+Number of swaps: 33
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 88
+Number of swaps: 35
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 93
+Number of swaps: 37
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 100
+Number of swaps: 40
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 105
+Number of swaps: 42
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 112
+Number of swaps: 45
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 119
+Number of swaps: 48
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 128
+Number of swaps: 52
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 133
+Number of swaps: 54
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 140
+Number of swaps: 57
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 147
+Number of swaps: 60
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 156
+Number of swaps: 64
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 163
+Number of swaps: 67
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 172
+Number of swaps: 71
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 181
+Number of swaps: 75
+---------------------------
+MY SORT
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 192
+Number of swaps: 80
+---------------------------
+kajtek@Air-Kajetan testing % tmux capture-pane -p -S'-' -E'-' -J > my-log2
+
