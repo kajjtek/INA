@@ -2,6 +2,7 @@
 #include <deque>
 #include <stdio.h>
 #include <iostream>
+#include "../arrayPrinter.h"
 
 template <class T>
 class mySort{
@@ -97,6 +98,9 @@ class mySort{
             (*this->swps)++;
             temp.push_back(right[j++]);
         }
+
+        arrayPrinter<int> printer;
+        printer.print(left.size()+right.size(),temp.data());
 
         return temp;
     }

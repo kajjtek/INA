@@ -1,5 +1,4 @@
 #include "../mySort.h"
-#include "../../arrayPrinter.h"
 
 int* copy_array(int size, int* array){
     int* temp = new int[size];

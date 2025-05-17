@@ -259,4 +259,75 @@ figcaption {
   }
 }
 
+
+/* 1) Pin the header so it never moves the layout */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;               /* adjust to your header height */
+  background: #fbf9f2;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+}
+
+/* 2) Push the rest of the page down so it’s not hidden under the header */
+.container {
+  padding-top: 60px;         /* must match .site-header height */
+}
+
+/* 3) Style & position the hamburger in the top-right */
+.hamburger {
+  position: absolute;
+  top: 15px;                 /* adjust for vertical centering */
+  right: 20px;               /* adjust for horizontal padding */
+  display: flex;             
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
+  margin-right: 30px;
+}
+
+.hamburger span {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background-color: #231f20;
+}
+
+/* 4) Make the nav overlay (hidden by default) */
+.nav.js-only {
+  display: none;
+  position: fixed;
+  top: 60px;                 /* just below the header */
+  right: 20px;               /* line up under the hamburger */
+  width: 200px;              /* or whatever width you like */
+  flex-direction: column;
+  background: #fbf9f2;
+  border: 1px solid #ccc;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+/* 5) Show it when toggled */
+.nav.js-only.active {
+  display: flex;
+}
+
+.nav.js-only a {
+  margin: 0.5em 0;
+  text-decoration: none;
+  color: #231f20;
+}
+
 /*# sourceMappingURL=style.css.map */

@@ -1,6 +1,7 @@
 #include "../../standardHandler.h"
 #include "../RandomSelect.h"
 #include <iostream>
+#include "../../../arrayPrinter.h"
 
 int main(int argc, char* argv[]){
     if(argc<2){
@@ -22,5 +23,8 @@ int main(int argc, char* argv[]){
     printer.print(size,array);
     std::cout<<"STATS:" <<std::endl;
     printer.printStats(selector.cmps, selector.swps);
+    std::cout<<"SORTED:" <<std::endl;
+    std::sort(array, array+size);
+    printer.print(size, array);
     delete[] array;
 }

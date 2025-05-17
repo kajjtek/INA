@@ -1,0 +1,128 @@
+                                                                                                                                                  
+kajtek@MacBook-Air-Kajetan AiSD % g++ -o ./bin/list3/binsearch_logtest ./list3/binsearch/testing/log_binsearchtest.cpp
+In file included from ./list3/binsearch/testing/log_binsearchtest.cpp:1:
+./list3/binsearch/testing/../binSearch.h:25:14: warning: default member initializer for non-static data member is a C++11 extension [-Wc++11-extensions]
+   25 |     int cmps = 0;
+      |              ^
+1 warning generated.
+kajtek@MacBook-Air-Kajetan AiSD % ./bin/list3/binsearch_logtest                                                       
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 17
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 11
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 3
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 17
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 0
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 19
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 12
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 15
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 7
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 20
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 0
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 19
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 20
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 21
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 3
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 22
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 17
+Number of swaps: 0
+---------------------------

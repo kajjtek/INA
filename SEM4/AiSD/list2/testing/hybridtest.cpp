@@ -1,5 +1,4 @@
-#include "hybridsort.h"
-#include "../../arrayPrinter.h"
+#include "../hybridsort.h"
 
 int* copy_array(int size, int* array){
     int* temp = new int[size];

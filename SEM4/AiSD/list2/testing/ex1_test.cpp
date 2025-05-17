@@ -2,7 +2,6 @@
 #include "../../generator.h"
 #include "../hybridsort.h"
 #include "../dualpivot.h"
-#include "../../arrayPrinter.h"
 
 int main(){
     generator<int> gen;

@@ -1,5 +1,6 @@
 #include "../RandomSelect.h"
 #include "../../../generator.h"
+#include "../../../arrayPrinter.h"
 
 int getRandom(int left, int right){
     std::random_device rd;
@@ -12,30 +13,69 @@ int main(){
     generator<int> gen;
     arrayPrinter<int> printer;
     for(int n=16; n<=30; n++){
+        int* array = gen.generateRandomArray(n);
+        int* temp = gen.copy_array(n ,array);
+        int size = n;
+        RandomSelect<int> select;
+        int k = getRandom(1,n);
+        int kvalue = select.select(array, 0, n-1, k);
         std::cout<<"-----------------------------"<<std::endl;
-        int* iarray = gen.generateRandomArray(n);
-        RandomSelect<int> selector;
-        selector.select(iarray, 0, n-1, getRandom(1,n));
-        std::cout<<"RANDOM SElECT - random array"<<std::endl;
-        printer.printStats(selector.cmps, selector.swps);
-        delete[] iarray;
+        std::cout<<"RANDOM SELECT - RANDOM ARRAY" << std::endl;
+        std::cout << "DESIRED INDEX: " <<k <<std::endl;
+        std::cout << "DESIRED VALUE: " << kvalue <<std::endl;
+        std::cout<<"BEFORE:" <<std::endl;
+        printer.print(size, temp);
+        std::cout<<"AFTER:" <<std::endl;
+        printer.print(size,array);
+        std::cout<<"STATS:" <<std::endl;
+        printer.printStats(select.cmps, select.swps);
+        std::cout<<"SORTED:" <<std::endl;
+        std::sort(array, array+size);
+        printer.print(size, array);
+        delete[] array;
     }
     for(int n=16; n<=30; n++){
+        int* array = gen.generateAscendingArray(n);
+        int* temp = gen.copy_array(n ,array);
+        int size = n;
+        RandomSelect<int> select;
+        int k = getRandom(1,n);
+        int kvalue = select.select(array, 0, n-1, k);
         std::cout<<"-----------------------------"<<std::endl;
-        int* iarray = gen.generateAscendingArray(n);
-        RandomSelect<int> selector;
-        selector.select(iarray, 0, n-1, getRandom(1,n));
-        std::cout<<"RANDOM SElECt - ascending array"<<std::endl;
-        printer.printStats(selector.cmps, selector.swps);
-        delete[] iarray;
+        std::cout<<"RANDOM SELECT - ASCENDING ARRAY" << std::endl;
+        std::cout << "DESIRED INDEX: " <<k <<std::endl;
+        std::cout << "DESIRED VALUE: " << kvalue <<std::endl;
+        std::cout<<"BEFORE:" <<std::endl;
+        printer.print(size, temp);
+        std::cout<<"AFTER:" <<std::endl;
+        printer.print(size,array);
+        std::cout<<"STATS:" <<std::endl;
+        printer.printStats(select.cmps, select.swps);
+        std::cout<<"SORTED:" <<std::endl;
+        std::sort(array, array+size);
+        printer.print(size, array);
+        delete[] array;
     }
     for(int n=16; n<=30; n++){
+        int* array = gen.generateDescendingArray(n);
+        int* temp = gen.copy_array(n ,array);
+        int size = n;
+        RandomSelect<int> select;
+        int k = getRandom(1,n);
+        int kvalue = select.select(array, 0, n-1, k);
         std::cout<<"-----------------------------"<<std::endl;
-        int* iarray = gen.generateDescendingArray(n);
-        RandomSelect<int> selector;
-        selector.select(iarray, 0, n-1, getRandom(1,n));
-        std::cout<<"RANDOM SElECt - descending arrray"<<std::endl;
-        printer.printStats(selector.cmps, selector.swps);
-        delete[] iarray;
+        std::cout<<"RANDOM SELECT - DESCENDING ARRAY" << std::endl;
+        std::cout << "DESIRED INDEX: " <<k <<std::endl;
+        std::cout << "DESIRED VALUE: " << kvalue <<std::endl;
+        std::cout<<"BEFORE:" <<std::endl;
+        printer.print(size, temp);
+        std::cout<<"AFTER:" <<std::endl;
+        printer.print(size,array);
+        std::cout<<"STATS:" <<std::endl;
+        printer.printStats(select.cmps, select.swps);
+        std::cout<<"SORTED:" <<std::endl;
+        std::sort(array, array+size);
+        printer.print(size, array);
+        delete[] array;
     }
 }

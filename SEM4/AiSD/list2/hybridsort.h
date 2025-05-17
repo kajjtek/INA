@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <iostream>
-#include "arrayPrinter.h"
+#include "../arrayPrinter.h"
 
 
 template <class T>

@@ -1,5 +1,4 @@
 #include "../mySort.h"
-#include "../../arrayPrinter.h"
 #include "../../generator.h"
 
 int main(){

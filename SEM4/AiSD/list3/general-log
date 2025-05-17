@@ -1,0 +1,3543 @@
+                                                                                                                                                  
+FOR IMPROVED READING EXPERIENCE THE LOG WAS DIVIDED INTO LOGS FOR EACH EXERCISE
+
+kajtek@Air-Kajetan AiSD % svn export https://repo.cs.pwr.edu.pl/282212-dir/mw1/list3/
+kajtek@Air-Kajetan AiSD % g++ -o ./bin/list3/log-select-test ./list3/select/testing/mylogtest_select.cpp
+In file included from ./list3/select/testing/mylogtest_select.cpp:1:
+./list3/select/testing/../Select.h:8:14: warning: default member initializer for non-static data member is a C++11 extension [-Wc++11-extensions]
+    8 |     int cmps = 0;
+      |              ^
+./list3/select/testing/../Select.h:9:14: warning: default member initializer for non-static data member is a C++11 extension [-Wc++11-extensions]
+    9 |     int swps = 0;
+      |              ^
+2 warnings generated.
+kajtek@Air-Kajetan AiSD % ./bin/list3/log-select-test                                                   
+-----------------------------
+SELECT - RANDOM ARRAY
+DESIRED INDEX: 6
+DESIRED VALUE: 9
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[14,30,30,28,24,13,9,0,4,19,29,31,9,8,4,22]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,4,4,8,9,9,24,22,13,19,28,30,30,29,31,14]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 115
+Number of swaps: 7
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,4,4,8,9,9,13,14,19,22,24,28,29,30,30,31]
+---------------------------
+-----------------------------
+SELECT - RANDOM ARRAY
+DESIRED INDEX: 5
+DESIRED VALUE: 11
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[30,6,31,20,14,0,21,24,2,32,11,12,15,20,22,7,18]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,2,6,7,11,12,14,15,18,32,31,20,30,20,22,21,24]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 213
+Number of swaps: 21
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,2,6,7,11,12,14,15,18,20,20,21,22,24,30,31,32]
+---------------------------
+-----------------------------
+SELECT - RANDOM ARRAY
+DESIRED INDEX: 11
+DESIRED VALUE: 17
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[25,25,0,4,2,30,20,6,11,19,26,17,0,10,2,13,32,2]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,2,4,6,0,2,2,10,11,13,17,30,32,20,25,26,19,25]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 213
+Number of swaps: 13
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,2,2,2,4,6,10,11,13,17,19,20,25,25,26,30,32]
+---------------------------
+-----------------------------
+SELECT - RANDOM ARRAY
+DESIRED INDEX: 14
+DESIRED VALUE: 20
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[14,15,3,26,36,19,35,4,34,15,26,20,1,15,18,13,14,15,5]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[3,14,15,4,15,1,15,5,13,14,15,18,19,20,26,36,26,34,35]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 169
+Number of swaps: 16
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,3,4,5,13,14,14,15,15,15,15,18,19,20,26,26,34,35,36]
+---------------------------
+-----------------------------
+SELECT - RANDOM ARRAY
+DESIRED INDEX: 6
+DESIRED VALUE: 10
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[22,38,35,7,10,20,37,7,19,16,30,25,37,23,33,1,10,33,35,6]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,7,6,7,10,10,16,19,20,37,23,25,30,33,37,38,22,35,33,35]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 198
+Number of swaps: 17
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,6,7,7,10,10,16,19,20,22,23,25,30,33,33,35,35,37,37,38]
+---------------------------
+-----------------------------
+SELECT - RANDOM ARRAY
+DESIRED INDEX: 15
+DESIRED VALUE: 31
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,31,0,41,14,6,38,29,17,23,17,1,12,37,27,6,31,16,39,17,33]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,14,6,1,12,17,6,16,17,17,23,27,29,31,31,41,33,38,39,37]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 209
+Number of swaps: 22
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,1,6,6,12,14,16,17,17,17,23,27,29,31,31,33,37,38,39,41]
+---------------------------
+-----------------------------
+SELECT - RANDOM ARRAY
+DESIRED INDEX: 3
+DESIRED VALUE: 6
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[43,36,34,43,3,0,6,7,31,36,36,26,14,24,37,34,42,40,24,27,13,43]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,3,6,7,14,13,24,24,26,36,43,34,43,36,37,36,27,34,40,42,43,31]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 192
+Number of swaps: 14
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,3,6,7,13,14,24,24,26,27,31,34,34,36,36,36,37,40,42,43,43,43]
+---------------------------
+-----------------------------
+SELECT - RANDOM ARRAY
+DESIRED INDEX: 22
+DESIRED VALUE: 43
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[24,8,40,2,34,11,25,11,9,43,33,26,45,37,26,43,29,21,15,29,20,16,6]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,8,9,11,11,15,6,16,25,26,21,24,20,26,29,33,29,34,37,40,43,43,45]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 344
+Number of swaps: 26
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,6,8,9,11,11,15,16,20,21,24,25,26,26,29,29,33,34,37,40,43,43,45]
+---------------------------
+-----------------------------
+SELECT - RANDOM ARRAY
+DESIRED INDEX: 3
+DESIRED VALUE: 10
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[46,15,22,11,46,42,13,39,9,17,10,37,22,12,40,32,42,31,40,27,16,23,2,27]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,9,10,11,12,13,15,22,16,17,22,46,46,37,40,27,31,32,40,42,39,42,23,27]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 245
+Number of swaps: 22
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,9,10,11,12,13,15,16,17,22,22,23,27,27,31,32,37,39,40,40,42,42,46,46]
+---------------------------
+-----------------------------
+SELECT - RANDOM ARRAY
+DESIRED INDEX: 9
+DESIRED VALUE: 18
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[31,47,15,41,17,42,23,4,20,44,25,8,25,13,5,1,28,33,38,45,18,43,46,13,47]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[4,5,1,8,13,13,15,17,18,20,23,31,41,25,25,47,28,33,38,45,42,44,43,46,47]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 253
+Number of swaps: 23
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,4,5,8,13,13,15,17,18,20,23,25,25,28,31,33,38,41,42,43,44,45,46,47,47]
+---------------------------
+-----------------------------
+SELECT - RANDOM ARRAY
+DESIRED INDEX: 14
+DESIRED VALUE: 24
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[14,25,8,13,9,1,41,46,45,49,18,18,34,16,27,35,24,42,24,32,12,22,12,7,51,49]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[8,9,13,14,1,16,18,7,12,12,18,22,24,24,27,32,25,34,35,42,45,49,51,46,49,41]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 296
+Number of swaps: 24
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,7,8,9,12,12,13,14,16,18,18,22,24,24,25,27,32,34,35,41,42,45,46,49,49,51]
+---------------------------
+-----------------------------
+SELECT - RANDOM ARRAY
+DESIRED INDEX: 26
+DESIRED VALUE: 47
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[45,11,6,33,40,25,27,11,44,42,50,46,31,22,6,43,3,8,33,34,30,5,29,47,31,14,11]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[6,11,11,25,27,6,22,3,8,5,29,14,11,30,33,34,31,33,31,40,43,44,42,45,46,47,50]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 371
+Number of swaps: 30
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[3,5,6,6,8,11,11,11,14,22,25,27,29,30,31,31,33,33,34,40,42,43,44,45,46,47,50]
+---------------------------
+-----------------------------
+SELECT - RANDOM ARRAY
+DESIRED INDEX: 15
+DESIRED VALUE: 23
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[23,2,12,40,43,12,25,13,51,54,1,5,14,15,7,55,35,9,32,18,2,40,46,36,35,9,54,4]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,12,12,13,1,5,7,14,15,9,18,2,4,9,23,54,43,32,35,55,54,35,36,40,46,40,25,51]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 153
+Number of swaps: 16
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,2,4,5,7,9,9,12,12,13,14,15,18,23,25,32,35,35,36,40,40,43,46,51,54,54,55]
+---------------------------
+-----------------------------
+SELECT - RANDOM ARRAY
+DESIRED INDEX: 23
+DESIRED VALUE: 37
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[35,16,18,26,8,5,47,23,10,26,33,42,2,4,34,37,53,13,38,37,11,17,45,29,33,48,35,4,9]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[8,16,18,26,5,10,23,26,2,4,13,11,17,4,9,29,33,33,34,35,35,37,37,38,42,47,48,45,53]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 405
+Number of swaps: 32
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,4,4,5,8,9,10,11,13,16,17,18,23,26,26,29,33,33,34,35,35,37,37,38,42,45,47,48,53]
+---------------------------
+-----------------------------
+SELECT - RANDOM ARRAY
+DESIRED INDEX: 17
+DESIRED VALUE: 29
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[22,27,29,38,26,57,27,58,45,27,35,49,0,12,16,18,29,48,32,33,26,49,44,59,0,27,20,50,3,23]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[22,26,27,27,0,12,16,18,0,26,3,20,23,27,27,29,29,32,33,48,44,49,57,58,59,50,35,38,49,45]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 283
+Number of swaps: 24
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,3,12,16,18,20,22,23,26,26,27,27,27,27,29,29,32,33,35,38,44,45,48,49,49,50,57,58,59]
+---------------------------
+-----------------------------
+SELECT - ASCENDING ARRAY
+DESIRED INDEX: 11
+DESIRED VALUE: 10
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 115
+Number of swaps: 13
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+---------------------------
+-----------------------------
+SELECT - ASCENDING ARRAY
+DESIRED INDEX: 3
+DESIRED VALUE: 2
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 115
+Number of swaps: 13
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+---------------------------
+-----------------------------
+SELECT - ASCENDING ARRAY
+DESIRED INDEX: 12
+DESIRED VALUE: 11
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 180
+Number of swaps: 20
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
+---------------------------
+-----------------------------
+SELECT - ASCENDING ARRAY
+DESIRED INDEX: 5
+DESIRED VALUE: 4
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 159
+Number of swaps: 20
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
+---------------------------
+-----------------------------
+SELECT - ASCENDING ARRAY
+DESIRED INDEX: 19
+DESIRED VALUE: 18
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 235
+Number of swaps: 24
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+---------------------------
+-----------------------------
+SELECT - ASCENDING ARRAY
+DESIRED INDEX: 17
+DESIRED VALUE: 16
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 233
+Number of swaps: 21
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+---------------------------
+-----------------------------
+SELECT - ASCENDING ARRAY
+DESIRED INDEX: 8
+DESIRED VALUE: 7
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 100
+Number of swaps: 9
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
+---------------------------
+-----------------------------
+SELECT - ASCENDING ARRAY
+DESIRED INDEX: 10
+DESIRED VALUE: 9
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 182
+Number of swaps: 16
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
+---------------------------
+-----------------------------
+SELECT - ASCENDING ARRAY
+DESIRED INDEX: 4
+DESIRED VALUE: 3
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 180
+Number of swaps: 20
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+---------------------------
+-----------------------------
+SELECT - ASCENDING ARRAY
+DESIRED INDEX: 2
+DESIRED VALUE: 1
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 159
+Number of swaps: 16
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+---------------------------
+-----------------------------
+SELECT - ASCENDING ARRAY
+DESIRED INDEX: 22
+DESIRED VALUE: 21
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 262
+Number of swaps: 26
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+---------------------------
+-----------------------------
+SELECT - ASCENDING ARRAY
+DESIRED INDEX: 11
+DESIRED VALUE: 10
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 271
+Number of swaps: 29
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]
+---------------------------
+-----------------------------
+SELECT - ASCENDING ARRAY
+DESIRED INDEX: 4
+DESIRED VALUE: 3
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 243
+Number of swaps: 25
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]
+---------------------------
+-----------------------------
+SELECT - ASCENDING ARRAY
+DESIRED INDEX: 2
+DESIRED VALUE: 1
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 203
+Number of swaps: 21
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]
+---------------------------
+-----------------------------
+SELECT - ASCENDING ARRAY
+DESIRED INDEX: 15
+DESIRED VALUE: 14
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 270
+Number of swaps: 30
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]
+---------------------------
+-----------------------------
+SELECT - DESCENDING ARRAY
+DESIRED INDEX: 4
+DESIRED VALUE: 4
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,3,1,4,16,7,8,9,10,11,12,13,14,5,6,15]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 147
+Number of swaps: 5
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+---------------------------
+-----------------------------
+SELECT - DESCENDING ARRAY
+DESIRED INDEX: 16
+DESIRED VALUE: 16
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[3,4,2,1,5,8,9,6,7,10,11,13,12,14,15,16,17]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 285
+Number of swaps: 20
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
+---------------------------
+-----------------------------
+SELECT - DESCENDING ARRAY
+DESIRED INDEX: 13
+DESIRED VALUE: 13
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[4,5,3,1,2,6,10,11,7,8,9,12,13,14,15,16,17,18]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 275
+Number of swaps: 21
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
+---------------------------
+-----------------------------
+SELECT - DESCENDING ARRAY
+DESIRED INDEX: 19
+DESIRED VALUE: 19
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[5,6,4,1,2,3,7,8,9,10,11,12,13,14,15,16,17,18,19]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 331
+Number of swaps: 22
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+---------------------------
+-----------------------------
+SELECT - DESCENDING ARRAY
+DESIRED INDEX: 1
+DESIRED VALUE: 1
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,7,5,6,8,14,15,16,17,18,9,10,19,20,11,12,13]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 260
+Number of swaps: 17
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+---------------------------
+-----------------------------
+SELECT - DESCENDING ARRAY
+DESIRED INDEX: 21
+DESIRED VALUE: 21
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,3,1,4,12,13,7,8,9,10,5,11,6,14,15,17,16,18,19,20,21]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 359
+Number of swaps: 24
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
+---------------------------
+-----------------------------
+SELECT - DESCENDING ARRAY
+DESIRED INDEX: 16
+DESIRED VALUE: 16
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[3,4,2,1,5,13,14,8,9,10,11,12,6,7,15,16,17,18,19,22,21,20]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 351
+Number of swaps: 25
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
+---------------------------
+-----------------------------
+SELECT - DESCENDING ARRAY
+DESIRED INDEX: 20
+DESIRED VALUE: 20
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[4,5,3,1,2,6,9,15,10,11,12,13,7,8,14,16,17,18,19,20,22,23,21]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 336
+Number of swaps: 23
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+---------------------------
+-----------------------------
+SELECT - DESCENDING ARRAY
+DESIRED INDEX: 1
+DESIRED VALUE: 1
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,5,6,4,7,17,18,19,10,11,12,13,14,20,21,22,8,9,23,24,15,16]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 287
+Number of swaps: 15
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+---------------------------
+-----------------------------
+SELECT - DESCENDING ARRAY
+DESIRED INDEX: 11
+DESIRED VALUE: 11
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[6,7,5,1,2,3,4,8,9,10,11,12,13,14,15,16,22,23,19,20,18,24,25,17,21]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 436
+Number of swaps: 28
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+---------------------------
+-----------------------------
+SELECT - DESCENDING ARRAY
+DESIRED INDEX: 3
+DESIRED VALUE: 3
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,7,8,4,5,6,9,21,12,13,14,15,16,22,23,24,10,11,25,26,17,18,19,20]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 285
+Number of swaps: 14
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]
+---------------------------
+-----------------------------
+SELECT - DESCENDING ARRAY
+DESIRED INDEX: 22
+DESIRED VALUE: 22
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[8,9,2,3,4,5,6,7,1,10,13,14,15,16,17,11,12,18,19,20,21,22,23,24,27,25,26]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 416
+Number of swaps: 30
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]
+---------------------------
+-----------------------------
+SELECT - DESCENDING ARRAY
+DESIRED INDEX: 14
+DESIRED VALUE: 14
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[9,10,3,4,5,6,7,8,1,2,11,12,13,14,15,16,20,17,19,18,21,24,25,23,22,28,26,27]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 440
+Number of swaps: 33
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]
+---------------------------
+-----------------------------
+SELECT - DESCENDING ARRAY
+DESIRED INDEX: 19
+DESIRED VALUE: 19
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[10,11,4,5,6,7,8,9,1,2,3,12,17,18,16,13,14,15,19,27,28,29,20,21,22,23,24,25,26]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 335
+Number of swaps: 21
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]
+---------------------------
+-----------------------------
+SELECT - DESCENDING ARRAY
+DESIRED INDEX: 29
+DESIRED VALUE: 29
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[11,12,5,6,7,8,9,10,1,2,3,4,13,19,20,14,15,18,16,17,21,22,23,24,25,26,27,28,29,30]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 450
+Number of swaps: 33
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
+---------------------------
+kajtek@Air-Kajetan AiSD % g++ -o ./bin/list3/log-random-select-test ./list3/randomselect/testing/mylogtest_rndselect.cpp                         
+clang++: error: no such file or directory: './list3/randomselect/testing/mylogtest_rndselect.cpp'
+clang++: error: no input files
+kajtek@Air-Kajetan AiSD % g++ -o ./bin/list3/log-random-select-test ./list3/randomselect/testing/mylogtest_rndsort.cpp  
+In file included from ./list3/randomselect/testing/mylogtest_rndsort.cpp:1:
+./list3/randomselect/testing/../RandomSelect.h:6:14: warning: default member initializer for non-static data member is a C++11 extension [-Wc++11-extensions]
+    6 |     int cmps = 0;
+      |              ^
+./list3/randomselect/testing/../RandomSelect.h:7:14: warning: default member initializer for non-static data member is a C++11 extension [-Wc++11-extensions]
+    7 |     int swps = 0;
+      |              ^
+2 warnings generated.
+kajtek@Air-Kajetan AiSD % ./bin/list3/log-random-select-test
+-----------------------------
+RANDOM SELECT - RANDOM ARRAY
+DESIRED INDEX: 14
+DESIRED VALUE: 23
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[12,25,17,23,12,16,20,31,2,10,19,8,20,21,19,6]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,6,8,12,16,12,10,17,20,19,19,20,21,23,25,31]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 101
+Number of swaps: 25
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,6,8,10,12,12,16,17,19,19,20,20,21,23,25,31]
+---------------------------
+-----------------------------
+RANDOM SELECT - RANDOM ARRAY
+DESIRED INDEX: 16
+DESIRED VALUE: 25
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[25,2,28,11,10,0,7,20,7,22,3,11,15,21,14,13,16]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,0,7,7,3,10,11,11,16,15,20,14,13,21,22,25,28]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 95
+Number of swaps: 23
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,2,3,7,7,10,11,11,13,14,15,16,20,21,22,25,28]
+---------------------------
+-----------------------------
+RANDOM SELECT - RANDOM ARRAY
+DESIRED INDEX: 16
+DESIRED VALUE: 27
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[24,29,27,0,14,31,7,8,8,19,7,4,24,13,12,12,13,21]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,7,4,7,8,8,13,12,12,13,14,24,21,19,24,27,29,31]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 103
+Number of swaps: 28
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,4,7,7,8,8,12,12,13,13,14,19,21,24,24,27,29,31]
+---------------------------
+-----------------------------
+RANDOM SELECT - RANDOM ARRAY
+DESIRED INDEX: 1
+DESIRED VALUE: 0
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[25,18,0,3,21,17,6,13,30,30,3,1,26,29,15,27,28,5,23]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,3,1,3,13,5,17,15,6,18,25,23,26,29,21,27,28,30,30]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 67
+Number of swaps: 18
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,3,3,5,6,13,15,17,18,21,23,25,26,27,28,29,30,30]
+---------------------------
+-----------------------------
+RANDOM SELECT - RANDOM ARRAY
+DESIRED INDEX: 8
+DESIRED VALUE: 18
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[33,5,31,1,39,36,0,25,17,11,27,22,34,22,23,5,35,18,33,4]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,4,5,17,11,5,18,27,22,33,22,23,33,31,25,34,39,36,35]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 135
+Number of swaps: 29
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,4,5,5,11,17,18,22,22,23,25,27,31,33,33,34,35,36,39]
+---------------------------
+-----------------------------
+RANDOM SELECT - RANDOM ARRAY
+DESIRED INDEX: 4
+DESIRED VALUE: 2
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[36,0,20,2,33,38,35,0,6,38,23,36,12,30,9,27,2,23,12,22,4]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,2,2,6,12,9,4,12,20,22,36,38,30,35,27,36,23,33,38,23]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 113
+Number of swaps: 35
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,2,2,4,6,9,12,12,20,22,23,23,27,30,33,35,36,36,38,38]
+---------------------------
+-----------------------------
+RANDOM SELECT - RANDOM ARRAY
+DESIRED INDEX: 6
+DESIRED VALUE: 7
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[24,28,9,24,2,36,4,10,11,0,5,11,9,32,20,7,6,15,32,42,7,28]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,2,4,5,6,7,7,11,9,9,10,11,15,20,24,24,28,32,32,42,28,36]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 139
+Number of swaps: 44
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,2,4,5,6,7,7,9,9,10,11,11,15,20,24,24,28,28,32,32,36,42]
+---------------------------
+-----------------------------
+RANDOM SELECT - RANDOM ARRAY
+DESIRED INDEX: 20
+DESIRED VALUE: 38
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,29,20,13,0,24,10,35,17,41,23,38,15,8,15,4,10,40,28,38,2,45,8]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,13,0,10,8,8,15,4,10,2,15,20,24,29,23,17,28,35,38,38,41,45,40]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 85
+Number of swaps: 23
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,4,8,8,10,10,13,15,15,17,20,23,24,28,29,35,38,38,40,41,45]
+---------------------------
+-----------------------------
+RANDOM SELECT - RANDOM ARRAY
+DESIRED INDEX: 24
+DESIRED VALUE: 46
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[34,17,43,19,10,35,6,5,39,40,9,31,25,4,23,19,23,46,38,34,33,20,8,8]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[34,17,19,10,35,6,5,39,8,9,31,25,4,23,19,23,38,34,33,20,8,40,43,46]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 57
+Number of swaps: 25
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[4,5,6,8,8,9,10,17,19,19,20,23,23,25,31,33,34,34,35,38,39,40,43,46]
+---------------------------
+-----------------------------
+RANDOM SELECT - RANDOM ARRAY
+DESIRED INDEX: 11
+DESIRED VALUE: 16
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[13,30,10,27,6,3,1,39,19,11,38,16,26,48,30,1,46,34,34,8,28,14,1,32,37]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,1,1,6,3,10,8,11,13,14,16,26,19,28,27,30,30,34,34,39,48,38,37,32,46]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 145
+Number of swaps: 33
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,1,1,3,6,8,10,11,13,14,16,19,26,27,28,30,30,32,34,34,37,38,39,46,48]
+---------------------------
+-----------------------------
+RANDOM SELECT - RANDOM ARRAY
+DESIRED INDEX: 3
+DESIRED VALUE: 4
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[45,15,41,10,0,42,35,17,8,4,18,44,19,18,1,10,35,5,27,24,18,31,10,16,10,49]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,4,8,10,5,10,10,10,41,18,44,19,18,49,45,35,42,27,24,18,31,35,16,17,15]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 101
+Number of swaps: 24
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,4,5,8,10,10,10,10,15,16,17,18,18,18,19,24,27,31,35,35,41,42,44,45,49]
+---------------------------
+-----------------------------
+RANDOM SELECT - RANDOM ARRAY
+DESIRED INDEX: 26
+DESIRED VALUE: 51
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[27,3,8,52,36,41,46,16,22,12,17,22,24,24,4,34,51,19,4,37,8,20,5,9,49,3,43]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[3,8,16,12,17,4,4,8,5,9,3,19,24,24,41,34,43,46,37,27,20,22,22,36,49,51,52]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 93
+Number of swaps: 29
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[3,3,4,4,5,8,8,9,12,16,17,19,20,22,22,24,24,27,34,36,37,41,43,46,49,51,52]
+---------------------------
+-----------------------------
+RANDOM SELECT - RANDOM ARRAY
+DESIRED INDEX: 26
+DESIRED VALUE: 50
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[16,17,45,39,35,20,51,19,18,9,33,17,34,47,50,6,33,27,25,6,51,22,19,1,24,22,43,45]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[16,17,20,19,18,9,17,6,6,19,1,22,22,39,33,27,25,35,33,24,34,43,45,45,47,50,51,51]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 127
+Number of swaps: 39
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,6,6,9,16,17,17,18,19,19,20,22,22,24,25,27,33,33,34,35,39,43,45,45,47,50,51,51]
+---------------------------
+-----------------------------
+RANDOM SELECT - RANDOM ARRAY
+DESIRED INDEX: 7
+DESIRED VALUE: 13
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[13,38,32,12,35,50,53,48,35,13,54,34,21,4,35,13,32,39,55,11,49,38,6,22,30,57,16,37,44]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[4,11,6,12,13,13,13,16,21,32,54,34,38,44,35,35,32,39,55,50,49,38,53,22,30,57,48,37,35]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 151
+Number of swaps: 24
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[4,6,11,12,13,13,13,16,21,22,30,32,32,34,35,35,35,37,38,38,39,44,48,49,50,53,54,55,57]
+---------------------------
+-----------------------------
+RANDOM SELECT - RANDOM ARRAY
+DESIRED INDEX: 9
+DESIRED VALUE: 19
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[16,57,19,46,1,59,7,34,23,37,57,53,1,59,24,26,49,7,33,12,35,55,16,29,40,16,44,48,51,22]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,1,7,7,16,16,12,16,19,22,23,53,59,59,24,26,49,46,33,34,35,55,57,29,40,37,44,48,51,57]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 121
+Number of swaps: 25
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,1,7,7,12,16,16,16,19,22,23,24,26,29,33,34,35,37,40,44,46,48,49,51,53,55,57,57,59,59]
+---------------------------
+-----------------------------
+RANDOM SELECT - ASCENDING ARRAY
+DESIRED INDEX: 15
+DESIRED VALUE: 14
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 93
+Number of swaps: 30
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+---------------------------
+-----------------------------
+RANDOM SELECT - ASCENDING ARRAY
+DESIRED INDEX: 8
+DESIRED VALUE: 7
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 107
+Number of swaps: 36
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+---------------------------
+-----------------------------
+RANDOM SELECT - ASCENDING ARRAY
+DESIRED INDEX: 6
+DESIRED VALUE: 5
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 59
+Number of swaps: 15
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
+---------------------------
+-----------------------------
+RANDOM SELECT - ASCENDING ARRAY
+DESIRED INDEX: 9
+DESIRED VALUE: 8
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 183
+Number of swaps: 51
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
+---------------------------
+-----------------------------
+RANDOM SELECT - ASCENDING ARRAY
+DESIRED INDEX: 3
+DESIRED VALUE: 2
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 153
+Number of swaps: 64
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+---------------------------
+-----------------------------
+RANDOM SELECT - ASCENDING ARRAY
+DESIRED INDEX: 11
+DESIRED VALUE: 10
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 93
+Number of swaps: 27
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+---------------------------
+-----------------------------
+RANDOM SELECT - ASCENDING ARRAY
+DESIRED INDEX: 7
+DESIRED VALUE: 6
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 147
+Number of swaps: 41
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
+---------------------------
+-----------------------------
+RANDOM SELECT - ASCENDING ARRAY
+DESIRED INDEX: 13
+DESIRED VALUE: 12
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 139
+Number of swaps: 36
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
+---------------------------
+-----------------------------
+RANDOM SELECT - ASCENDING ARRAY
+DESIRED INDEX: 4
+DESIRED VALUE: 3
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 179
+Number of swaps: 75
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+---------------------------
+-----------------------------
+RANDOM SELECT - ASCENDING ARRAY
+DESIRED INDEX: 13
+DESIRED VALUE: 12
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 175
+Number of swaps: 33
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+---------------------------
+-----------------------------
+RANDOM SELECT - ASCENDING ARRAY
+DESIRED INDEX: 20
+DESIRED VALUE: 19
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 157
+Number of swaps: 46
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+---------------------------
+-----------------------------
+RANDOM SELECT - ASCENDING ARRAY
+DESIRED INDEX: 18
+DESIRED VALUE: 17
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 93
+Number of swaps: 26
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]
+---------------------------
+-----------------------------
+RANDOM SELECT - ASCENDING ARRAY
+DESIRED INDEX: 1
+DESIRED VALUE: 0
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 57
+Number of swaps: 2
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]
+---------------------------
+-----------------------------
+RANDOM SELECT - ASCENDING ARRAY
+DESIRED INDEX: 22
+DESIRED VALUE: 21
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 117
+Number of swaps: 40
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]
+---------------------------
+-----------------------------
+RANDOM SELECT - ASCENDING ARRAY
+DESIRED INDEX: 16
+DESIRED VALUE: 15
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 207
+Number of swaps: 47
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]
+---------------------------
+-----------------------------
+RANDOM SELECT - DESCENDING ARRAY
+DESIRED INDEX: 2
+DESIRED VALUE: 2
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,13,12,11,10,9,8,7,6,5,4,16,15,14]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 39
+Number of swaps: 7
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+---------------------------
+-----------------------------
+RANDOM SELECT - DESCENDING ARRAY
+DESIRED INDEX: 15
+DESIRED VALUE: 15
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,11,10,9,8,7,6,5,4,3,2,12,13,14,15,16,17]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 55
+Number of swaps: 22
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
+---------------------------
+-----------------------------
+RANDOM SELECT - DESCENDING ARRAY
+DESIRED INDEX: 16
+DESIRED VALUE: 16
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,12,11,10,9,8,7,6,5,4,3,2,13,15,14,16,17,18]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 59
+Number of swaps: 24
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
+---------------------------
+-----------------------------
+RANDOM SELECT - DESCENDING ARRAY
+DESIRED INDEX: 18
+DESIRED VALUE: 18
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,4,3,2,5,14,13,12,11,10,9,8,7,6,15,16,17,18,19]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 125
+Number of swaps: 23
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+---------------------------
+-----------------------------
+RANDOM SELECT - DESCENDING ARRAY
+DESIRED INDEX: 11
+DESIRED VALUE: 11
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,9,8,7,6,5,4,3,2,10,11,12,13,15,14,16,18,17,20,19]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 81
+Number of swaps: 24
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+---------------------------
+-----------------------------
+RANDOM SELECT - DESCENDING ARRAY
+DESIRED INDEX: 3
+DESIRED VALUE: 3
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,7,6,8,9,10,11,20,19,18,17,16,15,14,13,12,21]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 97
+Number of swaps: 30
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
+---------------------------
+-----------------------------
+RANDOM SELECT - DESCENDING ARRAY
+DESIRED INDEX: 8
+DESIRED VALUE: 8
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,7,6,5,4,3,2,8,14,13,12,11,10,9,22,21,20,19,18,17,16,15]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 45
+Number of swaps: 9
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
+---------------------------
+-----------------------------
+RANDOM SELECT - DESCENDING ARRAY
+DESIRED INDEX: 5
+DESIRED VALUE: 5
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,4,3,2,5,18,17,16,15,14,13,12,11,10,9,8,7,6,23,22,21,20,19]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 47
+Number of swaps: 6
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+---------------------------
+-----------------------------
+RANDOM SELECT - DESCENDING ARRAY
+DESIRED INDEX: 23
+DESIRED VALUE: 23
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,8,7,6,5,4,3,2,9,15,14,13,12,11,10,16,17,18,19,20,21,22,23,24]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 127
+Number of swaps: 29
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+---------------------------
+-----------------------------
+RANDOM SELECT - DESCENDING ARRAY
+DESIRED INDEX: 20
+DESIRED VALUE: 20
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,18,19,20,21,22,23,24,25]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 99
+Number of swaps: 34
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+---------------------------
+-----------------------------
+RANDOM SELECT - DESCENDING ARRAY
+DESIRED INDEX: 25
+DESIRED VALUE: 25
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,11,10,9,8,7,6,5,4,3,2,12,14,13,15,23,22,21,20,19,18,17,16,24,25,26]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 89
+Number of swaps: 28
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]
+---------------------------
+-----------------------------
+RANDOM SELECT - DESCENDING ARRAY
+DESIRED INDEX: 10
+DESIRED VALUE: 10
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,8,7,6,5,4,3,9,10,11,14,13,12,15,24,23,22,21,20,19,18,17,16,27,26,25]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 99
+Number of swaps: 29
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]
+---------------------------
+-----------------------------
+RANDOM SELECT - DESCENDING ARRAY
+DESIRED INDEX: 8
+DESIRED VALUE: 8
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,4,3,5,6,7,8,9,10,11,17,16,15,14,13,12,28,27,26,25,24,23,22,21,20,19,18]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 101
+Number of swaps: 24
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]
+---------------------------
+-----------------------------
+RANDOM SELECT - DESCENDING ARRAY
+DESIRED INDEX: 21
+DESIRED VALUE: 21
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,17,18,19,20,21,22,23,24,25,28,27,26,29]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 111
+Number of swaps: 38
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]
+---------------------------
+-----------------------------
+RANDOM SELECT - DESCENDING ARRAY
+DESIRED INDEX: 28
+DESIRED VALUE: 28
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,6,5,4,3,2,7,13,12,11,10,9,8,14,16,15,17,23,22,21,20,19,18,24,25,27,26,28,29,30]
+---------------------------
+STATS:
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 197
+Number of swaps: 56
+---------------------------
+SORTED:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
+---------------------------
+kajtek@MacBook-Air-Kajetan AiSD % g++ -o ./bin/list3/quicksort-test-log ./list3/quicksort/testing/log-quicksort-test.cpp
+In file included from ./list3/quicksort/testing/log-quicksort-test.cpp:1:
+In file included from ./list3/quicksort/testing/../Quicksort.h:1:
+./list3/quicksort/testing/../../Select/Select.h:8:14: warning: default member initializer for non-static data member is a C++11 extension [-Wc++11-extensions]
+    8 |     int cmps = 0;
+      |              ^
+./list3/quicksort/testing/../../Select/Select.h:9:14: warning: default member initializer for non-static data member is a C++11 extension [-Wc++11-extensions]
+    9 |     int swps = 0;
+      |              ^
+In file included from ./list3/quicksort/testing/log-quicksort-test.cpp:1:
+./list3/quicksort/testing/../Quicksort.h:6:15: warning: default member initializer for non-static data member is a C++11 extension [-Wc++11-extensions]
+    6 |      int cmps = 0;
+      |               ^
+./list3/quicksort/testing/../Quicksort.h:7:15: warning: default member initializer for non-static data member is a C++11 extension [-Wc++11-extensions]
+    7 |      int swps = 0;
+      |               ^
+4 warnings generated.
+kajtek@MacBook-Air-Kajetan AiSD % ./bin/list3/quicksort-test-log                                                        
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,3,3,11,8,6,13,4]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,3,3,4,6,8,11,13]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 137
+Number of swaps: 21
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,3,3,4,6,8,11,13]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[4,11,2,6,4,9,6,9,15]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,4,4,6,6,9,9,11,15]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 166
+Number of swaps: 26
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,4,4,6,6,9,9,11,15]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[11,4,4,3,0,0,1,14,15,0]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,0,1,3,4,4,11,14,15]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 208
+Number of swaps: 29
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,0,1,3,4,4,11,14,15]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[3,19,15,13,8,19,12,1,7,20,0]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,3,7,8,12,13,15,19,19,20]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 285
+Number of swaps: 32
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,3,7,8,12,13,15,19,19,20]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[18,0,14,19,18,1,12,23,17,5,11,14]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,5,11,12,14,14,17,18,18,19,23]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 253
+Number of swaps: 36
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,5,11,12,14,14,17,18,18,19,23]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[6,5,19,15,20,7,5,5,21,8,25,17,23]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[5,5,5,6,7,8,15,17,19,20,21,23,25]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 316
+Number of swaps: 44
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[5,5,5,6,7,8,15,17,19,20,21,23,25]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[20,7,7,21,16,6,20,11,26,4,7,16,20,5]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[4,5,6,7,7,7,11,16,16,20,20,20,21,26]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 357
+Number of swaps: 54
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[4,5,6,7,7,7,11,16,16,20,20,20,21,26]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[20,28,25,16,24,10,11,6,8,5,1,8,16,29,28]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,5,6,8,8,10,11,16,16,20,24,25,28,28,29]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 371
+Number of swaps: 42
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,5,6,8,8,10,11,16,16,20,24,25,28,28,29]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[12,16,13,31,13,19,11,5,31,11,27,3,26,28,3,11]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[3,3,5,11,11,11,12,13,13,16,19,26,27,28,31,31]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 409
+Number of swaps: 52
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[3,3,5,11,11,11,12,13,13,16,19,26,27,28,31,31]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[17,27,11,2,4,5,11,32,31,23,25,9,29,15,32,27,19]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,4,5,9,11,11,15,17,19,23,25,27,27,29,31,32,32]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 506
+Number of swaps: 74
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,4,5,9,11,11,15,17,19,23,25,27,27,29,31,32,32]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[32,5,24,16,0,25,1,7,0,29,0,7,23,27,0,25,34,22]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,0,0,1,5,7,7,16,22,23,24,25,25,27,29,32,34]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 555
+Number of swaps: 81
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,0,0,1,5,7,7,16,22,23,24,25,25,27,29,32,34]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[34,5,16,5,10,34,20,31,4,5,31,30,31,26,32,12,34,5,14]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[4,5,5,5,5,10,12,14,16,20,26,30,31,31,31,32,34,34,34]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 531
+Number of swaps: 66
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[4,5,5,5,5,10,12,14,16,20,26,30,31,31,31,32,34,34,34]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[37,4,27,13,14,12,31,28,35,27,26,32,15,35,36,19,39,2,7,9]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,4,7,9,12,13,14,15,19,26,27,27,28,31,32,35,35,36,37,39]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 577
+Number of swaps: 71
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,4,7,9,12,13,14,15,19,26,27,27,28,31,32,35,35,36,37,39]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[28,5,21,4,18,7,26,2,23,35,0,21,38,20,34,18,13,26,23,19,26]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,2,4,5,7,13,18,18,19,20,21,21,23,23,26,26,26,28,34,35,38]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 656
+Number of swaps: 73
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,2,4,5,7,13,18,18,19,20,21,21,23,23,26,26,26,28,34,35,38]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[33,29,36,30,2,26,3,34,26,40,15,29,8,12,22,14,31,0,21,6,37,4]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,2,3,4,6,8,12,14,15,21,22,26,26,29,29,30,31,33,34,36,37,40]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 690
+Number of swaps: 78
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,2,3,4,6,8,12,14,15,21,22,26,26,29,29,30,31,33,34,36,37,40]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[20,20,17,6,16,41,16,45,0,28,34,24,40,2,8,31,1,18,13,44,42,12,36]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,6,8,12,13,16,16,17,18,20,20,24,28,31,34,36,40,41,42,44,45]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 728
+Number of swaps: 86
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,6,8,12,13,16,16,17,18,20,20,24,28,31,34,36,40,41,42,44,45]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[40,25,20,38,14,11,25,7,16,32,26,4,45,11,11,45,0,27,1,29,40,40,33,39]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,4,7,11,11,11,14,16,20,25,25,26,27,29,32,33,38,39,40,40,40,45,45]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 797
+Number of swaps: 94
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,4,7,11,11,11,14,16,20,25,25,26,27,29,32,33,38,39,40,40,40,45,45]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[18,38,49,45,11,26,34,31,2,40,3,47,3,18,37,46,38,35,14,47,6,33,5,16,36]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,3,3,5,6,11,14,16,18,18,26,31,33,34,35,36,37,38,38,40,45,46,47,47,49]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 825
+Number of swaps: 99
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,3,3,5,6,11,14,16,18,18,26,31,33,34,35,36,37,38,38,40,45,46,47,47,49]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[27,36,37,16,33,50,6,16,47,1,14,43,13,6,22,20,45,41,5,5,10,0,48,1,24,38]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,1,5,5,6,6,10,13,14,16,16,20,22,24,27,33,36,37,38,41,43,45,47,48,50]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 862
+Number of swaps: 102
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,1,5,5,6,6,10,13,14,16,16,20,22,24,27,33,36,37,38,41,43,45,47,48,50]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[18,17,50,10,40,49,38,20,1,27,50,36,35,29,34,13,13,12,9,37,40,8,10,53,33,23,18]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,8,9,10,10,12,13,13,17,18,18,20,23,27,29,33,34,35,36,37,38,40,40,49,50,50,53]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 993
+Number of swaps: 114
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,8,9,10,10,12,13,13,17,18,18,20,23,27,29,33,34,35,36,37,38,40,40,49,50,50,53]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[15,20,38,24,51,31,7,38,55,1,43,13,14,38,9,5,9,35,27,0,35,45,20,29,0,30,18,16]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,1,5,7,9,9,13,14,15,16,18,20,20,24,27,29,30,31,35,35,38,38,38,43,45,51,55]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1121
+Number of swaps: 127
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,1,5,7,9,9,13,14,15,16,18,20,20,24,27,29,30,31,35,35,38,38,38,43,45,51,55]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[47,8,20,6,11,47,47,20,21,40,52,57,21,55,35,34,56,3,23,45,4,45,47,6,37,48,12,33,22]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[3,4,6,6,8,11,12,20,20,21,21,22,23,33,34,35,37,40,45,45,47,47,47,47,48,52,55,56,57]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 868
+Number of swaps: 119
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[3,4,6,6,8,11,12,20,20,21,21,22,23,33,34,35,37,40,45,45,47,47,47,47,48,52,55,56,57]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[10,27,53,25,39,4,3,6,38,56,19,0,18,13,22,57,19,39,22,21,47,49,5,37,19,45,57,47,27,42]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,3,4,5,6,10,13,18,19,19,19,21,22,22,25,27,27,37,38,39,39,42,45,47,47,49,53,56,57,57]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1182
+Number of swaps: 138
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,3,4,5,6,10,13,18,19,19,19,21,22,22,25,27,27,37,38,39,39,42,45,47,47,49,53,56,57,57]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[9,13,29,56,32,37,37,8,48,13,32,35,21,45,35,48,43,19,54,47,5,45,53,36,5,33,53,46,46,36,44]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[5,5,8,9,13,13,19,21,29,32,32,33,35,35,36,36,37,37,43,44,45,45,46,46,47,48,48,53,53,54,56]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 987
+Number of swaps: 127
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[5,5,8,9,13,13,19,21,29,32,32,33,35,35,36,36,37,37,43,44,45,45,46,46,47,48,48,53,53,54,56]
+---------------------------
+---------------------
+Quick SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[57,61,47,59,49,20,21,23,34,13,44,21,40,50,1,18,62,15,8,28,12,35,32,25,23,25,19,35,2,17,49,22]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,8,12,13,15,17,18,19,20,21,21,22,23,23,25,25,28,32,34,35,35,40,44,47,49,49,50,57,59,61,62]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1244
+Number of swaps: 133
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,8,12,13,15,17,18,19,20,21,21,22,23,23,25,25,28,32,34,35,35,40,44,47,49,49,50,57,59,61,62]
+---------------------------
+                                       
+kajtek@MacBook-Air-Kajetan AiSD % g++ -o ./bin/list3/binsearch_logtest ./list3/binsearch/testing/log_binsearchtest.cpp
+In file included from ./list3/binsearch/testing/log_binsearchtest.cpp:1:
+./list3/binsearch/testing/../binSearch.h:25:14: warning: default member initializer for non-static data member is a C++11 extension [-Wc++11-extensions]
+   25 |     int cmps = 0;
+      |              ^
+1 warning generated.
+kajtek@MacBook-Air-Kajetan AiSD % ./bin/list3/binsearch_logtest                                                       
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 17
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 11
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 3
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 17
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 0
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 19
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 12
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 15
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 7
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 20
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 0
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 19
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 20
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 21
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 3
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 22
+Number of swaps: 0
+---------------------------
+-----------------------------
+Bin Search - descending arrray
+RESULT: 1
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 17
+Number of swaps: 0
+---------------------------
+kajtek@Air-Kajetan AiSD % g++ -o ./bin/list3/log-dualsort-test ./list3/dualpivotquicksort/testing/log-dualsort-test.cpp
+In file included from ./list3/dualpivotquicksort/testing/log-dualsort-test.cpp:1:
+In file included from ./list3/dualpivotquicksort/testing/../DualpivotQuicksort.h:1:
+./list3/dualpivotquicksort/testing/../../Select/Select.h:8:14: warning: default member initializer for non-static data member is a C++11 extension [-Wc++11-extensions]
+    8 |     int cmps = 0;
+      |              ^
+./list3/dualpivotquicksort/testing/../../Select/Select.h:9:14: warning: default member initializer for non-static data member is a C++11 extension [-Wc++11-extensions]
+    9 |     int swps = 0;
+      |              ^
+In file included from ./list3/dualpivotquicksort/testing/log-dualsort-test.cpp:1:
+./list3/dualpivotquicksort/testing/../DualpivotQuicksort.h:6:15: warning: default member initializer for non-static data member is a C++11 extension [-Wc++11-extensions]
+    6 |      int cmps = 0;
+      |               ^
+./list3/dualpivotquicksort/testing/../DualpivotQuicksort.h:7:15: warning: default member initializer for non-static data member is a C++11 extension [-Wc++11-extensions]
+    7 |      int swps = 0;
+      |               ^
+4 warnings generated.
+kajtek@Air-Kajetan AiSD % ./bin/list3/log-dualsort-test
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[10,14,5,0,12,0,12,13]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,5,10,12,12,13,14]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 132
+Number of swaps: 18
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,5,10,12,12,13,14]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[7,10,3,10,14,17,16,16,4]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[3,4,7,10,10,14,16,16,17]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 167
+Number of swaps: 24
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[3,4,7,10,10,14,16,16,17]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[15,10,17,12,12,15,11,11,15,2]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,10,11,11,12,12,15,15,15,17]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 184
+Number of swaps: 25
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[2,10,11,11,12,12,15,15,15,17]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[20,4,0,7,2,12,7,9,13,0,5]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,2,4,5,7,7,9,12,13,20]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 202
+Number of swaps: 26
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,2,4,5,7,7,9,12,13,20]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[23,0,16,15,16,15,10,15,21,0,17,16]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,10,15,15,15,16,16,16,17,21,23]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 258
+Number of swaps: 42
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,10,15,15,15,16,16,16,17,21,23]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,6,18,25,9,14,18,15,4,9,5,25,22]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,4,5,6,9,9,14,15,18,18,22,25,25]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 316
+Number of swaps: 49
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,4,5,6,9,9,14,15,18,18,22,25,25]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[7,18,26,16,5,11,9,10,26,14,1,6,19,9]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,5,6,7,9,9,10,11,14,16,18,19,26,26]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 369
+Number of swaps: 55
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,5,6,7,9,9,10,11,14,16,18,19,26,26]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[15,14,5,11,13,21,11,19,26,15,13,14,20,14,1]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,5,11,11,13,13,14,14,14,15,15,19,20,21,26]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 355
+Number of swaps: 54
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,5,11,11,13,13,14,14,14,15,15,19,20,21,26]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[10,23,17,8,24,16,4,14,16,15,28,25,29,1,11,25]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,4,8,10,11,14,15,16,16,17,23,24,25,25,28,29]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 475
+Number of swaps: 67
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,4,8,10,11,14,15,16,16,17,23,24,25,25,28,29]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[13,24,0,32,23,4,30,10,28,28,8,32,4,13,5,28,16]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,4,4,5,8,10,13,13,16,23,24,28,28,28,30,32,32]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 494
+Number of swaps: 71
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,4,4,5,8,10,13,13,16,23,24,28,28,28,30,32,32]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[21,20,14,19,8,7,24,14,23,21,19,8,28,23,23,20,34,4]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[4,7,8,8,14,14,19,19,20,20,21,21,23,23,23,24,28,34]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 545
+Number of swaps: 81
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[4,7,8,8,14,14,19,19,20,20,21,21,23,23,23,24,28,34]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[29,34,0,37,1,35,7,36,25,18,25,2,14,8,35,8,18,4,24]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,4,7,8,8,14,18,18,24,25,25,29,34,35,35,36,37]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 587
+Number of swaps: 73
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,2,4,7,8,8,14,18,18,24,25,25,29,34,35,35,36,37]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[29,37,35,19,4,14,13,22,5,39,30,32,9,1,19,9,32,10,10,16]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,4,5,9,9,10,10,13,14,16,19,19,22,29,30,32,32,35,37,39]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 618
+Number of swaps: 79
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,4,5,9,9,10,10,13,14,16,19,19,22,29,30,32,32,35,37,39]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[24,35,8,31,33,19,1,31,41,41,34,21,34,41,30,1,40,25,32,5,7]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,1,5,7,8,19,21,24,25,30,31,31,32,33,34,34,35,40,41,41,41]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 629
+Number of swaps: 75
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,1,5,7,8,19,21,24,25,30,31,31,32,33,34,34,35,40,41,41,41]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[22,4,39,34,9,25,5,24,16,10,8,6,16,41,18,40,35,8,23,1,21,8]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,4,5,6,8,8,8,9,10,16,16,18,21,22,23,24,25,34,35,39,40,41]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 710
+Number of swaps: 82
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,4,5,6,8,8,8,9,10,16,16,18,21,22,23,24,25,34,35,39,40,41]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,38,27,30,25,27,6,31,4,26,1,6,23,30,18,13,2,7,39,0,40,6,11]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,1,2,4,6,6,6,7,11,13,18,23,25,26,27,27,30,30,31,38,39,40]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 741
+Number of swaps: 84
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,1,2,4,6,6,6,7,11,13,18,23,25,26,27,27,30,30,31,38,39,40]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[46,42,18,31,44,23,42,16,22,23,35,3,18,47,22,36,37,38,44,26,45,20,33,20]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[3,16,18,18,20,20,22,22,23,23,26,31,33,35,36,37,38,42,42,44,44,45,46,47]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 778
+Number of swaps: 93
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[3,16,18,18,20,20,22,22,23,23,26,31,33,35,36,37,38,42,42,44,44,45,46,47]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[17,16,21,18,33,1,4,27,22,34,43,30,39,49,32,35,40,25,40,19,2,29,15,31,46]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,4,15,16,17,18,19,21,22,25,27,29,30,31,32,33,34,35,39,40,40,43,46,49]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 732
+Number of swaps: 87
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,2,4,15,16,17,18,19,21,22,25,27,29,30,31,32,33,34,35,39,40,40,43,46,49]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[37,1,0,12,50,26,42,42,19,25,14,35,27,21,51,32,37,27,32,3,21,0,41,32,51,19]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,1,3,12,14,19,19,21,21,25,26,27,27,32,32,32,35,37,37,41,42,42,50,51,51]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 881
+Number of swaps: 116
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,0,1,3,12,14,19,19,21,21,25,26,27,27,32,32,32,35,37,37,41,42,42,50,51,51]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[18,12,45,40,10,13,22,13,4,32,46,5,27,21,44,44,22,9,12,4,44,24,18,10,26,4,25]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[4,4,4,5,9,10,10,12,12,13,13,18,18,21,22,22,24,25,26,27,32,40,44,44,44,45,46]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 883
+Number of swaps: 112
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[4,4,4,5,9,10,10,12,12,13,13,18,18,21,22,22,24,25,26,27,32,40,44,44,44,45,46]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[48,11,46,5,12,17,53,14,23,25,16,38,27,30,43,18,1,52,18,9,52,45,54,55,19,0,46,32]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,5,9,11,12,14,16,17,18,18,19,23,25,27,30,32,38,43,45,46,46,48,52,52,53,54,55]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1069
+Number of swaps: 124
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[0,1,5,9,11,12,14,16,17,18,18,19,23,25,27,30,32,38,43,45,46,46,48,52,52,53,54,55]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[17,6,32,51,49,40,18,56,34,45,1,46,10,1,18,19,15,50,32,18,34,45,17,44,18,40,33,50,20]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,1,6,10,15,17,17,18,18,18,18,19,20,32,32,33,34,34,40,40,44,45,45,46,49,50,50,51,56]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 935
+Number of swaps: 111
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,1,6,10,15,17,17,18,18,18,18,19,20,32,32,33,34,34,40,40,44,45,45,46,49,50,50,51,56]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[15,26,16,14,57,16,51,43,42,5,17,43,7,34,33,57,21,15,57,51,30,50,35,48,12,50,36,14,42,12]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[5,7,12,12,14,14,15,15,16,16,17,21,26,30,33,34,35,36,42,42,43,43,48,50,50,51,51,57,57,57]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1130
+Number of swaps: 139
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[5,7,12,12,14,14,15,15,16,16,17,21,26,30,33,34,35,36,42,42,43,43,48,50,50,51,51,57,57,57]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[40,24,17,31,51,8,43,18,61,16,7,57,10,59,23,47,3,12,32,42,43,29,54,36,54,41,30,41,21,53,14]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[3,7,8,10,12,14,16,17,18,21,23,24,29,30,31,32,36,40,41,41,42,43,43,47,51,53,54,54,57,59,61]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 964
+Number of swaps: 104
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[3,7,8,10,12,14,16,17,18,21,23,24,29,30,31,32,36,40,41,41,42,43,43,47,51,53,54,54,57,59,61]
+---------------------------
+---------------------
+DUAL SORT
+BEFORE:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[13,21,46,48,5,11,27,56,10,49,10,49,1,46,25,49,38,32,5,44,43,5,33,56,24,60,36,30,32,37,49,6]
+---------------------------
+AFTER:
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,5,5,5,6,10,10,11,13,21,24,25,27,30,32,32,33,36,37,38,43,44,46,46,48,49,49,49,49,56,56,60]
+---------------------------
+STATS OF THE SORTING ALGORITHM
+---------------------------
+Number of comparisons: 1187
+Number of swaps: 154
+---------------------------
+VALIDATION
+CURRENT STATE OF AN ARRAY
+---------------------------
+[1,5,5,5,6,10,10,11,13,21,24,25,27,30,32,32,33,36,37,38,43,44,46,46,48,49,49,49,49,56,56,60]
+---------------------------
+kajtek@Air-Kajetan AiSD % tmux capture-pane -p -S'-' -E'-' -J > ./list3/general-log                                          
+

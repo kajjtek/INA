@@ -1,0 +1,60 @@
+body {
+  font-family: Roboto Mono, monospace;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  background-color:#fbf9f2;
+}
+#game {
+  margin: 20px;
+}
+#wordContainer {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+#lettersContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 600px;
+  margin: 0 auto 20px;
+}
+.letter {
+  width: 40px;
+  height: 40px;
+  margin: 5px;
+  line-height: 40px;
+  border: 1px solid #333;
+  border-radius: 5px;
+  background-color: white;
+  cursor: pointer;
+  user-select: none;
+  font-size: 18px;
+}
+.letter.clicked {
+  background-color: lightblue;
+  cursor: default;
+}
+#canvasContainer {
+  margin-bottom: 20px;
+}
+#controls {
+  margin-bottom: 20px;
+}
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+@media (max-width: 600px) {
+  .letter {
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      font-size: 16px;
+  }
+  #wordContainer {
+      font-size: 20px;
+  }
+}

@@ -1,4 +1,4 @@
-#include "insertionsort.h"
+#include "../insertionsort.h"
 #include "../../arrayPrinter.h"
 
 int* copy_array(int size, int* array){

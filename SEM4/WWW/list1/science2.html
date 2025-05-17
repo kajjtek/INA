@@ -12,6 +12,72 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet" />
     </head>
     <body class="project_container">
+
+        <header class="site-header">
+            <a href="index.html" class="logo">Portfolio</a>
+          
+            <noscript>
+              <style>
+                /* Ukrywamy hamburger i dynamiczne nav */
+                .hamburger,
+                .nav.js-only {
+                  display: none !important;
+                }
+          
+                /* Pokazujemy statyczne menu jako pasek u góry */
+                .nav.nojs {
+                  display: flex !important;
+                  position: fixed;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  background: #fff;
+                  border-bottom: 1px solid #ddd;
+                  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                  justify-content: center;
+                  gap: 2em;
+                  padding: 0.5em 0;
+                  z-index: 1001;
+                }
+          
+                /* Dodatkowo przesuwamy zawartość strony w dół */
+                body.container {
+                  padding-top: 3em;  /* dopasuj do wysokości paska */
+                }
+          
+                /* Styl linków w menu no-JS */
+                .nav.nojs a {
+                  color: #333;
+                  text-decoration: none;
+                  font-weight: 500;
+                }
+                .nav.nojs a:hover {
+                  text-decoration: underline;
+                }
+              </style>
+          
+          <nav class="nav nojs">
+            <a href="./main.html">O mnie</a>
+            <a href="./project.html">Chinese Checkers</a>
+            <a href="./project1.html">Politykle</a>
+            <a href="./project2.html">HOI4 Mode</a>
+            <a href="./science1.html">Zainteresowania</a>
+          </nav>
+            </noscript>
+          
+            <!-- reszta Twojego headera -->
+            <button id="btn-toggle" class="hamburger" aria-label="Menu">
+              <span></span><span></span><span></span>
+            </button>
+            <nav id="main-nav" class="nav js-only">
+              <a href="./main.html">O mnie</a>
+              <a href="./project.html">Chinese Checkers</a>
+              <a href="./project1.html">Politykle</a>
+              <a href="./project2.html">HOI4 Mode</a>
+              <a href="./science1.html">Zainteresowania</a>
+            </nav>
+          </header>
+
         <div class="left">
             
             <figure class="mlody_kajtek">
@@ -42,5 +108,6 @@
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+        <script src="./script.js"></script>
     </body>
 </html>

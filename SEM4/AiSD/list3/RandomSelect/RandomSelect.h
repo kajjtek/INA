@@ -1,10 +1,8 @@
 #include <random>
-#include "../../arrayPrinter.h"
 
 template <class T>
 class RandomSelect {
     public:
-    arrayPrinter<int> printer;
     int cmps = 0;
     int swps = 0;
     int select(T* array, int left, int right, int aim){
@@ -13,7 +11,6 @@ class RandomSelect {
         int r = random_partition(array, left, right);
         int k = r - left + 1;
         cmps++;
-        printer.print(right-left+1,array);
         if(aim == k) return array[r];
         if(aim < k) {cmps++ ;return select(array, left, r-1, aim);}
         else {cmps++;return select(array, r+1, right, aim-k);}
@@ -37,12 +34,14 @@ class RandomSelect {
         int i = firstindex - 1; 
         int j = firstindex;
         while(j<lastindex){
+            cmps+=2;
             if(array[j]<=pivot){
                 swap(&array[++i],&array[j]);
                 swps++;
             }
             j++;
         }
+        cmps++;
         swap(&array[++i],&array[lastindex]);
         swps++;
         return i;

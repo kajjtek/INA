@@ -7,10 +7,75 @@
         <meta name="author" content="Kajetan Plewa">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="theme-color" content="#fbf9f2">
-        <link rel="stylesheet" href="styles.css" />
+        <link rel="stylesheet" href="style.css" />
         <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
     </head>
+
     <body class ="container">
+        <header class="site-header">
+            <a href="index.html" class="logo">Portfolio</a>
+          
+            <noscript>
+              <style>
+
+                .hamburger,
+                .nav.js-only {
+                  display: none !important;
+                }
+          
+                .nav.nojs {
+                  display: flex !important;
+                  position: fixed;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  background: #fff;
+                  border-bottom: 1px solid #ddd;
+                  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                  justify-content: center;
+                  gap: 2em;
+                  padding: 0.5em 0;
+                  z-index: 1001;
+                }
+          
+                body.container {
+                  padding-top: 3em;  
+                }
+          
+                
+                .nav.nojs a {
+                  color: #333;
+                  text-decoration: none;
+                  font-weight: 500;
+                }
+                .nav.nojs a:hover {
+                  text-decoration: underline;
+                }
+              </style>
+          
+          <nav class="nav nojs">
+            <a href="./main.html">O mnie</a>
+            <a href="./project.html">Chinese Checkers</a>
+            <a href="./project1.html">Politykle</a>
+            <a href="./project2.html">HOI4 Mode</a>
+            <a href="./science1.html">Zainteresowania</a>
+          </nav>
+            </noscript>
+          
+            
+            <button id="btn-toggle" class="hamburger" aria-label="Menu">
+              <span></span><span></span><span></span>
+            </button>
+            <nav id="main-nav" class="nav js-only">
+              <a href="./main.html">O mnie</a>
+              <a href="./project.html">Chinese Checkers</a>
+              <a href="./project1.html">Politykle</a>
+              <a href="./project2.html">HOI4 Mode</a>
+              <a href="./science1.html">Zainteresowania</a>
+            </nav>
+          </header>
+
+          
         <div class="left">
                 <figure>
                     <figcaption>young me year 2009</figcaption>
@@ -64,6 +129,6 @@
                 </table>
             </section>
         </div>
-
+        <script src="./script.js"></script>
     </body>
 </html>
