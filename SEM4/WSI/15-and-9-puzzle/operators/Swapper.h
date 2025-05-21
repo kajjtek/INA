@@ -1,9 +1,12 @@
+#ifndef SWAPPER_H
+#define SWAPPER_H
+
 #include <stdint.h>
 #include "../objects/State.h"
 
 class Swapper {
     public:
-    State swapInBoard(State oldstate, int oldindex, int newindex){
+    State swapInBoard(State& oldstate, int oldindex, int newindex){
         uint64_t board = oldstate.board;
         uint8_t v1 = oldstate.get(oldindex);
         uint8_t v2 = oldstate.get(newindex);
@@ -17,5 +20,8 @@ class Swapper {
         uint8_t v2 = oldstate.get(newindex);
         oldstate.set(oldindex, v2);
         oldstate.set(newindex, v1);
+        oldstate.setZeroIndex(newindex);
     }
 };
+
+#endif

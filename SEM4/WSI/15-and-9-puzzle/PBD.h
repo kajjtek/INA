@@ -1,3 +1,6 @@
+#ifndef PBD_H
+#define PBD_H
+
 #include <stdint.h>
 #include "./objects/State.h"
 
@@ -14,5 +17,8 @@ class PBD {
     private:
     void execute(uint64_t goal){
         State goalState(goal);
+        
     }
 };
+
+#endif

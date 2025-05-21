@@ -1,0 +1,85 @@
+{
+  "info": {
+    "_postman_id": "84463506-da7a-a48f-f5330c849b4d",
+    "name": "Authentication",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication (/auth)",
+      "item": [
+        {
+          "name": "Login User (ADMIN)",
+          "event": [
+            {
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response is JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains JWT token\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.token).to.be.a('string');",
+                  "    pm.expect(jsonData.token).to.not.be.empty;",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains user details\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.id).to.be.a('number');",
+                  "    pm.expect(jsonData.username).to.be.a('string');",
+                  "    pm.expect(jsonData.roles).to.be.an('array');",
+                  "    pm.expect(jsonData.roles).to.include(\"ADMIN\"); // Sprawdź, czy ma rolę ADMIN",
+                  "});",
+                  "",
+                  "pm.test(\"Save JWT token to environment variable\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"jwtToken\", jsonData.token);",
+                  "    console.log(\"Saved ADMIN JWT Token: \" + jsonData.token);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              },
+              "listen": "test"
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"{{adminUsername}}\",\n    \"password\": \"{{adminPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Logs in an ADMIN user and saves the JWT token to an environment variable."
+          },
+          "response": []
+        }
+        // Add other Authentication requests here (e.g., Register User, Login Regular User, Refresh Token)
+      ]
+    }
+  ]
+}
