@@ -1,0 +1,13 @@
+game_client
+game_server
+game_server.o
+game
+bin
+.vscode
+game-minimax-client
+game-minimax-client.o
+GameBoard.o
+game_client.c
+game_server.c
+game_random_bot.c
+ReadMe

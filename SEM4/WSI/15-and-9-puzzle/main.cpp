@@ -7,7 +7,8 @@
 int main(){
     AStar aStar(Heurestics::ManhattanLC, 15);
     Generator generator;
-    State state = generator.generateRandomState();
+    State state(0x31968270DBAE5FC4);
+    // State state = generator.generateRandomState();
     StatePrinter printer;
     printer.doPrint(state);
     std::cout<<"RANDOM ARRAY"<<std::endl;

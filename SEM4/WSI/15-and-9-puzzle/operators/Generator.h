@@ -28,18 +28,51 @@ class Generator {
         }
         return state;
     }
-    State generateState(int n){
+    int getOppositeMove(int lastMove) {
+        if (lastMove == 0) return 2;
+        if (lastMove == 1) return 3;
+        if (lastMove == 2) return 0;
+        if (lastMove == 3) return 1;
+        return -1;
+    }
+    
+    State generateState(int n) {
         astarEssentials essentials(4);
         Mover mover;
         std::random_device rd;
         std::mt19937 g(rd());
         State init(0x0FEDCBA987654321);
         init.findZeroIndex();
-        for(int i=0; i<n; i++){
-            std::vector<int> moves = essentials.generateActions(init.getZeroIndex());
-            std::uniform_int_distribution<int> dist(0,moves.size()-1);
-            init.setMove(moves.at(dist(g)));
+    
+        
+        int lastAppliedMove = -1; 
+    
+        for (int i = 0; i < n; ++i) {
+            std::vector<int> possibleMoves = essentials.generateActions(init.getZeroIndex());
+    
+            
+            int forbiddenMove = -1;
+            if (lastAppliedMove != -1) { 
+                forbiddenMove = getOppositeMove(lastAppliedMove);
+            }
+    
+            
+            
+            possibleMoves.erase(std::remove_if(possibleMoves.begin(), possibleMoves.end(),
+                                               [forbiddenMove](int move) {
+                                                   return move == forbiddenMove;
+                                               }),
+                                possibleMoves.end());
+
+            std::uniform_int_distribution<int> dist(0, possibleMoves.size() - 1);
+            int chosenMove = possibleMoves.at(dist(g));
+    
+            
+            init.setMove(chosenMove);
             mover.makeMove(init, 4);
+    
+            
+            lastAppliedMove = chosenMove;
         }
         return init;
     }

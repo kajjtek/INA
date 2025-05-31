@@ -2,6 +2,6 @@
 #define HEURESTICS_H
 
 enum class Heurestics {
-    ManhattanLC, PBD
+    ManhattanLC, Manhattan
 };
 #endif
