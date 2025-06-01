@@ -1,31 +1,29 @@
-#ifndef NODE_H
-#define NODE_H
+#ifndef SNODE_H
+#define SNODE_H
 
-
-
-class Node {
+class SNode {
     public:
     int value;
-    Node* parent = nullptr;
-    Node* right = nullptr;
-    Node* left = nullptr;
+    SNode* parent = nullptr;
+    SNode* right = nullptr;
+    SNode* left = nullptr;
 
     /* CONSTRUCTOR */
-    Node(int value, Node* parent, Node* nil){
+    SNode(int value, SNode* parent,  SNode* nil){
         this->value=value;
         this->parent=parent;
         this->left=nil;
         this->right=nil;
     }
 
-    Node(){
+    SNode(){
         this->value=0;
         this->parent=this;
         this->left=this;
         this->right=this;
     }
 
-    ~Node(){}
+    ~SNode(){}
 };
 
 #endif

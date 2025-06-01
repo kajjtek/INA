@@ -1,0 +1,12 @@
+{
+  "name": "www-api-2025",
+  "version": "1.0.0",
+  "description": "Simple Rest API for an university project",
+  "license": "ISC",
+  "author": "Kajetan Plewa",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

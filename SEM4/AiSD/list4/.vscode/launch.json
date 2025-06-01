@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug RBTree",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/RBBST/tests/main.exe", // Path to your executable (Linux/macOS)
+            // For Windows: "${workspaceFolder}/build/rb_tree.exe"
+
+            "args": [],
+            "stopAtEntry": false, // Set to true if you want to stop at the beginning of main()
+            "cwd": "${workspaceFolder}/RBBST/tests", // Working directory for the debugger
+            "environment": [],
+            "externalConsole": true, // Set to true to see console output in a separate terminal
+            "MIMode": "gdb", // Debugger backend (gdb for GCC/MinGW/Clang)
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            // "preLaunchTask": "build_rb_tree", // This runs the task defined in tasks.json BEFORE debugging
+            "miDebuggerPath": "/usr/bin/gdb" // Optional: Specify path to gdb if not in system PATH
+            // For MinGW (Windows): "miDebuggerPath": "C:\\MinGW\\bin\\gdb.exe" (adjust path)
+        }
+    ]
+}
