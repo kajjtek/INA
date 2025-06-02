@@ -9,10 +9,26 @@ class RBTree {
     public:
     static RBNode* NIL;
     RBNode* root;
+
+    static long long key_comparisons;
+    static long long pointer_operations;
+
     RBTree(){
-        this->NIL=NIL==nullptr?new RBNode():NIL;
-        this->root=this->NIL;
+        if (NIL == nullptr) {
+            NIL = new RBNode();
+            NIL->parent = NIL; 
+            NIL->left = NIL;
+            NIL->right = NIL;
+            NIL->color = Color::Black;
+        }
+        this->root=NIL;
     }
+
+    static void reset_counts(){
+        key_comparisons = 0;
+        pointer_operations = 0;
+    }
+
     int height();
     void insert(int key);
     RBNode* findSuccessor(RBNode* current);
@@ -20,10 +36,18 @@ class RBTree {
     std::vector<RBNode*> inOrderTraversal();
     void doInOrderTraversal(RBNode* current, std::vector<RBNode*> &result);
     void print_BST();
-    ~RBTree(){clean(); if(NIL!=nullptr){delete NIL; NIL=nullptr;}} //post-order traversal that delets all the elements
+    void clean();
+    ~RBTree(){
+        clean();
+    }
+
+    static void reset_counters() {
+        key_comparisons = 0;
+        pointer_operations = 0;
+    }
+
     private:
     void doPrint(RBNode* current, int depth, char prefix, std::vector<bool>& leftTrace, std::vector<bool>& rightTrace);
-    void clean();
     void doClean(RBNode* current);
     void deletionRoot();
     int calculateHeight(RBNode* current);
@@ -34,13 +58,23 @@ class RBTree {
     void LRRotation(RBNode* x, RBNode* parent, RBNode* grandfather);
     void RRRotation(RBNode* x, RBNode* parent, RBNode* grandfather);
     void RLRotation(RBNode* x, RBNode* parent, RBNode* grandfather);
-    bool isBlack(RBNode* x){return x->color==Color::Black || x==NIL || x->color==Color::DoubleBlack;}
+    bool isBlack(RBNode* x){
+        if (x == NIL) {
+             pointer_operations++;
+             return true;
+        }
+        pointer_operations++;
+        pointer_operations++;
+        return x->color==Color::Black || x->color==Color::DoubleBlack;
+    }
     bool isRed(RBNode* x){
+        pointer_operations++;
         if(x==NIL) return false;
-        return x->color==Color::Red;}
+        pointer_operations++;
+        return x->color==Color::Red;
+    }
     void findRotation(RBNode* x, RBNode* parent, RBNode* grandfather);
     void fixDoubleBlack(RBNode* child, RBNode* parent);
-    // void fixDoubleBlackWithParent(RBNode* child, RBNode* parent);
 };
 
 #endif

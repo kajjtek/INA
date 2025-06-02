@@ -1,7 +1,7 @@
 #ifndef RBNODE_H
 #define RBNODE_H
 
-#include "./Color.h" 
+#include "./Color.h"
 
 class RBNode {
     public:
@@ -11,7 +11,6 @@ class RBNode {
     RBNode* right = nullptr;
     RBNode* left = nullptr;
 
-    /* CONSTRUCTOR */
     RBNode(int value, RBNode* parent, Color color, RBNode* nil){
         this->color=color;
         this->value=value;
