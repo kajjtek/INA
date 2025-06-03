@@ -12,24 +12,24 @@ void runTest(const std::string& testName, std::vector<int> insertKeys, std::vect
     for (int key : insertKeys) {
         std::cout << "Operation: insert " << key << "\n";
         tree.insert(key);
-        // tree.print_BST();
+        tree.print_BST();
         std::cout << "\n";
     }
     std::cout << "\n--- Control ---\n";
-    //  tree.print_BST();
+     tree.print_BST();
 
     std::cout << "\n--- Deletion Phase ---\n";
     for (int key : deleteKeys) {
         std::cout << "Operation: delete " << key << "\n";
         tree.deletion(key);
-        // tree.print_BST();
+        tree.print_BST();
         std::cout << "\n";
     }
     std::cout << "--- Test: " << testName << " Completed ---\n\n";
 }
 
 int main() {
-    const int n = 5000;
+    const int n = 30;
     std::vector<int> keys(n);
     for (int i = 0; i < n; ++i) {
         keys[i] = i + 1;

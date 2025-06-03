@@ -85,7 +85,7 @@ void RBTree::fixDoubleBlack(RBNode* child, RBNode* parent){
     }
 
     child->color=Color::DoubleBlack;
-    RBNode* sibling = parent->left==child?parent->right:child->parent->left;
+    RBNode* sibling = parent->left==child?parent->right:parent->left;
     pointer_operations+=2;
     if (isRed(sibling)) {
         parent->color = Color::Red;

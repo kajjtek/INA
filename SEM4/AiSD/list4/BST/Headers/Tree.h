@@ -14,8 +14,13 @@ class Tree {
     static long long pointer_operations;
 
     Tree(){
-        this->NIL=NIL==nullptr?new Node():NIL;
-        this->root=this->NIL;
+        if (NIL == nullptr) {
+            NIL = new Node();
+            NIL->parent = NIL; 
+            NIL->left = NIL;
+            NIL->right = NIL;
+        }
+        this->root=NIL;
     }
     static void reset_counters(){
         comparisons = 0;

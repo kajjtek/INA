@@ -17,7 +17,7 @@ void runTest(const std::string& testName, std::vector<int> insertKeys, std::vect
     }
 
      std::cout << "\n--- Control ---\n";
-     tree.print_BST();
+    //  tree.print_BST();
 
     std::cout << "\n--- Deletion Phase ---\n";
     for (int key : deleteKeys) {

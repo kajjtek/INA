@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug  (macOS)", // Zmieniona nazwa, aby wskazać, że to dla Maca
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/main", // Ścieżka do pliku wykonywalnego (zwykle poprawna dla macOS)
+            
+            "args": [],
+            "stopAtEntry": true, 
+            "cwd": "${workspaceFolder}", 
+            "environment": [],
+            "externalConsole": true, 
+            "MIMode": "lldb", // Zmieniono na lldb, domyślny debugger na macOS
+            // "setupCommands": [ // Usunięto, ponieważ są specyficzne dla gdb
+            //     {
+            //         "description": "Enable pretty-printing for gdb",
+            //         "text": "-enable-pretty-printing",
+            //         "ignoreFailures": true
+            //     }
+            // ],
+            // "preLaunchTask": "build_rb_tree", 
+            // "miDebuggerPath": "/usr/bin/gdb" // Usunięto, ponieważ lldb jest zazwyczaj w PATH na macOS
+        }
+    ]
+}

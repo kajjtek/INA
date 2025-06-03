@@ -25,7 +25,6 @@ class Node {
         this->right=this;
     }
 
-    ~Node(){}
 };
 
 #endif

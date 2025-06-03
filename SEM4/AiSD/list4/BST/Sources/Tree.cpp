@@ -66,7 +66,9 @@ void Tree::doDeletion(Node* current, int key){
     comparisons++;
     if(key==this->root->value) { deletionRoot();return;}
     comparisons++;
-    if(key==current->value){
+    if(key>current->value) {doDeletion(current->right, key);}
+    else if(key<current->value) {doDeletion(current->left, key);}
+    else {
         // case 1 no children
         comparisons+=2;
         if(current->left==NIL && current->right==NIL){
@@ -105,8 +107,7 @@ void Tree::doDeletion(Node* current, int key){
             current->parent->left==current?current->parent->left=child:current->parent->right=child;
             delete current;
         }
-    }else if(key<current->value) doDeletion(current->left, key);
-    else doDeletion(current->right, key);
+    }
     comparisons++;
     pointer_operations++;
 }

@@ -15,18 +15,24 @@ void STree::insert(int key){
 void STree::Zig(SNode* x){
     if(x==NIL) return;
     SNode* parent = x->parent;
+    SNode* grandparent = parent->parent;
     parent->left=x->right;
     if(parent->left!=NIL) parent->left->parent=parent;
     x->right=parent;
+    if(grandparent!=NIL) {grandparent->left==parent?grandparent->left=x:grandparent->right=x;x->parent=grandparent;}
+    else x->parent=NIL;
     parent->parent=x;
 }
 
 void STree::Zag(SNode* x){
     if(x==NIL) return;
     SNode* parent = x->parent;
+    SNode* grandparent = parent->parent;
     parent->right=x->left;
     if(parent->right!=NIL) parent->right->parent=parent;
     x->left=parent;
+    if(grandparent!=NIL) {grandparent->left==parent?grandparent->left=x:grandparent->right=x;x->parent=grandparent;}
+    else x->parent=NIL;
     parent->parent=x;    
 }
 
@@ -55,11 +61,14 @@ void STree::ZagZig(SNode* x){//where x is the one we want to up twice
 }
 
 void STree::Splay(SNode* x){
+    if(x==NIL) return;
     while(x!=root){
-        if(x->parent==root){
+        if(x->parent==NIL) root=x;
+        else if(x->parent==root){
             if(x==x->parent->left) {
                 Zig(x);
             }else Zag(x);
+            root=x;
         } else {
             SNode* parent = x->parent;
             SNode* grandfather = parent->parent;
@@ -69,26 +78,11 @@ void STree::Splay(SNode* x){
             else ZagZig(x);
         }
     }
-    root=x;
 }
 
 void STree::SplayFind(int key){
     SNode* x = find(key);
-    while(x!=root){
-        if(x->parent==root){
-            if(x==x->parent->left) {
-                Zig(x);
-            }else Zag(x);
-        } else {
-            SNode* parent = x->parent;
-            SNode* grandfather = parent->parent;
-            if(x==parent->left && parent==grandfather->left) ZigZig(x);
-            else if(x==parent->right && parent==grandfather->right) ZagZag(x);
-            else if(x==parent->right && parent==grandfather->left) ZigZag(x);
-            else ZagZig(x);
-        }
-    }
-    root=x;
+    Splay(x);
 }
 
 void STree::doInsert(SNode* current, int key){
