@@ -3,6 +3,7 @@
 #include <tuple>
 #include <vector>
 #include <map>
+#include <iostream>
 
 
 // struct Comparator {
@@ -40,6 +41,16 @@ Graph GreedyAlgorithms::prism(Graph &g){ //queue weight, parent, the node
     return MST;
 }
 
+void parentEstablisher(std::unordered_map<Node*,Node*> &parentMap, Node* node,Node* parent){
+    parentMap[node] = parent;
+
+    for(auto it=node->neighbours.begin(); it!=node->neighbours.end(); it++){
+        Node* neighbour = it->first;
+        if(parentMap.contains(neighbour) || parent==neighbour) continue;
+        parentEstablisher(parentMap, neighbour, node);
+    }
+}
+
 Graph GreedyAlgorithms::Kruskal(Graph &g){
     Graph MST;
     std::unordered_map<Node*, Node*> cloneMap;
@@ -71,16 +82,34 @@ Graph GreedyAlgorithms::Kruskal(Graph &g){
     return MST;
 }
 
-void GreedyAlgorithms::informationPassing(Graph &g){
+int GreedyAlgorithms::calculateSize(std::unordered_map<Node*, int> &map, Node* node, std::unordered_map<Node*, Node*> &parentMap) {
+    int size = 1;
+    for(auto it=node->neighbours.begin(); it!=node->neighbours.end(); it++){
+        Node* neighbour = it->first;
+        if(neighbour==parentMap[node]) continue;
+        size+=calculateSize(map , neighbour, parentMap);
+    }
+    map[node]=size;
+
+    return size;
+}
+
+int GreedyAlgorithms::informationPassing(Graph &g){
     std::unordered_map<Node*, int> sizeMap;
     std::unordered_map<Node*, std::vector<Node*>> optimalChildOrder;
+    std::unordered_map<Node*, Node*> parentMap;
 
-    calculateSize(sizeMap, *g.allNodes.begin());
+    Node* start = *g.allNodes.begin();
+
+    parentEstablisher(parentMap, start, nullptr);
+
+    calculateSize(sizeMap, *g.allNodes.begin(), parentMap);
 
     for(Node* node : g.allNodes){
         std::vector<Node*> order;
         for(auto it=node->neighbours.begin(); it!=node->neighbours.end(); it++){
             Node* neighbour = it->first;
+            if(neighbour==parentMap[node]) continue;
             order.push_back(neighbour);
         }
 
@@ -90,20 +119,36 @@ void GreedyAlgorithms::informationPassing(Graph &g){
         optimalChildOrder[node] = order;
     }
 
+    int time = 0;
+    std::unordered_map<int, std::vector<Node*>> timeArrival;
+    std::vector<Node*> currentRound;
+    timeArrival[0] = {start};
+    do
+    {
+        currentRound = timeArrival[time];
+        for(Node* currentNode: currentRound){
+            std::vector<Node*> order = optimalChildOrder[currentNode];
+            for(int i=0; i<order.size(); i++){
+                timeArrival[time+i+1].push_back(order.at(i));
+            }
+        }
+        time++;
+    } while (!currentRound.empty());
 
+    return time-1;
 
+    // for(int k=0; k<timeArrival.size(); k++){
+    //     std::vector<Node*> currentRound = timeArrival[k];
+    //     if(currentRound.empty())continue;
+    //     std::cout<<"ROUND "<<k<<std::endl;
+    //     for(Node* currentNode: currentRound){
+    //         std::cout<<currentNode->index<<", ";
+    //     }
+    //     std::cout << std::endl;
+    // }
 }
 
-int calculateSize(std::unordered_map<Node*, int> &map, Node* node){
-    int size = 1;
-    for(auto it=node->neighbours.begin(); it!=node->neighbours.end(); it++){
-        Node* neighbour = it->first;
-        size+=calculateSize(map , neighbour);
-    }
-    map[node]=size;
 
-    return size;
-}
 
 // void GreedyAlgorithms::setupSizeMap(std::unordered_map<Node*, int> &map, Node* root){
 //     int size = 1;

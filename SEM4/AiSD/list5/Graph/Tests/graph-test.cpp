@@ -8,4 +8,5 @@ int main(){
     GreedyAlgorithms util;
     Graph mst = util.prism(graph);
     Graph mst2 = util.Kruskal(graph);
+    util.informationPassing(mst);
 }

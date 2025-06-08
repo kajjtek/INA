@@ -11,6 +11,21 @@
             "program": "${workspaceFolder}/Graph/Tests/graph-test",
             "cwd" : "${workspaceFolder}/Graph/Tests/",
             "MIMode": "lldb"
+        },
+        {
+            "name": "(gdb) Dołącz",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/Graph/Tests/graph-test.exe",
+            "cwd" : "${workspaceFolder}/Graph/Tests/",
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing", // To jest kluczowa komenda dla GDB
+                    "ignoreFailures": true
+                }
+            ]
         }
 
     ]
