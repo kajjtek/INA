@@ -16,6 +16,7 @@ import www.restapi_2025.JWT.LoginRequest;
 import www.restapi_2025.Objects.User;
 import www.restapi_2025.Services.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,6 +51,20 @@ public class AuthController {
         if(userService.userExists(user.getUsername())){
             return ResponseEntity.badRequest().body("Error: Username is already taken");
         }
+        User newUser = userService.createUser(user);
+
+        return ResponseEntity.ok("User registered successfully!");
+    }
+
+    @PostMapping("/admin/create")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> registerAdmin(@RequestBody User user){
+        if(userService.userExists(user.getUsername())){
+            return ResponseEntity.badRequest().body("Error: Username is already taken");
+        }
+        List<String> list = new ArrayList<>();
+        list.add("ROLE_ADMIN");
+        user.setRoles(list);
         User newUser = userService.createUser(user);
 
         return ResponseEntity.ok("User registered successfully!");
