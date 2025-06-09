@@ -3,7 +3,7 @@ import pandas as pd
 import os
 
 def plot_comparisons_history(num_trials=5, folder='.'):
-    for i in range(1, num_trials + 1):
+    for i in range(0, num_trials):
         filename = os.path.join(folder, f"experiment_{i}.csv")
         if not os.path.exists(filename):
             print(f"File not found: {filename}")
