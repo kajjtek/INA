@@ -1,5 +1,6 @@
 #include <iostream>
 #include <limits>
+#include <fstream> // Required for file operations
 #include "../Headers/DSU.h"
 #include "../Headers/GreedyAlgorithms.h"
 #include "../Headers/Node.h"
@@ -10,67 +11,89 @@
 int main() {
     std::cout << "Rozpoczynam analizę eksperymentalną..." << std::endl;
 
-    // Parametry eksperymentu
-    const int MIN_NODES = 100;         // Minimalna liczba wierzchołków
-    const int MAX_NODES = 1000;        // Maksymalna liczba wierzchołków
-    const int NODE_STEP = 100;         // Krok zwiększania liczby wierzchołków
-    const int NUM_TRIALS_PER_N = 20;   // Liczba powtórzeń dla każdego rozmiaru drzewa
+    // Experiment parameters
+    const int MIN_NODES = 100;         // Minimum number of nodes
+    const int MAX_NODES = 1000;        // Maximum number of nodes
+    const int NODE_STEP = 100;         // Step for increasing node count
+    const int NUM_TRIALS_PER_N = 20;   // Number of trials for each tree size
 
-    std::random_device rd;   // Urządzenie do generowania prawdziwie losowych wartości (do inicjalizacji)
+    std::random_device rd;   // Device for generating truly random values (for initialization)
     std::mt19937 rng(rd());
 
-    // Nagłówek dla wyjścia w formacie CSV
+    // --- File output setup ---
+    // Open a file stream for writing
+    std::ofstream outputFile("information_passing_results.csv");
+
+    // Check if the file was opened successfully
+    if (!outputFile.is_open()) {
+        std::cerr << "Błąd: Nie można otworzyć pliku information_passing_results.csv do zapisu." << std::endl;
+        return 1; // Indicate an error
+    }
+
+    // Write the CSV header to the file
+    outputFile << "N_Nodes,Min_Rounds,Max_Rounds,Avg_Rounds" << std::endl;
+    // Also print to console for immediate feedback
     std::cout << "N_Nodes,Min_Rounds,Max_Rounds,Avg_Rounds" << std::endl;
+    // --- End file output setup ---
+
     GreedyAlgorithms util;
 
-    // Główna pętla eksperymentalna
+    // Main experimental loop
     for (int n = MIN_NODES; n <= MAX_NODES; n += NODE_STEP) {
-        // Zmienne do zbierania wyników dla bieżącej liczby wierzchołków 'n'
-        int min_rounds_for_n = std::numeric_limits<int>::max(); // Inicjalizacja na maksymalną wartość int
-        int max_rounds_for_n = 0;                               // Inicjalizacja na 0
-        long long sum_rounds_for_n = 0;                         // Użyj long long, aby uniknąć przepełnienia sumy
+        // Variables for collecting results for the current number of nodes 'n'
+        int min_rounds_for_n = std::numeric_limits<int>::max(); // Initialize to maximum int value
+        int max_rounds_for_n = 0;                               // Initialize to 0
+        long long sum_rounds_for_n = 0;                         // Use long long to prevent sum overflow
 
-        // Pętla wykonująca wiele prób dla bieżącej liczby wierzchołków 'n'
+        // Loop performing multiple trials for the current number of nodes 'n'
         for (int trial = 0; trial < NUM_TRIALS_PER_N; ++trial) {
-            // 1. Generuj losowy graf (w tym przypadku już drzewo)
-            // Obiekt `randomGraph` zostanie zniszczony na końcu tej iteracji pętli wewnętrznej,
-            // a jego destruktor zwolni zaalokowane Node*.
+            // 1. Generate a random graph (in this case, already a tree)
+            // The `randomGraph` object will be destroyed at the end of this inner loop iteration,
+            // and its destructor will deallocate the allocated Node*s.
             Graph randomGraph;
             randomGraph.createRandomFullGraph(n);
-            
-            // 2. Wygeneruj MST z `randomGraph` za pomocą algorytmu Pryma.
-            // Ważne: Zwrócony obiekt `mst` będzie zawierał *nowe* obiekty Node*,
-            // które są kopiami struktury z `randomGraph`.
+
+            // 2. Generate an MST from `randomGraph` using Prim's algorithm.
+            // Important: The returned `mst` object will contain *new* Node* objects,
+            // which are copies of the structure from `randomGraph`.
             Graph mst = util.prism(randomGraph);
-            
-            // Sprawdzenie, czy MST zostało poprawnie utworzone i nie jest puste
+
+            // Check if MST was correctly created and is not empty
             if (mst.allNodes.empty()) {
                 std::cerr << "Ostrzeżenie: MST jest puste dla N=" << n << ", próba=" << trial << ". Pomijam." << std::endl;
-                continue; // Pomiń tę próbę, jeśli MST jest puste (nie powinno się zdarzyć dla n > 0)
+                continue; // Skip this trial if MST is empty (shouldn't happen for n > 0)
             }
 
-            // 3. Wybierz losowy wierzchołek startowy z *wygenerowanego MST*
+            // 3. Choose a random starting node from the *generated MST*
+            // This part was commented out in your original code, if you want to use it:
             // std::uniform_int_distribution<> node_idx_dist(0, mst.allNodes.size() - 1);
             // Node* randomStartNode = mst.allNodes[node_idx_dist(rng)];
 
-            // 4. Uruchom symulację propagacji informacji na MST
-            // Funkcja informationPassing powinna zwrócić maksymalną liczbę rund.
+            // 4. Run the information passing simulation on the MST
+            // The informationPassing function should return the maximum number of rounds.
             int rounds_needed = util.informationPassing(mst);
-            
-            // 5. Zbieraj wyniki z bieżącej próby
+
+            // 5. Collect results from the current trial
             min_rounds_for_n = std::min(min_rounds_for_n, rounds_needed);
             max_rounds_for_n = std::max(max_rounds_for_n, rounds_needed);
             sum_rounds_for_n += rounds_needed;
 
-            // Obiekty `mst` i `randomGraph` (i ich zawartość Node*) zostaną automatycznie zwolnione
-            // po zakończeniu tej iteracji pętli wewnętrznej dzięki destruktorom klasy Graph.
+            // `mst` and `randomGraph` objects (and their Node* contents) will be automatically
+            // deallocated at the end of this inner loop iteration thanks to the Graph class destructors.
         }
 
-        // Oblicz średnią liczbę rund dla bieżącej liczby wierzchołków 'n'
+        // Calculate the average number of rounds for the current number of nodes 'n'
         double avg_rounds_for_n = static_cast<double>(sum_rounds_for_n) / NUM_TRIALS_PER_N;
 
-        // Wypisz wyniki w formacie CSV (N_Nodes,Min_Rounds,Max_Rounds,Avg_Rounds)
-        // std::fixed i std::setprecision(2) służą do formatowania liczby zmiennoprzecinkowej.
+        // Write the results to the file in CSV format (N_Nodes,Min_Rounds,Max_Rounds,Avg_Rounds)
+        // std::fixed and std::setprecision(2) are used for floating-point number formatting.
+        outputFile << n << ","
+                   << min_rounds_for_n << ","
+                   << max_rounds_for_n << ","
+                   << std::fixed << std::setprecision(2) << avg_rounds_for_n
+                   << std::endl;
+
+        // Also print to console for real-time progress monitoring
         std::cout << n << ","
                   << min_rounds_for_n << ","
                   << max_rounds_for_n << ","
@@ -78,8 +101,12 @@ int main() {
                   << std::endl;
     }
 
-    std::cout << "Analiza zakończona. Wyniki zostały wypisane na standardowe wyjście (format CSV)." << std::endl;
-    std::cout << "Możesz przekierować to wyjście do pliku, np. './your_program > results.csv'" << std::endl;
+    // --- File output cleanup ---
+    outputFile.close(); // Close the output file when done
+    // --- End file output cleanup ---
+
+    std::cout << "Analiza zakończona. Wyniki zostały zapisane do pliku information_passing_results.csv" << std::endl;
+    std::cout << "Wyniki są również wypisywane na standardowe wyjście." << std::endl;
 
     return 0;
 }

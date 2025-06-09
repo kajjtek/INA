@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 try:
-    df = pd.read_csv('message_propagation_analysis.csv')
+    df = pd.read_csv('information_passing_results.csv')
 except FileNotFoundError:
     print("Error: 'message_propagation_analysis.csv' not found.")
     print("Please ensure you have run the C++ program and the file was generated.")
@@ -28,7 +28,7 @@ print("Wykres 'Analiza rozesłania wiadomości w drzewach MST' został wygenerow
 
 # Wczytaj dane z pliku CSV
 try:
-    df = pd.read_csv('mst_times_comparison.csv') # Zakładana nazwa pliku
+    df = pd.read_csv('results.csv') # Zakładana nazwa pliku
 except FileNotFoundError:
     print("Błąd: Plik 'mst_times_comparison.csv' nie został znaleziony.")
     print("Upewnij się, że plik CSV z danymi jest w tym samym katalogu co skrypt.")

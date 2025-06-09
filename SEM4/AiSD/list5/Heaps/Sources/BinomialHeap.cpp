@@ -52,6 +52,7 @@ Node* BinomialHeap::merge(Node* H1Head, Node* H2Head) {
         tail = tail->sibling;
     }
 
+    currentOperationComparisons++;
     if (H1Head != nullptr) {
         tail->sibling = H1Head;
     } else if (H2Head != nullptr) {
@@ -62,7 +63,7 @@ Node* BinomialHeap::merge(Node* H1Head, Node* H2Head) {
 
 
 void BinomialHeap::heapInsert(int key) {
-    currentOperationComparisons = 0;
+    // currentOperationComparisons = 0;
     Node* x = new Node(key);
     BinomialHeap tempHeap;
     tempHeap.head = x;
