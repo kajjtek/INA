@@ -2,48 +2,28 @@
 #define BINOMIALHEAP_H
 
 #include "Node.h"
+#include <vector>
 
 class BinomialHeap {
 private:
     Node* head;
-    mutable long long currentOperationComparisons;
-    mutable long long totalComparisonsMade;
+    int comparisons;
 
-    void deleteAllNodes(Node* node);
-
-    void link(Node* y, Node* z);
-
-    Node* merge(Node* H1Head, Node* H2Head);
+    void linkTrees(Node* y, Node* z);
+    Node* mergeHeaps(Node* h1, Node* h2);
+    Node* unionHeaps(Node* h1, Node* h2);
+    void printTree(Node* node, int indent = 0);
 
 public:
-    BinomialHeap() : head(nullptr), currentOperationComparisons(0), totalComparisonsMade(0) {}
+    BinomialHeap();
 
-    ~BinomialHeap() {
-        deleteAllNodes(head);
-        head = nullptr;
-    }
+    void insert(int key);
+    void merge(BinomialHeap& other);
+    int extractMin();
+    bool isEmpty() const;
 
-    void heapInsert(int key);
-
-    Node* extractMin();
-
-    void heapUnion(BinomialHeap& H2);
-
-    long long getComparisonCount() const {
-        return currentOperationComparisons;
-    }
-
-    void resetComparisonCount() {
-        currentOperationComparisons = 0;
-    }
-
-    long long getTotalComparisonCount() const {
-        return totalComparisonsMade;
-    }
-
-    Node* getHead() const {
-        return head;
-    }
+    int getComparisons() const;
+    void resetComparisons();
 };
 
 #endif

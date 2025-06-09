@@ -13,7 +13,7 @@ int main() {
 
     // Experiment parameters
     const int MIN_NODES = 100;         // Minimum number of nodes
-    const int MAX_NODES = 1000;        // Maximum number of nodes
+    const int MAX_NODES = 5000;        // Maximum number of nodes
     const int NODE_STEP = 100;         // Step for increasing node count
     const int NUM_TRIALS_PER_N = 20;   // Number of trials for each tree size
 

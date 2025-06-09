@@ -1,173 +1,149 @@
 #include "../Header/BinomialHeap.h"
-#include <algorithm>
+#include <iostream>
+#include <climits>
+#include <queue>
 
-void BinomialHeap::deleteAllNodes(Node* node) {
-        if (node == nullptr) return;
-        Node* current = node;
-        while (current != nullptr) {
-            Node* nextSibling = current->sibling;
-            deleteAllNodes(current->child);
-            delete current;
-            current = nextSibling;
-        }
-    }
+BinomialHeap::BinomialHeap() : head(nullptr), comparisons(0) {}
 
-void BinomialHeap::link(Node* y, Node* z) {
-    currentOperationComparisons++;
-    if (y->key > z->key) {
-        std::swap(y, z);
-    }
+void BinomialHeap::linkTrees(Node* y, Node* z) {
     y->parent = z;
     y->sibling = z->child;
     z->child = y;
     z->degree++;
 }
 
-Node* BinomialHeap::merge(Node* H1Head, Node* H2Head) {
-    if (H1Head == nullptr) return H2Head;
-    if (H2Head == nullptr) return H1Head;
+Node* BinomialHeap::mergeHeaps(Node* h1, Node* h2) {
+    if (!h1) return h2;
+    if (!h2) return h1;
 
-    Node* newHead = nullptr;
+    Node* head = nullptr;
     Node* tail = nullptr;
 
-    currentOperationComparisons++;
-    if (H1Head->degree <= H2Head->degree) {
-        newHead = H1Head;
-        H1Head = H1Head->sibling;
-    } else {
-        newHead = H2Head;
-        H2Head = H2Head->sibling;
-    }
-    tail = newHead;
+    Node* a = h1;
+    Node* b = h2;
 
-    while (H1Head != nullptr && H2Head != nullptr) {
-        currentOperationComparisons++;
-        if (H1Head->degree <= H2Head->degree) {
-            tail->sibling = H1Head;
-            H1Head = H1Head->sibling;
+    if (a->degree <= b->degree) {
+        head = a;
+        a = a->sibling;
+    } else {
+        head = b;
+        b = b->sibling;
+    }
+
+    tail = head;
+
+    while (a && b) {
+        if (a->degree <= b->degree) {
+            tail->sibling = a;
+            a = a->sibling;
         } else {
-            tail->sibling = H2Head;
-            H2Head = H2Head->sibling;
+            tail->sibling = b;
+            b = b->sibling;
         }
         tail = tail->sibling;
     }
 
-    currentOperationComparisons++;
-    if (H1Head != nullptr) {
-        tail->sibling = H1Head;
-    } else if (H2Head != nullptr) {
-        tail->sibling = H2Head;
+    tail->sibling = (a) ? a : b;
+
+    return head;
+}
+
+Node* BinomialHeap::unionHeaps(Node* h1, Node* h2) {
+    Node* newHead = mergeHeaps(h1, h2);
+    if (!newHead) return nullptr;
+
+    Node* prev = nullptr;
+    Node* curr = newHead;
+    Node* next = curr->sibling;
+
+    while (next) {
+        if ((curr->degree != next->degree) ||
+            (next->sibling && next->sibling->degree == curr->degree)) {
+            prev = curr;
+            curr = next;
+        } else {
+            comparisons++;
+            if (curr->key <= next->key) {
+                curr->sibling = next->sibling;
+                linkTrees(next, curr);
+            } else {
+                if (!prev) {
+                    newHead = next;
+                } else {
+                    prev->sibling = next;
+                }
+                linkTrees(curr, next);
+                curr = next;
+            }
+        }
+        next = curr->sibling;
     }
+
     return newHead;
 }
 
-
-void BinomialHeap::heapInsert(int key) {
-    // currentOperationComparisons = 0;
-    Node* x = new Node(key);
-    BinomialHeap tempHeap;
-    tempHeap.head = x;
-    heapUnion(tempHeap);
-    tempHeap.head = nullptr;
-    totalComparisonsMade += currentOperationComparisons;
+void BinomialHeap::insert(int key) {
+    BinomialHeap temp;
+    temp.head = new Node(key);
+    this->head = unionHeaps(this->head, temp.head);
 }
 
-Node* BinomialHeap::extractMin() {
-    currentOperationComparisons = 0;
-    if (head == nullptr) return nullptr;
+void BinomialHeap::merge(BinomialHeap& other) {
+    this->head = unionHeaps(this->head, other.head);
+    other.head = nullptr;
+}
+
+int BinomialHeap::extractMin() {
+    if (!head) return INT_MIN;
 
     Node* minNode = head;
     Node* minPrev = nullptr;
-    Node* current = head->sibling;
-    Node* prev = head;
+    Node* curr = head;
+    Node* prev = nullptr;
 
-    while (current != nullptr) {
-        currentOperationComparisons++;
-        if (current->key < minNode->key) {
-            minNode = current;
+    int minKey = minNode->key;
+
+    while (curr) {
+        comparisons++;
+        if (curr->key < minKey) {
+            minKey = curr->key;
+            minNode = curr;
             minPrev = prev;
         }
-        prev = current;
-        current = current->sibling;
+        prev = curr;
+        curr = curr->sibling;
     }
 
-    if (minNode == head) {
-        head = minNode->sibling;
-    } else {
+    if (minPrev) {
         minPrev->sibling = minNode->sibling;
+    } else {
+        head = minNode->sibling;
     }
-    minNode->sibling = nullptr;
 
-    BinomialHeap tempHeapFromChildren;
-    Node* childHead = nullptr;
-    Node* currentChild = minNode->child;
-    Node* nextChild;
+    Node* child = minNode->child;
+    Node* reversed = nullptr;
 
-    while (currentChild != nullptr) {
-        currentChild->parent = nullptr;
-        nextChild = currentChild->sibling;
-        currentChild->sibling = childHead;
-        childHead = currentChild;
-        currentChild = nextChild;
+    while (child) {
+        Node* next = child->sibling;
+        child->sibling = reversed;
+        child->parent = nullptr;
+        reversed = child;
+        child = next;
     }
-    tempHeapFromChildren.head = childHead;
 
-    heapUnion(tempHeapFromChildren);
-    tempHeapFromChildren.head = nullptr;
-
-    totalComparisonsMade += currentOperationComparisons;
-    return minNode;
+    head = unionHeaps(head, reversed);
+    delete minNode;
+    return minKey;
 }
 
-void BinomialHeap::heapUnion(BinomialHeap& H2) {
-    currentOperationComparisons = 0;
+bool BinomialHeap::isEmpty() const {
+    return head == nullptr;
+}
 
-    Node* H1HeadOriginal = this->head;
-    Node* H2HeadOriginal = H2.head;
+int BinomialHeap::getComparisons() const {
+    return comparisons;
+}
 
-    Node* mergedHead = merge(H1HeadOriginal, H2HeadOriginal);
-
-    this->head = nullptr;
-    H2.head = nullptr;
-
-    if (mergedHead == nullptr) {
-        totalComparisonsMade += currentOperationComparisons;
-        return;
-    }
-
-    Node* prevX = nullptr;
-    Node* x = mergedHead;
-    Node* nextX = x->sibling;
-
-    while (nextX != nullptr) {
-        bool degreesDiffer = (x->degree != nextX->degree);
-        currentOperationComparisons++;
-
-        bool nextNextHasSameDegree = false;
-        if (nextX->sibling != nullptr) {
-            currentOperationComparisons++;
-            nextNextHasSameDegree = (nextX->sibling->degree == x->degree);
-        }
-
-        if (degreesDiffer || nextNextHasSameDegree) {
-            prevX = x;
-            x = nextX;
-        } else {
-            if (x->key <= nextX->key) {
-                x->sibling = nextX->sibling;
-                link(nextX, x);
-            } else {
-                if (prevX == nullptr) {
-                    mergedHead = nextX;
-                } else {
-                    prevX->sibling = nextX;
-                }
-                link(x, nextX);
-                x = nextX;
-            }
-        }
-        nextX = x->sibling;
-    }
-    this->head = mergedHead;
-    totalComparisonsMade += currentOperationComparisons;
+void BinomialHeap::resetComparisons() {
+    comparisons = 0;
 }

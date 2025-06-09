@@ -1,43 +1,43 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import os
 
-# Wczytaj dane z pliku CSV
-try:
-    df_exp1 = pd.read_csv('comparisons_per_operation_n500.csv')
-except FileNotFoundError:
-    print("Błąd: Plik 'comparisons_per_operation_n500.csv' nie został znaleziony.")
-    print("Upewnij się, że uruchomiłeś program C++ i plik został wygenerowany.")
-    exit()
+def plot_comparisons_history(num_trials=5, folder='.'):
+    for i in range(1, num_trials + 1):
+        filename = os.path.join(folder, f"experiment_{i}.csv")
+        if not os.path.exists(filename):
+            print(f"File not found: {filename}")
+            continue
+        
+        df = pd.read_csv(filename, header=None, names=['operation', 'comparisons'])
+        
+        plt.figure(figsize=(10, 5))
+        plt.plot(df['operation'], df['comparisons'], label=f'Trial {i}', color='blue')
+        plt.xlabel("Operation index (i)")
+        plt.ylabel("Number of comparisons")
+        plt.title(f"Comparisons per Extract-Min operation (Trial {i})")
+        plt.grid(True)
+        plt.tight_layout()
+        plt.savefig(f"plot_comparisons_trial_{i}.png")
+        plt.close()
+        print(f"Saved plot_comparisons_trial_{i}.png")
 
-plt.figure(figsize=(14, 8)) # Ustawia rozmiar wykresu
+def plot_average_cost_vs_n(filename='average_costs.csv'):
+    if not os.path.exists(filename):
+        print(f"File not found: {filename}")
+        return
+    df = pd.read_csv(filename)
+    plt.figure(figsize=(10, 6))
+    plt.plot(df['n'], df['average_cost'], marker='o', linestyle='-', color='green')
+    plt.xlabel("n")
+    plt.ylabel("Average cost per Extract-Min operation")
+    plt.title("Average cost vs. n")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig("plot_average_cost_vs_n.png")
+    plt.close()
+    print("Saved plot_average_cost_vs_n.png")
 
-# Rysuj dane dla każdego eksperymentu
-for i in sorted(df_exp1['experiment_id'].unique()):
-    subset = df_exp1[df_exp1['experiment_id'] == i]
-    plt.plot(subset['operation_index'], subset['comparisons_count'], label=f'Eksperyment {i}', alpha=0.7)
-
-plt.xlabel('Indeks operacji (kolejność wykonania)')
-plt.ylabel('Liczba porównań kluczy')
-plt.title('Liczba porównań na operację dla n=500 (5 eksperymentów)')
-plt.legend(title='ID eksperymentu')
-plt.grid(True, linestyle='--', alpha=0.6)
-plt.tight_layout() # Dopasuj układ, aby zapobiec przycinaniu etykiet
-plt.show()
-
-# Wczytaj dane z pliku CSV
-try:
-    df_exp2 = pd.read_csv('n_vs_average_cost.csv')
-except FileNotFoundError:
-    print("Błąd: Plik 'n_vs_average_cost.csv' nie został znaleziony.")
-    print("Upewnij się, że uruchomiłeś program C++ i plik został wygenerowany.")
-    exit()
-
-plt.figure(figsize=(12, 7)) # Ustawia rozmiar wykresu
-plt.plot(df_exp2['n'], df_exp2['average_cost'], marker='o', linestyle='-', color='skyblue', markersize=4, linewidth=1.5)
-
-plt.xlabel('Wartość n')
-plt.ylabel('Średni koszt operacji (całkowita liczba porównań / n)')
-plt.title('Zależność średniego kosztu operacji od n')
-plt.grid(True, linestyle='--', alpha=0.6)
-plt.tight_layout()
-plt.show()
+if __name__ == "__main__":
+    plot_comparisons_history()
+    plot_average_cost_vs_n()

@@ -8,7 +8,7 @@ using namespace std::chrono;
 
 int main() {
     int nMin = 100;
-    int nMax = 1000;
+    int nMax = 2000;
     int step = 100;
     int rep = 20;
 

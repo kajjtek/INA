@@ -1,143 +1,89 @@
+#include "../Header/BinomialHeap.h"
 #include <iostream>
 #include <vector>
-#include <random>
-#include <algorithm>
+#include <cstdlib>
+#include <ctime>
 #include <fstream>
-#include <climits>
-#include <iomanip>
-#include <chrono>
-#include "../Header/Node.h"
-#include "../Header/BinomialHeap.h"
 
+void runExperiment(int n, int experimentId) {
+    BinomialHeap H1, H2;
 
-void runSingleNExperiment(int nVal, int experimentRunId, std::ofstream& dataFile) {
-    BinomialHeap H1, H2, H;
-    std::vector<long long> comparisonsPerOpHistory;
-
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distrib(1, 1000000);
-
-    for (int i = 0; i < nVal; ++i) {
-        int val = distrib(gen);
-        H1.heapInsert(val);
-        comparisonsPerOpHistory.push_back(H1.getComparisonCount());
-        H1.resetComparisonCount();
+    std::srand(std::time(nullptr) + experimentId);
+    for (int i = 0; i < n; ++i) {
+        H1.insert(std::rand());
+        H2.insert(std::rand());
     }
 
-    for (int i = 0; i < nVal; ++i) {
-        int val = distrib(gen);
-        H2.heapInsert(val);
-        comparisonsPerOpHistory.push_back(H2.getComparisonCount());
-        H2.resetComparisonCount();
+    H1.merge(H2);
+
+    std::vector<int> extracted;
+    std::vector<int> comparisonsPerExtract;
+
+    for (int i = 0; i < 2 * n; ++i) {
+        H1.resetComparisons();
+        int min = H1.extractMin();
+        int comps = H1.getComparisons();
+
+        if (min == INT_MIN) {
+            std::cerr << "Error: extracted INT_MIN\n";
+            return;
+        }
+
+        comparisonsPerExtract.push_back(comps);
+        extracted.push_back(min);
     }
 
-    H.heapUnion(H1);
-    comparisonsPerOpHistory.push_back(H.getComparisonCount());
-    H.resetComparisonCount();
-
-    H.heapUnion(H2);
-    comparisonsPerOpHistory.push_back(H.getComparisonCount());
-    H.resetComparisonCount();
-
-    std::vector<int> extractedElements;
-    for (int i = 0; i < 2 * nVal; ++i) {
-        Node* minNode = H.extractMin();
-        if (minNode) {
-            extractedElements.push_back(minNode->key);
-            comparisonsPerOpHistory.push_back(H.getComparisonCount());
-            H.resetComparisonCount();
-            delete minNode;
-        } else {
-            std::cerr << "Błąd: Próbowano wykonać Extract-Min na pustym kopcu przed 2n operacjami dla n="
-                      << nVal << ", eksperyment=" << experimentRunId << std::endl;
-            break;
+    // Check if sorted
+    for (size_t i = 1; i < extracted.size(); ++i) {
+        if (extracted[i - 1] > extracted[i]) {
+            std::cerr << "Error: Extracted sequence is not sorted.\n";
+            return;
         }
     }
 
-    bool isSorted = std::is_sorted(extractedElements.begin(), extractedElements.end());
-    if (!isSorted) {
-        std::cerr << "Błąd: Wyodrębnione elementy nie są posortowane dla n=" << nVal
-                  << ", eksperyment=" << experimentRunId << std::endl;
+    // Save to file
+    std::ofstream file("experiment_" + std::to_string(experimentId) + ".csv");
+    for (size_t i = 0; i < comparisonsPerExtract.size(); ++i) {
+        file << i + 1 << "," << comparisonsPerExtract[i] << "\n";
     }
-    if (H.getHead() != nullptr) {
-        std::cerr << "Błąd: Kopiec nie jest pusty po 2n ekstrakcjach dla n=" << nVal
-                  << ", eksperyment=" << experimentRunId << std::endl;
-    }
-
-    for (size_t i = 0; i < comparisonsPerOpHistory.size(); ++i) {
-        dataFile << experimentRunId << "," << i << "," << comparisonsPerOpHistory[i] << std::endl;
-    }
+    file.close();
+    std::cout << "Experiment " << experimentId << " done.\n";
 }
 
-void runNvsAverageCostExperiment(int startN, int endN, int stepN, std::ofstream& dataFile) {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-
-    dataFile << "n,average_cost" << std::endl;
-
-    for (int n = startN; n <= endN; n += stepN) {
-        long long totalComparisonsForN = 0;
-        int numTrials = 3;
-
-        for (int trial = 0; trial < numTrials; ++trial) {
-            BinomialHeap H1, H2, H;
-            std::uniform_int_distribution<> distrib(1, 1000000);
-
+void runAverageCostExperiment() {
+    std::ofstream file("average_cost.csv");
+    for (int n = 100; n <= 10000; n += 100) {
+        long long totalComparisons = 0;
+        for (int t = 0; t < 5; ++t) {
+            BinomialHeap H1, H2;
+            std::srand(std::time(nullptr) + t + n);
             for (int i = 0; i < n; ++i) {
-                H1.heapInsert(distrib(gen));
-            }
-            for (int i = 0; i < n; ++i) {
-                H2.heapInsert(distrib(gen));
+                H1.insert(std::rand());
+                H2.insert(std::rand());
             }
 
-            H.heapUnion(H1);
-            H.heapUnion(H2);
-
+            H1.merge(H2);
             for (int i = 0; i < 2 * n; ++i) {
-                Node* minNode = H.extractMin();
-                if (minNode) {
-                    delete minNode;
-                }
+                H1.resetComparisons();
+                H1.extractMin();
+                totalComparisons += H1.getComparisons();
             }
-            totalComparisonsForN += H.getTotalComparisonCount();
         }
-        double avgCostPerInitialN = static_cast<double>(totalComparisonsForN) / (numTrials * n);
-
-        dataFile << n << "," << std::fixed << std::setprecision(6) << avgCostPerInitialN << std::endl;
+        double avgCost = static_cast<double>(totalComparisons) / (2 * n * 5);
+        file << n << "," << avgCost << "\n";
+        std::cout << "n = " << n << " done.\n";
     }
+    file.close();
 }
-
 
 int main() {
-    std::srand(static_cast<unsigned int>(std::time(nullptr)));
-
-    std::ofstream exp1Data("comparisons_per_operation_n500.csv");
-    if (!exp1Data.is_open()) {
-        std::cerr << "Nie mozna otworzyc pliku comparisons_per_operation_n500.csv" << std::endl;
-        return 1;
-    }
-    exp1Data << "experiment_id,operation_index,comparisons_count" << std::endl;
-
-    std::cout << "Przeprowadzanie eksperymentow dla n = 500 (5 powtorzen)..." << std::endl;
+    // 5 experiments for n = 500
     for (int i = 0; i < 5; ++i) {
-        runSingleNExperiment(500, i + 1, exp1Data);
-    }
-    exp1Data.close();
-    std::cout << "Dane dla eksperymentu n=500 zapisane do comparisons_per_operation_n500.csv" << std::endl;
-    std::cout << "---" << std::endl;
-
-    std::ofstream exp2Data("n_vs_average_cost.csv");
-    if (!exp2Data.is_open()) {
-        std::cerr << "Nie mozna otworzyc pliku n_vs_average_cost.csv" << std::endl;
-        return 1;
+        runExperiment(500, i);
     }
 
-    std::cout << "\nPrzeprowadzanie eksperymentow dla n od 100 do 10000 (krok 100)..." << std::endl;
-    runNvsAverageCostExperiment(100, 10000, 100, exp2Data);
-    exp2Data.close();
-    std::cout << "Dane dla eksperymentu zaleznosci n od sredniego kosztu zapisane do n_vs_average_cost.csv" << std::endl;
-    std::cout << "---" << std::endl;
+    // Average cost experiment
+    runAverageCostExperiment();
 
     return 0;
 }
