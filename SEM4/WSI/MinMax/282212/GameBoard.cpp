@@ -1,4 +1,4 @@
-#include "../GameBoard.h"
+#include "./GameBoard.h"
 #include <stdio.h>
 
 const int GameBoard::lose[48][3][2] = {

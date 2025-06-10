@@ -23,7 +23,6 @@ int main(int argc, char *argv[]) {
   int msg;
   int move;
 
-
   GameBoard gameBoard_instance;
   SolutionFinder ai_solver;
 

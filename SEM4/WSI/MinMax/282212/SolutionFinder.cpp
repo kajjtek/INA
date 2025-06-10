@@ -1,5 +1,5 @@
-#include "../SolutionFinder.h"
-#include "../GameBoard.h"
+#include "./SolutionFinder.h"
+#include "./GameBoard.h"
 #include <limits>
 #include <iostream>
 
@@ -141,7 +141,7 @@ int SolutionFinder::calculateHeurestic(const GameBoard &gameBoard){
     score +=calculateVerticalPatterns(gameBoard);
     score +=calculateDiagonalPatterns(gameBoard);
     return 1*score
-    //  + 1*winningPossibilitiesHeurestic(gameBoard)
+     + 1*winningPossibilitiesHeurestic(gameBoard)
     ;
 }
 

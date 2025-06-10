@@ -192,37 +192,38 @@ if __name__ == '__main__':
     true_labels_list = all_labels.tolist()
 
 
-    # Task 1.1: K-means for 10 clusters
-    print("\n--- Running K-means for 10 clusters ---")
-    k_10_centroids, k_10_assignments, k_10_inertia = run_experiment(10, 3, data_points)
-    print(f"K=10: Final Inertia = {k_10_inertia:.2f}")
+    # # Task 1.1: K-means for 10 clusters
+    # print("\n--- Running K-means for 10 clusters ---")
+    # k_10_centroids, k_10_assignments, k_10_inertia = run_experiment(10, 3, data_points)
+    # print(f"K=10: Final Inertia = {k_10_inertia:.2f}")
 
-    # Task 1.2: Plot assignment matrix for 10 clusters
-    print("\n--- Plotting assignment matrix for 10 clusters ---")
-    plot_assignment_matrix(true_labels_list, k_10_assignments, k_clusters=10)
+    # # Task 1.2: Plot assignment matrix for 10 clusters
+    # print("\n--- Plotting assignment matrix for 10 clusters ---")
+    # plot_assignment_matrix(true_labels_list, k_10_assignments, k_clusters=10)
 
-    # Task 1.3: Plot centroids for 10 clusters
-    print("\n--- Plotting centroids for 10 clusters ---")
-    plot_centroids(k_10_centroids, image_shape=(28, 28))
+    # # Task 1.3: Plot centroids for 10 clusters
+    # print("\n--- Plotting centroids for 10 clusters ---")
+    # plot_centroids(k_10_centroids, image_shape=(28, 28))
 
 
-    # Task 1.4: Repeat for 15, 20, and 30 clusters
-    # K=15
-    print("\n--- Running K-means for 15 clusters ---")
-    k_15_centroids, k_15_assignments, k_15_inertia = run_experiment(15, 3, data_points)
-    print(f"K=15: Final Inertia = {k_15_inertia:.2f}")
-    plot_assignment_matrix(true_labels_list, k_15_assignments, k_clusters=15)
-    plot_centroids(k_15_centroids, image_shape=(28, 28))
+    # # Task 1.4: Repeat for 15, 20, and 30 clusters
+    # # K=15
+    # print("\n--- Running K-means for 15 clusters ---")
+    # k_15_centroids, k_15_assignments, k_15_inertia = run_experiment(15, 3, data_points)
+    # print(f"K=15: Final Inertia = {k_15_inertia:.2f}")
+    # plot_assignment_matrix(true_labels_list, k_15_assignments, k_clusters=15)
+    # plot_centroids(k_15_centroids, image_shape=(28, 28))
 
-    # K=20
-    print("\n--- Running K-means for 20 clusters ---")
-    k_20_centroids, k_20_assignments, k_20_inertia = run_experiment(20, 3, data_points)
-    print(f"K=20: Final Inertia = {k_20_inertia:.2f}")
-    plot_assignment_matrix(true_labels_list, k_20_assignments, k_clusters=20)
-    plot_centroids(k_20_centroids, image_shape=(28, 28))
+    # # K=20
+    # print("\n--- Running K-means for 20 clusters ---")
+    # k_20_centroids, k_20_assignments, k_20_inertia = run_experiment(20, 3, data_points)
+    # print(f"K=20: Final Inertia = {k_20_inertia:.2f}")
+    # plot_assignment_matrix(true_labels_list, k_20_assignments, k_clusters=20)
+    # plot_centroids(k_20_centroids, image_shape=(28, 28))
 
     # K=30
     print("\n--- Running K-means for 30 clusters ---")
+    
     k_30_centroids, k_30_assignments, k_30_inertia =run_experiment(30, 3, data_points)
     print(f"K=30: Final Inertia = {k_30_inertia:.2f}")
     plot_assignment_matrix(true_labels_list, k_30_assignments, k_clusters=30)

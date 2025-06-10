@@ -16,7 +16,7 @@ def euclidean_distance(point1, point2):
 def findNeighbours(point_idx, data):
     neighbours = []
     for i in range(len(data)):
-        if(euclidean_distance(data[i]), point_idx):
+        if euclidean_distance(data[i], data[point_idx]):
             neighbours.append(i)
     return neighbours
 
@@ -35,7 +35,7 @@ def dbscan_algorithm(dataRaw, eps, min_samples):
         if(labels[i]!=0): continue
 
         neighbours = findNeighbours(i, data)
-        if len(neighbours<min_samples):
+        if len(neighbours)<min_samples:
             labels[i]=-1
             continue
             
@@ -61,7 +61,8 @@ def dbscan_algorithm(dataRaw, eps, min_samples):
                         queue.append(neighbour_id)
     
     print(f"DBSCAN completed. Found {cluster_id} clusters and {labels.count(-1)} noise points.")
-    return labels
+
+    return labels, cluster_id
 
 
 def calculate_k_distances(data, k_neighbors):
@@ -206,15 +207,15 @@ if __name__ == '__main__':
     # Calculate k-distances for epsilon selection (e.g., for min_samples=20)
     # This step can be very computationally intensive for large datasets (like MNIST)
     # If it takes too long, you might want to sample a subset of your data for this analysis.
-    print("\n--- Calculating k-distances for DBSCAN parameter tuning (This might take a while for large datasets) ---")
+    # print("\n--- Calculating k-distances for DBSCAN parameter tuning (This might take a while for large datasets) ---")
     # Choosing min_samples = 20 as an example. You should experiment with this value.
-    try:
-        k_for_dbscan_plot = 20 # A common starting point for min_samples
-        dbscan_k_distances = calculate_k_distances(data_points, k_for_dbscan_plot)
-        plot_k_distances(dbscan_k_distances, k_for_dbscan_plot)
-        print(f"K-distance graph plotted. Look for an 'elbow' to choose eps.")
-    except Exception as e:
-        print(f"Could not calculate k-distances (might be too slow for full dataset or {e}). Skipping plot.")
+    # try:
+    #     k_for_dbscan_plot = 20 # A common starting point for min_samples
+    #     dbscan_k_distances = calculate_k_distances(data_points, k_for_dbscan_plot)
+    #     plot_k_distances(dbscan_k_distances, k_for_dbscan_plot)
+    #     print(f"K-distance graph plotted. Look for an 'elbow' to choose eps.")
+    # except Exception as e:
+    #     print(f"Could not calculate k-distances (might be too slow for full dataset or {e}). Skipping plot.")
 
 
     # Placeholder for chosen eps and min_samples after analysis of k-distance graph
@@ -223,8 +224,19 @@ if __name__ == '__main__':
     chosen_eps = 0.5 # Example value, you must select this based on your plot
     chosen_min_samples = 20 # Example value, you must select this based on your plot
 
-    print(f"\n--- Running DBSCAN with chosen parameters: eps={chosen_eps}, min_samples={chosen_min_samples} ---")
+    
     dbscan_assignments = dbscan_algorithm(data_points, eps=chosen_eps, min_samples=chosen_min_samples)
 
     # Task 2.3: Evaluate DBSCAN results
     evaluate_dbscan_clusters(true_labels_list, dbscan_assignments)
+
+
+
+    for eps in range(8,16):
+        for min_samples in range(10,20):
+            print(f"\n--- Running DBSCAN with chosen parameters: eps={eps}, min_samples={min_samples} ---")
+            dbscan_assignments, n_clasters = dbscan_algorithm(data_points, eps=eps, min_samples=min_samples)
+            if 10 <= n_clasters <= 30:
+                evaluate_dbscan_clusters(true_labels_list, dbscan_assignments)
+            else:
+                print(f"\n-----cluster number={n_clasters}\n")
