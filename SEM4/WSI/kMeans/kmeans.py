@@ -125,7 +125,6 @@ def run_experiment(k, repetitions, dataRaw):
     return best_centroids, best_assignments, best_inertia
 
 
-# --- Visualization Functions ---
 
 def plot_assignment_matrix(true_labels, cluster_assignments, k_clusters, num_digits=10):
     assignment_matrix = np.zeros((num_digits, k_clusters))
@@ -221,7 +220,6 @@ if __name__ == '__main__':
     # plot_assignment_matrix(true_labels_list, k_20_assignments, k_clusters=20)
     # plot_centroids(k_20_centroids, image_shape=(28, 28))
 
-    # K=30
     print("\n--- Running K-means for 30 clusters ---")
     
     k_30_centroids, k_30_assignments, k_30_inertia =run_experiment(30, 3, data_points)
