@@ -1,0 +1,26 @@
+Given a string containing just the characters '(' and ')', return the length of the longest valid (well-formed) parentheses substring.
+
+
+//algorithm
+
+function(string s):
+
+n = length(s)
+for i from 0 to n:
+    Dp[i]=0
+
+max_len = 0;
+
+for i from 2 to n:
+    if s[i]==")":
+        if s[i-1]=="(":
+            Dp[i] = Dp[i-2] + 2;
+        else:
+            previous_index = i - Dp[i-1] - 1 //index where predecessor of the beginning of this sequence is
+            if s[previous_index] == "(":
+                Dp[i]=Dp[i-1]+2
+            else:
+                Dp[i]=Dp[i-1]
+max_len=max{max_len, Dp[i]}
+
+return max_len

@@ -1,0 +1,27 @@
+Rozwazmy stacj ˛a przeładunkow ˛a o pojemno ˙ sci ´ W. Na stacj˛e zamawiamy dla klientów taki sam towar,
+przychodz ˛acy w jednostkowych paczkach. Przechowywanie jednej paczki przez jeden dzien kosztuje ´ c.
+Zamówienie dostawy dowolnej liczby paczek kosztuje P. Pokaz algorytm, który maj ˛ac dany ci ˛ag ˙
+zapotrzebowan klientów (dla ka ´ zdego dnia wiemy ile paczek zostanie od nas kupione) tak rozplanowuje ˙
+nasz plan zamówien,´ zeby minimalizowa ˙ c całkowity koszt. Przeanalizuj poprawno ´ s´c i zło ´ zono ˙ s´c´
+obliczeniow ˛a swojego algorytmu.
+
+//algorytm
+input: w - max pojemnosc Z[1...n] - ile trzeba wyslac kazdego dnia c - koszt za dzien P - koszt za doslanie do placowki
+
+function(Z[1...n], ...):
+for i from 1 to n:
+    for w from 1 to W:
+        Dp[i][w] = INT_MAX
+
+for w from 1 to W:
+Dp[1][w]=P
+
+for i from 1 to n:
+    for p from 1 to W:
+        for x from 1 to W:
+            if(x - (Z[i]+p)<=0):
+                Dp[i][p] = min{Dp[i][p], Dp[i-1][x]+cx+P}
+            else:
+                Dp[i][p] = min{Dp[i][p], Dp[i-1][x]+cx}
+
+return Dp[n][0]

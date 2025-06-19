@@ -1,6 +1,7 @@
-import React, { useContext,createContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import AuthContext from '../../context/AuthContext'; // <-- No curly braces for default export
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { api } from '../../services/api';
 
 const ReviewDetail = () => {
     const { id } = useParams();
@@ -15,7 +16,7 @@ const ReviewDetail = () => {
             setLoading(true);
             setError('');
             try {
-                const data = await api.fetchWrapper(`/reviews/${id}`, { method: 'GET', token: jwtToken });
+                const data = await api.fetchReviewById(jwtToken, id);
                 setReview(data);
             } catch (err) {
                 setError(err.message || 'Failed to fetch review details.');
@@ -39,25 +40,27 @@ const ReviewDetail = () => {
 
     const isAuthor = currentUser && review && review.author && currentUser.id === review.author.id;
 
-    if (loading) return <div className="text-center p-8">Loading review details...</div>;
-    if (error) return <div className="text-center p-8 text-red-500">Error: {error}</div>;
-    if (!review) return <div className="text-center p-8 text-gray-600">Review not found.</div>;
+    if (loading) return <div className="text-center p-8 text-xl font-semibold">Loading review details...</div>;
+    if (error) return <div className="text-center p-8 text-red-500 text-xl font-semibold">Error: {error}</div>;
+    if (!review) return <div className="text-center p-8 text-gray-600 text-xl">Review not found.</div>;
 
     return (
-        <div className="container mx-auto p-8 max-w-2xl">
-            <div className="bg-white p-8 rounded-lg shadow-lg">
-                <h2 className="text-3xl font-bold mb-4 text-gray-800">Review Details</h2>
-                <p className="text-lg text-gray-700 mb-2"><strong>Rating:</strong> {review.rating}</p>
-                <p className="text-gray-700 mb-4"><strong>Description:</strong> {review.description}</p>
-                <p className="text-gray-600 text-sm mb-2"><strong>Author:</strong> {review.author ? review.author.username : 'N/A'}</p>
-                <p className="text-gray-600 text-sm mb-4"><strong>Game:</strong> {review.game ? review.game.name : 'N/A'}</p>
+        <div className="container mx-auto p-8 min-h-[calc(100vh-80px)] flex items-center justify-center">
+            <div className="bg-white p-8 md:p-10 rounded-xl shadow-2xl max-w-2xl w-full border border-purple-200">
+                <h2 className="text-4xl font-bold mb-6 text-gray-800 text-center">Review Details</h2>
+                <div className="space-y-3">
+                    <p className="text-xl text-gray-800"><strong>Rating:</strong> <span className="font-semibold text-purple-600">{review.rating}</span></p> {/* Wyróżniona ocena */}
+                    <p className="text-lg text-gray-700"><strong>Description:</strong> {review.description}</p>
+                    <p className="text-md text-gray-600"><strong>Author:</strong> <span className="font-medium text-blue-600">{review.author ? review.author.username : 'N/A'}</span></p>
+                    <p className="text-md text-gray-600"><strong>Game:</strong> <span className="font-medium text-blue-600">{review.game ? review.game.name : 'N/A'}</span></p>
+                </div>
 
                 {(isAdmin || isAuthor) && (
-                    <div className="mt-4 flex space-x-4">
+                    <div className="mt-8 flex flex-wrap gap-3 justify-center">
                         {isAuthor && (
                             <Link
                                 to={`/reviews/edit/${review.id}`}
-                                className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-full transition-colors"
+                                className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2.5 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg"
                             >
                                 Edit Review
                             </Link>
@@ -65,7 +68,7 @@ const ReviewDetail = () => {
                         {isAdmin && (
                             <button
                                 onClick={handleDelete}
-                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition-colors"
+                                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2.5 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg"
                             >
                                 Delete Review
                             </button>

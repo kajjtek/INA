@@ -1,0 +1,22 @@
+Jedziemy przez paliwow ˛a pustyni˛e pojazdem pal ˛acym 1 litr paliwa na 1 km. Pojemnos´c baku wynosi ´ W.
+Znamy rozkład stacji benzynowych wzdłuz drogi, któr ˛a jedziemy i wszystkie one s ˛a poło ˙ zone na ˙
+kilometrach b˛ed ˛acych liczbami całkowitymi. Na stacji numer i, cena paliwa wynosi wi
+. Pokaz algorytm ˙
+obliczaj ˛acy jak najtaniej mozna dojecha ˙ c do ko ´ nca drogi (czyli do stacji numer ´ n). Przeanalizuj poprawnos´c´
+i złozono ˙ s´c obliczeniow ˛a swojego algorytmu.
+
+
+//algorytm
+Dp[i][left] - optimal cost for i-th station 
+X[1...n] - cords of i-th station
+W[1...n] - cost of i-th station
+function(X[1...n], W[1...n]):
+for i from 1 to n:
+Dp[1][i] = i*w[1];
+
+for i from 1 to n:
+    j = i - 1
+    for b from 0 to W
+        Dp[i][b] = min{[prevcost + w[j]*(x[i]-x[j]) - m + left for prevcost <- Dp[j][m]]}
+
+return Dp[n][0]

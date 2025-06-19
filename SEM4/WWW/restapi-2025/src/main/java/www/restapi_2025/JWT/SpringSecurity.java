@@ -18,6 +18,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import www.restapi_2025.Services.UserService;
 
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+import org.springframework.security.config.Customizer;
+
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
 public class SpringSecurity {
@@ -46,12 +51,28 @@ public class SpringSecurity {
     }
 
     @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true); // Allow credentials (e.g., Authorization header)
+        // Set the allowed origin to your frontend's URL.
+        // If your frontend runs on a different port (e.g., 5174), change it here.
+        config.addAllowedOrigin("http://localhost:5173"); // <-- Frontend URL
+        config.addAllowedHeader("*"); // Allow all headers
+        config.addAllowedMethod("*"); // Allow all HTTP methods (GET, POST, PUT, DELETE, OPTIONS)
+        source.registerCorsConfiguration("/**", config); // Apply this CORS config to all paths
+        return new CorsFilter(source);
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, DaoAuthenticationProvider authenticationProvider, JWTRequestFilter jwtRequestFilter) throws Exception {
         http.csrf(csrf -> csrf.disable())
+                .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/games/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/users/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/games").hasRole("ADMIN") // Assuming "ADMIN" role, adjust if needed
                         .requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/reviews").hasRole("ADMIN")

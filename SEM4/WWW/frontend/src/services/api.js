@@ -1,21 +1,23 @@
-const API_BASE_URL = 'http://localhost:8080'; // **IMPORTANT: Replace with your actual backend API URL**
+const API_BASE_URL = 'http://localhost:8080'; 
 
 const api = {
-    // Utility to get authenticated headers
+   
     getAuthHeaders: (token) => ({
         'Content-Type': 'application/json',
         ...(token && { 'Authorization': `Bearer ${token}` })
     }),
 
-    // Generic fetch wrapper
     async fetchWrapper(url, options = {}) {
-        const { jwtToken } = useContext(AuthContext); // Access context inside component/hook
-        const headers = api.getAuthHeaders(jwtToken);
+
+        const token = options.token; 
+        
+        const headers = api.getAuthHeaders(token);
+
         const response = await fetch(`${API_BASE_URL}${url}`, {
             ...options,
             headers: {
                 ...headers,
-                ...options.headers,
+                ...options.headers, 
             },
         });
 
@@ -23,14 +25,13 @@ const api = {
             const errorData = await response.json().catch(() => ({ message: 'Something went wrong' }));
             throw new Error(errorData.message || 'API request failed');
         }
-        // Handle 204 No Content for DELETE
+        
         if (response.status === 204) {
             return null;
         }
         return response.json();
     },
 
-    // Example API calls (you would add more for each resource)
     async login(username, password) {
         const response = await fetch(`${API_BASE_URL}/auth/signin`, {
             method: 'POST',
@@ -51,10 +52,10 @@ const api = {
             body: JSON.stringify(userData),
         });
         if (!response.ok) {
-            const errorData = await response.text().catch(() => 'Registration failed'); // Backend returns plain text for "User already taken"
+            const errorData = await response.text().catch(() => 'Registration failed');
             throw new Error(errorData || 'Registration failed');
         }
-        return response.text(); // Expecting "User registered successfully!"
+        return response.text();
     },
 
     async getAllGames(token, params) {
@@ -78,8 +79,35 @@ const api = {
         return await api.fetchWrapper(`/games/${id}`, { method: 'DELETE', token });
     },
 
+
     async getAllReviews(token) {
         return await api.fetchWrapper('/reviews', { method: 'GET', token });
     },
-    // ... add more API functions for reviews, users, etc.
+    async deleteReview(token, id) {
+        return await api.fetchWrapper(`/reviews/${id}`, { method: 'DELETE', token });
+    },
+    async fetchReviewsByGame(token, gameId) {
+        return await api.fetchWrapper(`/reviews/by-game/${gameId}`, { method: 'GET', token });
+    },
+    async fetchReviewById(token, id) {
+        return await api.fetchWrapper(`/reviews/${id}`, { method: 'GET', token });
+    },
+    async createReview(token, authorId, gameId, reviewDetails) {
+        return await api.fetchWrapper(`/reviews/user/${authorId}/game/${gameId}`, { method: 'POST', body: JSON.stringify(reviewDetails), token });
+    },
+    async updateReview(token, id, updatedReviewDetails) {
+        return await api.fetchWrapper(`/reviews/${id}`, { method: 'PUT', body: JSON.stringify(updatedReviewDetails), token });
+    },
+
+    async createAdminUser(token, userData) {
+        return await api.fetchWrapper('/auth/admin/create', { method: 'POST', body: JSON.stringify(userData), token });
+    },
+    async deleteUser(token, userId) {
+        return await api.fetchWrapper(`/auth/admin/delete/${userId}`, { method: 'DELETE', token });
+    },
+    async getAllUsers(token) {
+        return await api.fetchWrapper('/users', { method: 'GET', token });
+    },
 };
+
+export { api }; // EXPORT THE 'api' OBJECT

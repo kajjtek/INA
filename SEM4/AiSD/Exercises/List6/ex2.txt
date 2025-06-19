@@ -1,0 +1,44 @@
+PSEUDOCODE FOR PROBLEM:
+INPUT: Zbiór n odcinków [si
+, fi
+, wi
+] dla i = {1, . . . , n}, gdzie si
+to pocz ˛atek i-tego odcinka, fi koniec
+i-tego odcinka, wi
+to waga i-tego odcinka.
+OUTPUT: Podzbiór odcinków nie przecinaj ˛acych si˛e o najwi˛ekszej wadze.
+Zaprojektuj efektywny algorytm rozwi ˛azuj ˛acy postawiony problem. Przeanalizuj poprawnos´c i zło ´ zono ˙ s´c´
+obliczeniow ˛a swojego algorytmu.
+
+
+////// algorytm
+
+prev[i] - previous segment for i-th segment whose finish is smaller that i's start
+Dp[i] - optimal way of selection of segments for i
+
+binSearch(intervals, j):
+result=0
+low=1
+high=j-1
+
+while low<=high:
+    mid = (high+low)/2
+    if interval[mid].finish<=interval[j].start:
+        result = mid
+        low = mid+1
+    else:
+        high = mid-1
+return result
+
+Dp[0] = 0
+
+function(A[1..n]):
+sort(A, comparator) <-- comparator compares by finishes and then by starts if finishes are equal
+
+for int i=1 to n:
+    prev[i]=binSearch(A, i)
+
+for int i=1 to n:
+    Dp[i] = max {Dp[prev[i]]+A[i].weight, Dp[i-1]}
+
+return Dp[n]

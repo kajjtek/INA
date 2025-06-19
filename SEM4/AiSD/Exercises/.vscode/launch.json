@@ -1,0 +1,20 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(lldb) Launch", // Name of the configuration
+            "type": "cppdbg",        // Type of debugger (C++ Debugger)
+            "request": "launch",     // Launch a program
+            "program": "${workspaceFolder}/a.out", // Path to your executable. Assumes it's compiled as 'a.out' in the workspace root.
+            "args": [],              // Command-line arguments to pass to your program
+            "stopAtEntry": false,    // Set to true to stop at the beginning of the program's main function
+            "cwd": "${workspaceFolder}", // Current working directory for the debugger
+            "environment": [],       // Environment variables to set for the program
+            "externalConsole": false, // Set to true to use an external terminal for input/output
+            "MIMode": "lldb"         // Specify lldb as the debugger backend for macOS
+        }
+    ]
+}

@@ -1,6 +1,7 @@
 import React, { useContext,createContext, useState, useEffect } from 'react';
 import AuthContext from '../../context/AuthContext'; // <-- No curly braces for default export
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { api } from '../../services/api';
 
 const GameForm = () => {
     const { id } = useParams(); // For edit mode
@@ -51,72 +52,74 @@ const GameForm = () => {
         }
     };
 
-    if (loading && isEditing) return <div className="text-center p-8">Loading game data...</div>;
-    if (error) return <div className="text-center p-8 text-red-500">Error: {error}</div>;
+    if (loading && isEditing) return <div className="text-center p-8 text-xl font-semibold">Loading game data...</div>;
+    if (error) return <div className="text-center p-8 text-red-500 text-xl font-semibold">Error: {error}</div>;
 
     return (
-        <div className="container mx-auto p-8 max-w-md">
-            <h2 className="text-3xl font-bold mb-6 text-center">{isEditing ? 'Edit Game' : 'Add New Game'}</h2>
-            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg">
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="gameName">
-                        Name
-                    </label>
-                    <input
-                        type="text"
-                        id="gameName"
-                        name="name"
-                        value={game.name}
-                        onChange={handleChange}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="yearOfRelease">
-                        Year of Release
-                    </label>
-                    <input
-                        type="number"
-                        id="yearOfRelease"
-                        name="yearOfRelease"
-                        value={game.yearOfRelease}
-                        onChange={handleChange}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required
-                    />
-                </div>
-                <div className="mb-6">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="creator">
-                        Creator
-                    </label>
-                    <input
-                        type="text"
-                        id="creator"
-                        name="creator"
-                        value={game.creator}
-                        onChange={handleChange}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required
-                    />
-                </div>
-                <div className="flex items-center justify-between">
-                    <button
-                        type="submit"
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline transition-colors"
-                        disabled={loading}
-                    >
-                        {loading ? 'Saving...' : (isEditing ? 'Update Game' : 'Add Game')}
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => navigate('/games')}
-                        className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline transition-colors"
-                    >
-                        Cancel
-                    </button>
-                </div>
-            </form>
+        <div className="container mx-auto p-8 min-h-[calc(100vh-80px)] flex items-center justify-center">
+            <div className="bg-white p-8 md:p-10 rounded-xl shadow-2xl max-w-md w-full border border-blue-200">
+                <h2 className="text-4xl font-bold mb-8 text-center text-gray-800">{isEditing ? 'Edit Game' : 'Add New Game'}</h2>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="relative">
+                        <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="gameName">
+                            Name
+                        </label>
+                        <input
+                            type="text"
+                            id="gameName"
+                            name="name"
+                            value={game.name}
+                            onChange={handleChange}
+                            className="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-2.5 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                            required
+                        />
+                    </div>
+                    <div className="relative">
+                        <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="yearOfRelease">
+                            Year of Release
+                        </label>
+                        <input
+                            type="number"
+                            id="yearOfRelease"
+                            name="yearOfRelease"
+                            value={game.yearOfRelease}
+                            onChange={handleChange}
+                            className="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-2.5 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                            required
+                        />
+                    </div>
+                    <div className="relative">
+                        <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="creator">
+                            Creator
+                        </label>
+                        <input
+                            type="text"
+                            id="creator"
+                            name="creator"
+                            value={game.creator}
+                            onChange={handleChange}
+                            className="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-2.5 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                            required
+                        />
+                    </div>
+                    <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 mt-6">
+                        <button
+                            type="submit"
+                            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-6 rounded-full focus:outline-none focus:shadow-outline transition-all duration-300 transform hover:scale-105 shadow-lg w-full sm:w-auto"
+                            disabled={loading}
+                        >
+                            {loading ? 'Saving...' : (isEditing ? 'Update Game' : 'Add Game')}
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => navigate('/games')}
+                            className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2.5 px-6 rounded-full focus:outline-none focus:shadow-outline transition-all duration-300 transform hover:scale-105 shadow-lg w-full sm:w-auto"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };
