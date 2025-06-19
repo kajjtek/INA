@@ -198,10 +198,10 @@ int SolutionFinder::doCalculate(int tile1, int tile2, int tile3, int tile4, int 
     else if(count1==1 && count2==0) return casex0(sequence, 1, shift);
     else if(count1==0 && count2==1) return casex0(sequence, 2, shift);
     else if(count1==0 && count2==0) return case00(sequence);
-    else if(count1==1 && count2==0 && tile2==0) case0x(sequence,1,shift);
-    else if(count1==0 && count2==1 && tile2==0) case0x(sequence,2,shift);
-    else if(count1==2) casexx(sequence, 1, shift);
-    else if(count2==2) casexx(sequence, 2, shift);
+    else if(count1==1 && count2==0 && tile2==0) return case0x(sequence,1,shift);
+    else if(count1==0 && count2==1 && tile2==0) return case0x(sequence,2,shift);
+    else if(count1==2) return casexx(sequence, 1, shift);
+    else if(count2==2) return casexx(sequence, 2, shift);
     else throw std::runtime_error("Problem with doCalculate");
 }
 

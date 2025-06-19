@@ -7,6 +7,7 @@ import ProtectedRoute from './components/common/ProtectedRoute.jsx'; // default 
 
 // Import your page components
 import Home from './components/Home.jsx';
+import InfoPage from './components/InfoPage.jsx';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Navbar from './components/common/Navbar';
@@ -26,6 +27,7 @@ export default function App() {
                 <main className="py-8">
                     <Routes>
                         <Route path="/" element={<Home />} />
+                        <Route path="/info" element={<InfoPage />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
 

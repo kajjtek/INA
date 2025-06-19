@@ -4,7 +4,6 @@ import React, { createContext, useState, useEffect } from 'react';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-    // State to hold JWT token, user info, and roles
     const [jwtToken, setJwtToken] = useState(localStorage.getItem('jwtToken'));
     const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('currentUser')));
     const [roles, setRoles] = useState(JSON.parse(localStorage.getItem('userRoles')) || []);
@@ -12,7 +11,6 @@ export const AuthProvider = ({ children }) => {
     const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
-        // Update states based on localStorage changes or initial load
         const token = localStorage.getItem('jwtToken');
         const user = JSON.parse(localStorage.getItem('currentUser'));
         const userRoles = JSON.parse(localStorage.getItem('userRoles'));
@@ -24,7 +22,6 @@ export const AuthProvider = ({ children }) => {
         setIsAdmin(userRoles && userRoles.includes('ROLE_ADMIN'));
     }, []);
 
-    // Function to handle user login
     const login = (token, user, userRoles) => {
         localStorage.setItem('jwtToken', token);
         localStorage.setItem('currentUser', JSON.stringify(user));
@@ -36,7 +33,6 @@ export const AuthProvider = ({ children }) => {
         setIsAdmin(userRoles.includes('ROLE_ADMIN'));
     };
 
-    // Function to handle user logout
     const logout = () => {
         localStorage.removeItem('jwtToken');
         localStorage.removeItem('currentUser');

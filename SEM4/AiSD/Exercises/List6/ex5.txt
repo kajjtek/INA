@@ -1,0 +1,46 @@
+Rozwazmy ukorzenione drzewo, w którego korzeniu pojawia si˛e pewna informacja. W ka ˙ zdej rundzie, ˙
+wierzchołek posiadaj ˛acy informacj˛e, moze poinformowa ˙ c jedno swoje dziecko. Poka ´ z algorytm, który na ˙
+podstawie struktury drzewa obliczy dla kazdego wierzchołka w jakiej kolejno ˙ sci ma on informowa ´ c dzieci ´
+tak, zeby czas dotarcia informacji do wszystkich wierzchołków drzewa był jak najkrótszy. Przeanalizuj ˙
+poprawnos´c i zło ´ zono ˙ s´c obliczeniow ˛a swojego algorytmu.
+
+
+//algorithm
+
+Data structure:
+Node {
+    key
+    left
+    right
+    leaves
+    parent
+}
+
+insert(key):
+x = bst.insert(key)
+if(xp.parent.children.size==1)//it used to be a leaf:
+nothing
+else:
+updateup(x) - else we add a new leaf and thus have to update up to the root
+
+updateup(x):
+current = x
+while current!=Tree.root:
+    current.leaves++;
+    current = current.parent
+
+function(root):
+map <- for each node this map will show count how many times it was visited (so that correct child can be chosen)
+queue
+queue.push({root})
+while !queue.empty :
+    vector
+    for node in queue.pop():
+        vector.pushback(getMinimumLeavesChild(map[node])) <- we get k-th child in terms of leaves
+        map[node]++
+        print node
+    queue.push(vector)
+
+
+//actually this aint bst - what should be changed - create a map and calcluate for each node the number of leaves it has
+//then just use this 
