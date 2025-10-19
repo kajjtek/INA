@@ -35,8 +35,8 @@ void Graph::setArrays(int n, std::vector<std::pair<int,int>> edgesImported){//to
     this->edges=new int[edgesImported.size()];
     for(int i=0; i<edgesImported.size();i++){
         std::pair<int,int> Pair = edgesImported.at(i);
-        int u = Pair.first;
-        int v = Pair.second;
+        int u = Pair.first-1;
+        int v = Pair.second-1;
 
         counts[u]++;
         this->edges[i]=v;//pamietaj ze u na koncu musi miec dodane +1 bo 0-index
