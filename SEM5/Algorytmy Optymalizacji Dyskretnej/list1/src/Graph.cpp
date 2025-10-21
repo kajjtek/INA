@@ -6,6 +6,46 @@
 #include <vector>
 #include <unordered_map>
 
+Graph Graph::reverseGraph(){
+    int* nCounts = new int[v_size]{};
+    int* nEdges = new int[e_size];
+    int* position = new int[v_size-1]{};
+
+    for(int i=0; i<v_size; i++){
+        int r1 = vertices[i];
+        int r2 = vertices[i+1];
+
+        for(int j=r1; j<r2; j++){
+            int v = edges[j];
+            nCounts[v]++;
+        }
+    }
+
+    int* nVertices = new int[v_size];
+    nVertices[0]=0;
+    for(int i=1; i<v_size; i++){
+        nVertices[i]=nVertices[i-1]+nCounts[i];
+    }
+
+    for(int i=0; i<v_size; i++){
+        int r1 = vertices[i];
+        int r2 = vertices[i+1];
+
+        for(int j=r1; j<r2; j++){
+            int v = edges[j];
+            int u = i;
+            int left = nVertices[v];
+            int shift = position[v];
+            position[v]++;
+            nEdges[left+shift]=u;
+        }
+    }
+
+    Graph nGraph(nVertices, nEdges, v_size, e_size);
+
+    return nGraph;
+}
+
 Graph::Graph(int numberOfVertices, char t, std::vector<std::pair<int,int>> edges){
     try {
         setType(t);

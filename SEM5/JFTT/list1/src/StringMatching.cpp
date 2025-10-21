@@ -124,7 +124,7 @@ int* StringMatching::preprocessingKMP(int* transition_table, std::string pattern
             k=transition_table[k-1];
         }
 
-        if(pattern[k+1]==pattern[q]){
+        if(pattern[k]==pattern[q]){
             k++;
         }
         transition_table[q]=k;
