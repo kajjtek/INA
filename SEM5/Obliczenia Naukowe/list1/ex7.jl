@@ -1,3 +1,5 @@
+# KAJETAN PLEWA
+
 using Printf
 
 f(x::Float64)::Float64 = sin(x) + cos(3.0 * x)
