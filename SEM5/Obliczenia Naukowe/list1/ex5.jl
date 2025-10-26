@@ -10,8 +10,8 @@ function first(T::Type, x, y)
     return sum
 end
 
-function sum_forward(terms)
-    S = 0.0
+function sum_forward(terms, T::Type)
+    S = T(0.0)
     for i in 1:length(terms)
         S = S + terms[i]
     end
@@ -22,7 +22,7 @@ function second(T::Type, x, y)
     x = T.(x)
     y = T.(y)
     sum = T(0.0)
-    for i in 5:1
+    for i in 5:-1:1
         sum+=T(x[i])*T(y[i])
     end
     return sum
@@ -32,7 +32,7 @@ function third(T::Type, x, y)
     x = T.(x)
     y = T.(y)
 
-    products = x .* y
+    products = T.(x) .* T.(y)
 
     positive = products[products .> T(0.0)]
     negative = products[products .< T(0.0)]
@@ -40,8 +40,10 @@ function third(T::Type, x, y)
     sort!(positive, by=abs,rev=true)
     sort!(negative, by=abs,rev=true)
 
-    spos = sum_forward(positive)
-    sneg = sum_forward(negative)
+    spos = sum_forward(positive, T)
+    sneg = sum_forward(negative, T)
+
+    println("Sum of positive: ",spos, " Sum of negative: ", sneg)
 
     return spos + sneg
 end
@@ -58,8 +60,8 @@ function fourth(T::Type, x, y)
     sort!(positive, by=abs,rev=false)
     sort!(negative, by=abs,rev=false)
 
-    spos = sum_forward(positive)
-    sneg = sum_forward(negative)
+    spos = sum_forward(positive, T)
+    sneg = sum_forward(negative, T)
 
     return spos + sneg
 end

@@ -40,6 +40,8 @@ Graph Graph::reverseGraph(){
             nEdges[left+shift]=u;
         }
     }
+    delete[] nCounts;
+    delete[] position;
 
     Graph nGraph(nVertices, nEdges, v_size, e_size);
 
@@ -65,26 +67,35 @@ Graph::Graph(int numberOfVertices, char t, std::vector<std::pair<int,int>> edges
 
 void Graph::setType(char t){
     if(t=='D') this->type=Type::Directed;
-    else if (t=='A') this->type=Type::Undirected;
-    else throw std::invalid_argument("The type input must be either A or D");
+    else if (t=='U') this->type=Type::Undirected;
+    else throw std::invalid_argument("The type input must be either U or D");
 }
 
 void Graph::setArrays(int n, std::vector<std::pair<int,int>> edgesImported){//to dziala dla posortowanych edgesImproted TODO dodac to w pliku ktory przerabia stdina
-    int* counts = new int[n+1]{};//to inicjalizuje na zero zapameitaj sobie
+    int* counts = new int[n]{};//to inicjalizuje na zero zapameitaj sobie
+    int* position = new int[n]{};
     this->vertices=new int[n+1];
     this->edges=new int[edgesImported.size()];
     for(int i=0; i<edgesImported.size();i++){
         std::pair<int,int> Pair = edgesImported.at(i);
         int u = Pair.first-1;
-        int v = Pair.second-1;
-
-        counts[u]++;
-        this->edges[i]=v;//pamietaj ze u na koncu musi miec dodane +1 bo 0-index
+        counts[u]++;//pamietaj ze u na koncu musi miec dodane +1 bo 0-index
     }
     this->vertices[0]=0;
     for(int i=1; i<n+1;i++){
         this->vertices[i]=this->vertices[i-1]+counts[i-1];
     }
+    for(int i=0; i<edgesImported.size(); i++){
+        std::pair<int,int> Pair = edgesImported.at(i);
+        int u = Pair.first-1;
+        int v = Pair.second-1;
+        int left = vertices[u];
+        int shift = position[u];
+        position[u]++;
+        edges[left+shift]=v;
+    }
+    delete[] counts;
+    delete[] position;
 }
 
 Graph::~Graph(){

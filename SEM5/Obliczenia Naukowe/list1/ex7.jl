@@ -22,11 +22,12 @@ function numerical_differentiation_experiment()
         h = 2.0^(-n)
         approx_derivative = f_prime_approx(x0, h)
         absolute_error = abs(exact_derivative - approx_derivative)
+        percentage = abs(absolute_error / exact_derivative * 100)
         
         x0_plus_h = x0 + h
 
-        @printf("| %2d | %1.16e | %1.16e | %1.16e | %1.16e |\n",
-                n, h, approx_derivative, absolute_error, x0_plus_h)
+        @printf("| %2d | %1.16e | %1.16e | %1.16e | %1.16e | %1.16e |\n",
+                n, h, approx_derivative, absolute_error, x0_plus_h, percentage)
 
     end
 end

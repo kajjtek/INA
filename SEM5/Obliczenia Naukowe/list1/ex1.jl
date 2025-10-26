@@ -1,5 +1,18 @@
 # KAJETAN PLEWA
 
+"""
+    machine_epsilon_finder(T::Type)
+
+Oblicza maszynowy epsilon (`machine epsilon`) dla podanego typu zmiennoprzecinkowego `T`.
+Maszynowy epsilon to najmniejsza dodatnia liczba `ε` taka, że `1.0 + ε > 1.0`.
+
+# Parametry formalne
+- `T::Type`: Typ zmiennoprzecinkowy (np. Float16, Float32, Float64), dla którego
+             ma zostać obliczony epsilon maszynowy.
+
+# Zwraca
+- `T`: Obliczona wartość maszynowego epsilona.
+"""
 function machine_epsilon_finder(T::Type)
 
     epsilon = T(1.0)
@@ -14,12 +27,14 @@ end
 function eta_finder(T::Type)
 
     eta = T(1.0)
+    last = 0.0
 
     while eta>T(0.0)
+        last = eta
         eta = eta/2
     end
     
-    return 2*eta
+    return last
 end
 
 function max_finder(T::Type)
@@ -28,7 +43,7 @@ function max_finder(T::Type)
         x *= T(2.0)
     end
    
-    return prevfloat(2 * x)
+    return x
 end
 
 
@@ -42,8 +57,8 @@ function main()
         computed_e = eta_finder(T)
         builtin_e = nextfloat(T(0.0))
 
-        computed_max = eta_finder(T)
-        builtin_max = nextfloat(T(0.0))
+        computed_max = max_finder(T)
+        builtin_max = floatmax(T(0.0))
     
 
         println("Type: ", T, " Computed macheps: ", computed_m, " Built-in macheps: ", builtin_m)

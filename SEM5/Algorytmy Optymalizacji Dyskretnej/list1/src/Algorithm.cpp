@@ -4,38 +4,47 @@
 #include <unordered_map>
 #include "../header/Graph.h"
 #include <algorithm>
-#include <exception>
+#include <stdexcept>
+#include <string>
 
 std::optional<std::pair<std::vector<int>, std::vector<int>>> Algorithm::isBipartiate(Graph g){
     std::vector<int> set1;
     std::vector<int> set2;
-    int numberOfVertices = g.v_size;
-    int* color = new int[numberOfVertices]{-1};
+    int numberOfVertices = g.v_size-1;
+    int* color = new int[numberOfVertices];
+    std::fill(color, color+numberOfVertices, -1);
     std::deque<int> queue;
     //TODO dodaj zeby dzialalo dla izolowanych plus mozna poprawic inicjowanie grafow tak zeby lepiej zczytywal dges z stdina
-    queue.push_back(0);
-    color[0]=0;
-    set1.push_back(0);
+    
+    for(int startnode=0; startnode<numberOfVertices; startnode++){
 
-    while(!queue.empty()){
-        int current = queue.front();
-        queue.pop_front();
+        if(color[startnode]==-1){
+            queue.push_back(startnode);
+            color[startnode]=0;
+            set1.push_back(startnode);
 
-        int left = g.vertices[current];
-        int right = g.vertices[current+1];
+             while(!queue.empty()){
+                int current = queue.front();
+                queue.pop_front();
 
-        for(int i=left; i<right; i++){
-            int neighbour = g.edges[i];
+                int left = g.vertices[current];
+                int right = g.vertices[current+1];
 
-            if(color[neighbour]==-1){
-                color[neighbour]=1-color[current];
-                queue.push_back(neighbour);
+                for(int i=left; i<right; i++){
+                    int neighbour = g.edges[i];
 
-                if(color[neighbour]==0) set1.push_back(neighbour);
-                else set2.push_back(neighbour);
-            }
-            else if(color[neighbour]==color[current]){
-                return std::nullopt;
+                    if(color[neighbour]==-1){
+                        color[neighbour]=1-color[current];
+                        queue.push_back(neighbour);
+
+                        if(color[neighbour]==0) set1.push_back(neighbour);
+                        else set2.push_back(neighbour);
+                    }
+                    else if(color[neighbour]==color[current]){
+                        delete[] color;
+                        return std::nullopt;
+                    }
+                }
             }
         }
     }
@@ -49,7 +58,8 @@ std::vector<std::vector<int>> Algorithm::SSC(Graph g){
     std::vector<int> post = sortTopologicaly(g);
     Graph reversee = g.reverseGraph();
     int vNumber = g.v_size-1;
-    int* visited = new int[vNumber]{-1};//-1-unvisited
+    int* visited = new int[vNumber];//-1-unvisited
+    std::fill(visited, visited+vNumber, -1);
     std::vector<std::vector<int>> sscs;
 
     for(int i=post.size()-1; i>=0; i--){
@@ -60,6 +70,7 @@ std::vector<std::vector<int>> Algorithm::SSC(Graph g){
         }
     }
 
+    delete[] visited;
     return sscs;
 }
 
@@ -88,7 +99,7 @@ std::vector<int> Algorithm::search(Graph g, AlgType t, int start, int* visited, 
                 visited[g.edges[i]]=current;
             }
         }
-        order.push_back(current+1);
+        order.push_back(current);
     }
     return order;
 }
@@ -98,31 +109,36 @@ std::vector<int> Algorithm::sortTopologicaly(Graph g){
     int v_size = g.v_size;
     int* color = new int[v_size-1]{};
     std::deque<int> container;
-    container.push_front(0);
-    
 
-    while(!container.empty()){
-        int current = container.front();
-        color[current] = 1;
-        bool should_continue = true;
-        
-        int r1 = g.vertices[current];
-        int r2 = g.vertices[current+1];
-        for(int i=r1; i<r2; i++){
-            if(color[g.edges[i]]==0){
-                container.push_front(g.edges[i]);
-                should_continue=false;
-                continue;
-            } else if (color[g.edges[i]]==1){
-                throw CycleFoundException("A cycle has been found");
+    for(int startnode=0; startnode<v_size-1; startnode++){
+        if(color[startnode]==0){
+            container.push_front(startnode);
+
+             while(!container.empty()){
+                int current = container.front();
+                if(color[current]==0) color[current]=1;
+                bool should_continue = true;
+                
+                int r1 = g.vertices[current];
+                int r2 = g.vertices[current+1];
+                for(int i=r1; i<r2; i++){
+                    if(color[g.edges[i]]==0){
+                        container.push_front(g.edges[i]);
+                        should_continue=false;
+                        continue;
+                    } else if (color[g.edges[i]]==1){
+                        delete[] color;
+                        throw CycleFoundException("A cycle has been found");
+                    }
+                }
+                if(!should_continue) continue;
+                container.pop_front();
+                color[current]=2;
+                order.push_back(current); //remember that it must be reserved ;d
             }
         }
-        if(!should_continue) continue;
-        container.pop_front();
-        color[current]=2;
-        order.push_back(current); //remember that it must be reserved ;d
     }
-
+    
     delete[] color;
     return order;
 }

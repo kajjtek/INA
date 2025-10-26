@@ -32,7 +32,7 @@ function second_part()
         println("For interval: ", interval)
         x1 = Float64(interval[1])
         x2 = Float64(interval[2])
-        med = Float64(x1-x2)
+        med = Float64(x2-x1)
 
 
         tab = [x1, x2, med]
@@ -62,5 +62,6 @@ function main()
     end
 
 end
+
 
 second_part()
