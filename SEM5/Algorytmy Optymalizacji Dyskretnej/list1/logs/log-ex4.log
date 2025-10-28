@@ -1,0 +1,95 @@
+========================================================
+PROGRAM: ex4 (Testuje folder: ..//testfiles/4)
+========================================================
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4a-4.txt" "t"
+Operation took 1.00008 ms to execute
+The graph IS bipariate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4a-5.txt" "t"
+Operation took 15.4438 ms to execute
+The graph IS bipariate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4a-6.txt" "t"
+Operation took 97.1205 ms to execute
+The graph IS bipariate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4a-2.txt" "t"
+Operation took 0.022417 ms to execute
+The graph IS bipariate
+First Set
+0, 2, 11, 20, 4, 13, 22, 31, 40, 6, 15, 24, 33, 42, 51, 60, 8, 17, 26, 35, 44, 53, 62, 71, 80, 19, 28, 37, 46, 55, 64, 73, 82, 91, 39, 48, 57, 66, 75, 84, 93, 59, 68, 77, 86, 95, 79, 88, 97, 99, 
+Second Set
+1, 10, 3, 12, 21, 30, 5, 14, 23, 32, 41, 50, 7, 16, 25, 34, 43, 52, 61, 70, 9, 18, 27, 36, 45, 54, 63, 72, 81, 90, 29, 38, 47, 56, 65, 74, 83, 92, 49, 58, 67, 76, 85, 94, 69, 78, 87, 96, 89, 98, 
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4a-3.txt" "t"
+Operation took 0.155084 ms to execute
+The graph IS bipariate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4a-1.txt" "t"
+Operation took 0.012375 ms to execute
+The graph IS bipariate
+First Set
+0, 2, 5, 8, 7, 10, 13, 15, 
+Second Set
+1, 4, 3, 6, 9, 12, 11, 14, 
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4b-5.txt" "t"
+Operation took 7.37896 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4b-4.txt" "t"
+Operation took 0.470959 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4b-6.txt" "t"
+Operation took 46.328 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4b-3.txt" "t"
+Operation took 0.079542 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4b-2.txt" "t"
+Operation took 0.011333 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4b-1.txt" "t"
+Operation took 0.0085 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4b-4.txt" "t"
+Operation took 1.16467 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4b-5.txt" "t"
+Operation took 9.42767 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4b-6.txt" "t"
+Operation took 75.9414 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4b-2.txt" "t"
+Operation took 0.017125 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4b-3.txt" "t"
+Operation took 0.079708 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4b-1.txt" "t"
+Operation took 0.007333 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4a-5.txt" "t"
+Operation took 12.6452 ms to execute
+The graph IS bipariate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4a-4.txt" "t"
+Operation took 1.534 ms to execute
+The graph IS bipariate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4a-6.txt" "t"
+Operation took 102.088 ms to execute
+The graph IS bipariate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4a-3.txt" "t"
+Operation took 0.107584 ms to execute
+The graph IS bipariate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4a-2.txt" "t"
+Operation took 0.021833 ms to execute
+The graph IS bipariate
+First Set
+0, 3, 4, 5, 6, 15, 16, 63, 64, 65, 66, 67, 68, 69, 70, 17, 18, 71, 72, 73, 74, 75, 76, 77, 78, 19, 20, 79, 80, 81, 82, 83, 84, 85, 86, 21, 22, 87, 88, 89, 90, 91, 92, 93, 94, 23, 24, 95, 96, 97, 98, 99, 100, 101, 102, 25, 26, 103, 104, 105, 106, 107, 108, 109, 110, 27, 28, 111, 112, 113, 114, 115, 116, 117, 118, 29, 30, 119, 120, 121, 122, 123, 124, 125, 126, 
+Second Set
+1, 2, 7, 8, 9, 10, 11, 12, 13, 14, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4a-1.txt" "t"
+Operation took 0.011084 ms to execute
+The graph IS bipariate
+First Set
+0, 3, 4, 5, 6, 
+Second Set
+1, 2, 7, 8, 9, 10, 11, 12, 13, 14, 
+--------------------------------------------------------
+🏁 Wszystkie testy zakończone.
+kajtek@Air-Kajetan bin % tmux capture-pane -p -S'-' -E'-' -J > ./log               
+

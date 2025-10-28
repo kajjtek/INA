@@ -1,0 +1,204 @@
+                                                                                                       
+kajtek@Air-Kajetan bin % bash list1.sh
+--- Rozpoczynam testy przypisane do numerycznych folderów ---
+Flaga używana dla wszystkich testów: 't'
+--------------------------------------------------------
+========================================================
+PROGRAM: ex2 (Testuje folder: ..//testfiles/2)
+========================================================
+   ▶️ Wykonuję: ./ex2 "..//testfiles/2/g2a-5.txt" "t"
+Operation took 15.2665 ms to execute
+NO CYCLE DETECTED
+   ▶️ Wykonuję: ./ex2 "..//testfiles/2/g2a-4.txt" "t"
+Operation took 0.887458 ms to execute
+NO CYCLE DETECTED
+   ▶️ Wykonuję: ./ex2 "..//testfiles/2/g2a-6.txt" "t"
+Operation took 107.542 ms to execute
+NO CYCLE DETECTED
+   ▶️ Wykonuję: ./ex2 "..//testfiles/2/g2a-3.txt" "t"
+Operation took 0.150583 ms to execute
+NO CYCLE DETECTED
+   ▶️ Wykonuję: ./ex2 "..//testfiles/2/g2a-2.txt" "t"
+Operation took 0.014375 ms to execute
+NO CYCLE DETECTED
+100 -> 90 -> 80 -> 70 -> 60 -> 50 -> 40 -> 30 -> 20 -> 10 -> 99 -> 89 -> 79 -> 69 -> 59 -> 49 -> 39 -> 29 -> 19 -> 9 -> 98 -> 88 -> 78 -> 68 -> 58 -> 48 -> 38 -> 28 -> 18 -> 8 -> 97 -> 87 -> 77 -> 67 -> 57 -> 47 -> 37 -> 27 -> 17 -> 7 -> 96 -> 86 -> 76 -> 66 -> 56 -> 46 -> 36 -> 26 -> 16 -> 6 -> 95 -> 85 -> 75 -> 65 -> 55 -> 45 -> 35 -> 25 -> 15 -> 5 -> 94 -> 84 -> 74 -> 64 -> 54 -> 44 -> 34 -> 24 -> 14 -> 4 -> 93 -> 83 -> 73 -> 63 -> 53 -> 43 -> 33 -> 23 -> 13 -> 3 -> 92 -> 82 -> 72 -> 62 -> 52 -> 42 -> 32 -> 22 -> 12 -> 2 -> 91 -> 81 -> 71 -> 61 -> 51 -> 41 -> 31 -> 21 -> 11 -> 1 ->  END 
+   ▶️ Wykonuję: ./ex2 "..//testfiles/2/g2a-1.txt" "t"
+Operation took 0.008875 ms to execute
+NO CYCLE DETECTED
+16 -> 12 -> 8 -> 4 -> 15 -> 11 -> 7 -> 3 -> 14 -> 10 -> 6 -> 2 -> 13 -> 9 -> 5 -> 1 ->  END 
+   ▶️ Wykonuję: ./ex2 "..//testfiles/2/g2b-4.txt" "t"
+A cycle has been found
+GRAPH HAS A CYCLE
+   ▶️ Wykonuję: ./ex2 "..//testfiles/2/g2b-5.txt" "t"
+A cycle has been found
+GRAPH HAS A CYCLE
+   ▶️ Wykonuję: ./ex2 "..//testfiles/2/g2b-6.txt" "t"
+A cycle has been found
+GRAPH HAS A CYCLE
+   ▶️ Wykonuję: ./ex2 "..//testfiles/2/g2b-2.txt" "t"
+A cycle has been found
+GRAPH HAS A CYCLE
+   ▶️ Wykonuję: ./ex2 "..//testfiles/2/g2b-3.txt" "t"
+A cycle has been found
+GRAPH HAS A CYCLE
+   ▶️ Wykonuję: ./ex2 "..//testfiles/2/g2b-1.txt" "t"
+A cycle has been found
+GRAPH HAS A CYCLE
+--------------------------------------------------------
+========================================================
+PROGRAM: ex3 (Testuje folder: ..//testfiles/3)
+========================================================
+   ▶️ Wykonuję: ./ex3 "..//testfiles/3/g3-1.txt" "t"
+Operation took 0.019709 ms to execute
+Number of components: 5
+Size of a component: 5
+1, 2, 3, 4, 5, 
+Size of a component: 4
+12, 15, 14, 13, 
+Size of a component: 4
+6, 8, 9, 7, 
+Size of a component: 2
+10, 11, 
+Size of a component: 1
+16, 
+   ▶️ Wykonuję: ./ex3 "..//testfiles/3/g3-2.txt" "t"
+Operation took 0.047417 ms to execute
+Number of components: 5
+Size of a component: 6
+1, 2, 3, 4, 5, 6, 
+Size of a component: 40
+67, 106, 105, 104, 103, 102, 101, 100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88, 87, 86, 85, 84, 83, 82, 81, 80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 68, 
+Size of a component: 36
+7, 13, 14, 19, 8, 20, 25, 21, 26, 31, 15, 27, 32, 37, 9, 28, 33, 38, 22, 34, 39, 16, 35, 40, 10, 29, 41, 23, 42, 17, 36, 11, 30, 24, 18, 12, 
+Size of a component: 24
+43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 
+Size of a component: 1
+107, 
+   ▶️ Wykonuję: ./ex3 "..//testfiles/3/g3-3.txt" "t"
+Operation took 0.206958 ms to execute
+Number of components: 5
+Size of a component: 7
+Size of a component: 400
+Size of a component: 400
+Size of a component: 200
+Size of a component: 1
+   ▶️ Wykonuję: ./ex3 "..//testfiles/3/g3-6.txt" "t"
+Operation took 185.687 ms to execute
+Number of components: 5
+Size of a component: 10
+Size of a component: 400000
+Size of a component: 360000
+Size of a component: 240000
+Size of a component: 1
+   ▶️ Wykonuję: ./ex3 "..//testfiles/3/g3-4.txt" "t"
+Operation took 1.8845 ms to execute
+Number of components: 5
+Size of a component: 8
+Size of a component: 4000
+Size of a component: 3600
+Size of a component: 2400
+Size of a component: 1
+   ▶️ Wykonuję: ./ex3 "..//testfiles/3/g3-5.txt" "t"
+Operation took 18.534 ms to execute
+Number of components: 5
+Size of a component: 9
+Size of a component: 40000
+Size of a component: 40000
+Size of a component: 20000
+Size of a component: 1
+--------------------------------------------------------
+========================================================
+PROGRAM: ex4 (Testuje folder: ..//testfiles/4)
+========================================================
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4a-4.txt" "t"
+Operation took 1.00008 ms to execute
+The graph IS bipariate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4a-5.txt" "t"
+Operation took 15.4438 ms to execute
+The graph IS bipariate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4a-6.txt" "t"
+Operation took 97.1205 ms to execute
+The graph IS bipariate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4a-2.txt" "t"
+Operation took 0.022417 ms to execute
+The graph IS bipariate
+First Set
+0, 2, 11, 20, 4, 13, 22, 31, 40, 6, 15, 24, 33, 42, 51, 60, 8, 17, 26, 35, 44, 53, 62, 71, 80, 19, 28, 37, 46, 55, 64, 73, 82, 91, 39, 48, 57, 66, 75, 84, 93, 59, 68, 77, 86, 95, 79, 88, 97, 99, 
+Second Set
+1, 10, 3, 12, 21, 30, 5, 14, 23, 32, 41, 50, 7, 16, 25, 34, 43, 52, 61, 70, 9, 18, 27, 36, 45, 54, 63, 72, 81, 90, 29, 38, 47, 56, 65, 74, 83, 92, 49, 58, 67, 76, 85, 94, 69, 78, 87, 96, 89, 98, 
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4a-3.txt" "t"
+Operation took 0.155084 ms to execute
+The graph IS bipariate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4a-1.txt" "t"
+Operation took 0.012375 ms to execute
+The graph IS bipariate
+First Set
+0, 2, 5, 8, 7, 10, 13, 15, 
+Second Set
+1, 4, 3, 6, 9, 12, 11, 14, 
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4b-5.txt" "t"
+Operation took 7.37896 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4b-4.txt" "t"
+Operation took 0.470959 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4b-6.txt" "t"
+Operation took 46.328 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4b-3.txt" "t"
+Operation took 0.079542 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4b-2.txt" "t"
+Operation took 0.011333 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/d4b-1.txt" "t"
+Operation took 0.0085 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4b-4.txt" "t"
+Operation took 1.16467 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4b-5.txt" "t"
+Operation took 9.42767 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4b-6.txt" "t"
+Operation took 75.9414 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4b-2.txt" "t"
+Operation took 0.017125 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4b-3.txt" "t"
+Operation took 0.079708 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4b-1.txt" "t"
+Operation took 0.007333 ms to execute
+Graph IS NOT bipartiate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4a-5.txt" "t"
+Operation took 12.6452 ms to execute
+The graph IS bipariate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4a-4.txt" "t"
+Operation took 1.534 ms to execute
+The graph IS bipariate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4a-6.txt" "t"
+Operation took 102.088 ms to execute
+The graph IS bipariate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4a-3.txt" "t"
+Operation took 0.107584 ms to execute
+The graph IS bipariate
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4a-2.txt" "t"
+Operation took 0.021833 ms to execute
+The graph IS bipariate
+First Set
+0, 3, 4, 5, 6, 15, 16, 63, 64, 65, 66, 67, 68, 69, 70, 17, 18, 71, 72, 73, 74, 75, 76, 77, 78, 19, 20, 79, 80, 81, 82, 83, 84, 85, 86, 21, 22, 87, 88, 89, 90, 91, 92, 93, 94, 23, 24, 95, 96, 97, 98, 99, 100, 101, 102, 25, 26, 103, 104, 105, 106, 107, 108, 109, 110, 27, 28, 111, 112, 113, 114, 115, 116, 117, 118, 29, 30, 119, 120, 121, 122, 123, 124, 125, 126, 
+Second Set
+1, 2, 7, 8, 9, 10, 11, 12, 13, 14, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 
+   ▶️ Wykonuję: ./ex4 "..//testfiles/4/u4a-1.txt" "t"
+Operation took 0.011084 ms to execute
+The graph IS bipariate
+First Set
+0, 3, 4, 5, 6, 
+Second Set
+1, 2, 7, 8, 9, 10, 11, 12, 13, 14, 
+--------------------------------------------------------
+🏁 Wszystkie testy zakończone.
+kajtek@Air-Kajetan bin % tmux capture-pane -p -S'-' -E'-' -J > ./log               
+

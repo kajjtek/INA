@@ -1,0 +1,63 @@
+--------------------------------------------------------
+========================================================
+PROGRAM: ex3 (Testuje folder: ..//testfiles/3)
+========================================================
+   ▶️ Wykonuję: ./ex3 "..//testfiles/3/g3-1.txt" "t"
+Operation took 0.019709 ms to execute
+Number of components: 5
+Size of a component: 5
+1, 2, 3, 4, 5, 
+Size of a component: 4
+12, 15, 14, 13, 
+Size of a component: 4
+6, 8, 9, 7, 
+Size of a component: 2
+10, 11, 
+Size of a component: 1
+16, 
+   ▶️ Wykonuję: ./ex3 "..//testfiles/3/g3-2.txt" "t"
+Operation took 0.047417 ms to execute
+Number of components: 5
+Size of a component: 6
+1, 2, 3, 4, 5, 6, 
+Size of a component: 40
+67, 106, 105, 104, 103, 102, 101, 100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88, 87, 86, 85, 84, 83, 82, 81, 80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 68, 
+Size of a component: 36
+7, 13, 14, 19, 8, 20, 25, 21, 26, 31, 15, 27, 32, 37, 9, 28, 33, 38, 22, 34, 39, 16, 35, 40, 10, 29, 41, 23, 42, 17, 36, 11, 30, 24, 18, 12, 
+Size of a component: 24
+43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 
+Size of a component: 1
+107, 
+   ▶️ Wykonuję: ./ex3 "..//testfiles/3/g3-3.txt" "t"
+Operation took 0.206958 ms to execute
+Number of components: 5
+Size of a component: 7
+Size of a component: 400
+Size of a component: 400
+Size of a component: 200
+Size of a component: 1
+   ▶️ Wykonuję: ./ex3 "..//testfiles/3/g3-6.txt" "t"
+Operation took 185.687 ms to execute
+Number of components: 5
+Size of a component: 10
+Size of a component: 400000
+Size of a component: 360000
+Size of a component: 240000
+Size of a component: 1
+   ▶️ Wykonuję: ./ex3 "..//testfiles/3/g3-4.txt" "t"
+Operation took 1.8845 ms to execute
+Number of components: 5
+Size of a component: 8
+Size of a component: 4000
+Size of a component: 3600
+Size of a component: 2400
+Size of a component: 1
+   ▶️ Wykonuję: ./ex3 "..//testfiles/3/g3-5.txt" "t"
+Operation took 18.534 ms to execute
+Number of components: 5
+Size of a component: 9
+Size of a component: 40000
+Size of a component: 40000
+Size of a component: 20000
+Size of a component: 1
+--------------------------------------------------------

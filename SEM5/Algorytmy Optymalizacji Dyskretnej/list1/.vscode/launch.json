@@ -1,7 +1,28 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": []
+    "configurations": [
+        {
+            "name": "LLDB Debug (macOS/Clang)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/tester", 
+            
+            // ARGUMENTY: Należy je uzupełnić! Twój program wymaga 2 argumentów:
+            // 1. ścieżka do pliku grafu (filename)
+            // 2. wzorzec/flaga ('s' lub 't')
+            "args": ["./testfiles/3/g3-2.txt", "s"], 
+            
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false, // Zmień na true, jeśli wolisz oddzielne okno konsoli
+            "MIMode": "lldb", // Ustawione na natywny dla macOS debuger
+            
+            // Sekcja setupCommands dla LLDB zazwyczaj nie jest wymagana,
+            // ale jeśli chcesz ją zostawić pustą, możesz ją usunąć lub zostawić tak jak jest.
+            "setupCommands": [], 
+            
+            "preLaunchTask": "" // Wymaga zadania 'build_fa' w tasks.json używającego clang++
+        }
+    ]
 }
