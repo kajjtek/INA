@@ -18,7 +18,7 @@ class Algorithm{
     std::vector<int> DFS(Graph g, int start, int* visited, bool treeable){
         return search(g, AlgType::DFS, start, visited, treeable);
     }
-    std::vector<int> sortTopologicaly(Graph g);
+    std::vector<int> sortTopologicaly(Graph g, bool throwable);
     std::vector<std::vector<int>> SSC(Graph g);
     std::optional<std::pair<std::vector<int>, std::vector<int>>> isBipartiate(Graph g);
     private:

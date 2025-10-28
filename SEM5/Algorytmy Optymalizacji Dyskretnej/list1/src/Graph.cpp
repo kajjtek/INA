@@ -11,7 +11,7 @@ Graph Graph::reverseGraph(){
     int* nEdges = new int[e_size];
     int* position = new int[v_size-1]{};
 
-    for(int i=0; i<v_size; i++){
+    for(int i=0; i<v_size-1; i++){
         int r1 = vertices[i];
         int r2 = vertices[i+1];
 
@@ -24,10 +24,10 @@ Graph Graph::reverseGraph(){
     int* nVertices = new int[v_size];
     nVertices[0]=0;
     for(int i=1; i<v_size; i++){
-        nVertices[i]=nVertices[i-1]+nCounts[i];
+        nVertices[i]=nVertices[i-1]+nCounts[i-1];
     }
 
-    for(int i=0; i<v_size; i++){
+    for(int i=0; i<v_size-1; i++){
         int r1 = vertices[i];
         int r2 = vertices[i+1];
 

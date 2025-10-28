@@ -38,11 +38,11 @@ function eta_finder(T::Type)
 end
 
 function max_finder(T::Type)
-    x = T(1.0)
+    x = T(2.0)-eps(T)
     while isfinite(2 * x)
         x *= T(2.0)
     end
-   
+
     return x
 end
 

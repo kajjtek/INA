@@ -55,7 +55,7 @@ std::optional<std::pair<std::vector<int>, std::vector<int>>> Algorithm::isBipart
 }
 
 std::vector<std::vector<int>> Algorithm::SSC(Graph g){
-    std::vector<int> post = sortTopologicaly(g);
+    std::vector<int> post = sortTopologicaly(g, false);
     Graph reversee = g.reverseGraph();
     int vNumber = g.v_size-1;
     int* visited = new int[vNumber];//-1-unvisited
@@ -65,7 +65,7 @@ std::vector<std::vector<int>> Algorithm::SSC(Graph g){
     for(int i=post.size()-1; i>=0; i--){
         int current = post[i];
         if(visited[current]==-1){
-            std::vector<int> component = search(reversee, AlgType::DFS, post[i], visited, false); //trzeba przekazywac visited najlepiej
+            std::vector<int> component = search(reversee, AlgType::BFS, post[i], visited, false); //trzeba przekazywac visited najlepiej
             sscs.push_back(component);
         }
     }
@@ -104,7 +104,7 @@ std::vector<int> Algorithm::search(Graph g, AlgType t, int start, int* visited, 
     return order;
 }
 
-std::vector<int> Algorithm::sortTopologicaly(Graph g){
+std::vector<int> Algorithm::sortTopologicaly(Graph g, bool throwable){
     std::vector<int> order;
     int v_size = g.v_size;
     int* color = new int[v_size-1]{};
@@ -117,21 +117,22 @@ std::vector<int> Algorithm::sortTopologicaly(Graph g){
              while(!container.empty()){
                 int current = container.front();
                 if(color[current]==0) color[current]=1;
-                bool should_continue = true;
+                bool found_new_neighbour = false;
                 
                 int r1 = g.vertices[current];
                 int r2 = g.vertices[current+1];
                 for(int i=r1; i<r2; i++){
-                    if(color[g.edges[i]]==0){
-                        container.push_front(g.edges[i]);
-                        should_continue=false;
-                        continue;
-                    } else if (color[g.edges[i]]==1){
+                    int neighbour = g.edges[i];
+                    if(color[neighbour]==0){
+                        container.push_front(neighbour);
+                        found_new_neighbour=true;
+                        break;;
+                    } else if (color[g.edges[i]]==1 && throwable){
                         delete[] color;
                         throw CycleFoundException("A cycle has been found");
                     }
                 }
-                if(!should_continue) continue;
+                if(found_new_neighbour) continue;
                 container.pop_front();
                 color[current]=2;
                 order.push_back(current); //remember that it must be reserved ;d

@@ -59,7 +59,7 @@ int main(int argc, char* argv[]){
     if(flag=='t') printTree(g, visited, order1);
 
     try {
-        order1 = algorithm.sortTopologicaly(g);
+        order1 = algorithm.sortTopologicaly(g, true);
         if(order1.size()>0) std::cout<<"The graph has no cycles"<<std::endl;
         if(numberOfVertices<=200){
             for(int current: order1){
@@ -76,6 +76,12 @@ int main(int argc, char* argv[]){
         std::vector<std::vector<int>> sscs = algorithm.SSC(g);
         for(std::vector<int> component: sscs){
             std::cout<<"Size of a component: "<<component.size()<<std::endl;
+            if(numberOfVertices<=200){
+                for(int x:component){
+                    std::cout<<x+1<<", ";
+                }
+                std::cout<<std::endl;
+            }
         }
     }catch(...) {}
 
