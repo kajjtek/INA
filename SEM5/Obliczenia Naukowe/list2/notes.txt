@@ -1,0 +1,6 @@
+dla 1
+wnioskowac mozna ze mala zmiana w mantysie moze miec znaczący wpływ na wynik i jego precyzje. warto pamietac wiec ze testujac funkcje
+nalezy sprawdzac ja dla wielu wartosci
+wiele funkcji moze byc podatnych na bledy zwiazane z zaokragleniem - kwestia kiedy je wykryjemy
+jest to zadanie uwarunkowane mozna policzyc pochodna zeby pokazac ze cond(x) duzy
+nalezy byc ostroznym z pochopna ocena przydatnosci funkcji - nalezy oceniac nie tylko jej skrajne przypadki ale wedlug na przyklad rozkladu potencjalnych zmiennych
