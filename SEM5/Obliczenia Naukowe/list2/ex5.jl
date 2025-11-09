@@ -1,3 +1,4 @@
+#KAJETAN PLEWA
 function logistic_model(p0::T, r::T, shouldStop::Bool) where T <: AbstractFloat
     p = p0
 

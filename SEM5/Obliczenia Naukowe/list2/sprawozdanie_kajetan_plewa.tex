@@ -1,0 +1,548 @@
+\documentclass[11pt, a4paper]{article}
+
+% --- PREAMBUŁA DLA PDFLATEX (Stabilna) ---
+\usepackage{float}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel} % Ustawienie języka polskiego
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
+
+% Pakiety matematyczne i tabelaryczne
+\usepackage{amsmath}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, urlcolor=blue, linkcolor=black, citecolor=black}
+\usepackage{graphicx}
+
+\sisetup{
+	round-mode = places,
+	round-precision = 8,
+	scientific-notation = true,
+	exponent-product = \cdot, % Używa kropki jako separatora wykładnika
+	group-separator = {} % Wyłącza separator tysięcy
+}
+
+\title{\vspace{-2cm}\textbf{Analiza Wpływu Niewielkich Zmian Danych na Sumowanie Iloczynu Skalarnego}}
+\author{Kajetan Plewa}
+\date{\today}
+
+\begin{document}
+	
+	\maketitle
+	\thispagestyle{empty}
+	
+	\section{Zadanie 1}
+	
+	Celem jest analiza \textbf{wrażliwości problemu sumowania iloczynu skalarnego} $S = \sum_{i=1}^{5} x_i y_i$ na \textbf{dwa czynniki}: precyzję arytmetyczną ($\text{Float32}$ vs. $\text{Float64}$) oraz kolejność sumowania.
+	
+	\subsection{Badane Wersje Danych Wejściowych}
+	W celu zbadania wpływu niewielkich zmian, porównane są dwa zestawy wektorów $X$ i $Y$. Zestaw \textbf{Zmodyfikowany} jest efektem usunięcia ostatniej cyfry z $x_4$ i $x_5$ w stosunku do zestawu \textbf{Oryginalnego}. Oba zestawy są konwertowane do wybranej precyzji ($\text{Float32}$ lub $\text{Float64}$) przed rozpoczęciem obliczeń.
+	
+	\begin{verbatim}
+		% Wersja Oryginalna:
+		x_oryg = [2.718281828, -3.141592654, 1.414213562, 0.577215664, 0.301029995]
+		y_oryg = [1486.2497, 878366.9879, -22.37492, 4773714.647, 0.000185049]
+		
+		% Wersja Zmodyfikowana:
+		x_mod =  [2.718281828, -3.141592654, 1.414213562, 0.57721566, 0.30102999]
+		y_mod =  [1486.2497, 878366.9879, -22.37492, 4773714.647, 0.000185049]
+	\end{verbatim}
+	
+	\subsection{Opis Implementacji Metod Sumowania}
+	
+	Zastosowano cztery metody, implementowane w języku Julia, które różnią się kolejnością dodawania składników, co ma krytyczny wpływ na błąd zaokrąglenia.
+	
+	\subsubsection{Metoda I: Sumowanie Standardowe (Forward)}
+	Sumowanie odbywa się w naturalnej kolejności indeksów (od $i=1$ do $i=5$). Jest to standardowa, najprostsza implementacja, która jest najbardziej podatna na błędy utraty cyfr znaczących, gdy odejmowane są od siebie duże, lecz przeciwne składniki.
+	
+	\subsubsection{Metoda II: Sumowanie w Kolejności Malejącej (Backward)}
+	Sumowanie odbywa się w odwróconej kolejności indeksów (od $i=5$ do $i=1$). Tak jak Metoda I, jest ona wrażliwa na błędy zaokrągleń, a zmiana kolejności zwykle nie prowadzi do znacznej poprawy w tym konkretnym problemie.
+	
+	\subsubsection{Metoda III: Sortowanie Malejąco wg Wartości Bezwzględnej}
+	Wszystkie iloczyny cząstkowe ($x_i y_i$) są obliczane, a następnie sortowane w kolejności \textbf{malejącej} według ich wartości bezwzględnej. Sumowanie odbywa się od największych wartości bezwzględnych. Ta metoda jest numerycznie gorsza od Metody IV, ponieważ duże błędy zaokrągleń, powstające przy sumowaniu dużych liczb, nie mają szansy zostać skompensowane przez dodanie małych składników na końcu.
+	
+	\subsubsection{Metoda IV: Sortowanie Rosnąco wg Wartości Bezwzględnej (Zalecana)}
+	Wszystkie iloczyny cząstkowe ($x_i y_i$) są sortowane w kolejności rosnącej według ich wartości bezwzględnej. Sumowanie odbywa się od najmniejszych wartości bezwzględnych. Jest to numerycznie najstabilniejsza metoda sumowania, ponieważ małe błędy zaokrągleń wprowadzane przez małe składniki są minimalizowane na wczesnym etapie, zanim duże składniki zdominują sumę.
+	
+	\subsection{Porównanie Wyników dla Danych Oryginalnych i Zmodyfikowanych}
+	
+	Poniższa tabela zestawienia wyników dla obu zestawów danych. Przyjęto, że wynik Metody IV w $\text{Float64}$ dla danych oryginalnych jest wynikiem referencyjnym.
+	
+	\begin{table}[h]
+		\centering
+		\caption{Zestawienie wyników sumowania (Oryginalne vs. Zmodyfikowane).}
+		\label{tab:porownanie_danych}
+		\begin{tabular}{llcc}
+			\toprule
+			Metoda & Precyzja (T) & Wynik (Oryginalne Dane) & Wynik (Zmodyfikowane Dane) \\
+			\midrule
+			I (Forward) & $\text{Float32}$ & $-0.49994434$ & $-0.4999443$ \\
+			II (Backward) & $\text{Float32}$ & $-0.4543457$ & $-0.4543457$ \\
+			III (Sort Abs Desc) & $\text{Float32}$ & $-0.5$ & $-0.5$ \\
+			IV (Sort Abs Asc) & $\text{Float32}$ & $-0.5$ & $-0.5$ \\
+			\midrule
+			I (Forward) & $\text{Float64}$ & $ 1.0251881368296672 \times 10^{-10}$ & $-0.004296342739891585$ \\
+			II (Backward) & $\text{Float64}$ & $-1.5643308870494366 \times 10^{-10} $ & $-0.004296342998713953$ \\
+			III (Sort Abs Desc) & $\text{Float64}$ & $0.0 $ & $-0.004296342842280865$ \\
+			IV (Sort Abs Asc) & $\text{Float64}$ & $0.0$ & $-0.004296342842280865$ \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	\subsection{Interpretacja Wyników Numerycznych dla Sumy Bliskiej Zeru}
+	Prezentowane wyniki, w których teoretyczna suma iloczynu skalarnego ($S = \sum x_i y_i$) jest bliska zera, demonstrują dobre uwarunkowanie.
+	
+	\subsubsection{Analiza Precyzji $\text{Float32}$ (Pojedyncza Precyzja)}
+	
+	\begin{itemize}
+		\item \textbf{Utrata Precyzji:} Wszystkie metody w $\text{Float32}$ zwróciły wyniki rzędu $10^0$ ($\approx -0.5$), zamiast poprawnego rzędu wielkości $10^{-10}$. Jest to rezultat konieczności odejmowania dużych, bliskich sobie liczb rzędu $10^6$.
+		\item \textbf{Niewystarczająca Liczba Cyfr Znaczących:} $\text{Float32}$ oferuje tylko około 7 cyfr znaczących, co jest zdecydowanie niewystarczające do zachowania precyzji w obliczeniu różnicy dwóch dużych sum ($\sum |x_i y_i| \approx 2.76 \times 10^6$), która powinna dać wynik rzędu $10^{-10}$.
+		\item \textbf{Zmiana spodowana modyfikacją danych:} Mała zmiana danych spowodowała bardzo małe zmiany wyników. Świadczy to o dobrym uwarunkowaniu zadania,
+	\end{itemize}
+	
+	\subsubsection{Analiza Precyzji $\text{Float64}$ (Podwójna Precyzja)}
+	
+	\begin{itemize}
+		\item \textbf{Niestabilność Metod Standardowych (I i II):} Metody sumowania w porządku naturalnym (Forward) i odwrotnym (Backward) dały dwa różne, niezerowe wyniki ($+1.025 \times 10^{-10}$ i $-1.564 \times 10^{-10}$). 
+		
+		\item \textbf{Idealna Stabilność Metod Sortujących (III i IV):} Obie metody sortujące (Malejąco i Rosnąco wg wartości bezwzględnej) osiągnęły wynik $\mathbf{0.0}$. Jest to dowód na to, że prawdziwa suma jest bliska zeru i że \textbf{stabilny algorytm} jest w stanie skorygować błędy zaokrąglenia.
+		
+		\item \textbf{Modyfikacja danych:} Mała zmiana danych spowodowała dużą zmianę wyników - co ciekawe drugim efektem pobocznym jest wyrownanie wyników, niezależnie od użytego algorytmu.
+	\end{itemize}
+	
+	
+	\subsection{Wnioski}
+	Na podstawie otrzymanych rezultatów wnioskować można, że:\\
+		\begin{itemize}
+		\item Float32 jest bezużyteczny dla obliczeń numerycznych, ale jest dobrze uwarunkowany. 
+		
+		\item Dla Float64 zadanie jest źle uwarunkowane - na poziomie 0.4\%, niezależnie od użytego algorytmu. Warto więc zauważyć, że uwarunkowanie zależy od typu w praktyce.
+		
+		\item Widać, że dla niektórych zmiennych zwrócone dane są bezużyteczne -> algorytm III i IV dla Float64, podczas gdy dla innych wyniki są zgodne i wartościowe. Sugeruje to, że by ostatecznie ocenić poprawność funkcji należy testować ją na wielu wartościach, gdyż wiele wad jest trudna do wykrycia na poziomie teoretycznym.
+		Określenie odporności funkcji na błędy maszynowe jest więc czynnością niełatwą - kluczowy są testy empiryczne oparte przykładowo na rozkładzie probabilistycznym zmiennej.
+	\end{itemize}
+	
+	\section{Zadanie 2}
+	
+	Celem zadania jest analiza funkcji $f(x)$ pod kątem jej wizualizacji i zachowania asymptotycznego w nieskończoności.
+	
+	\subsection{Obliczenie Granicy Analitycznej $\lim_{x\to\infty} f(x)$ Metodą de l'Hôpitala}
+	
+	Analizujemy granicę funkcji:
+	$$ \lim_{x\to\infty} f(x) = \lim_{x\to\infty} e^x \ln(1 + e^{-x}) $$
+	Ponieważ jest to symbol nieoznaczony $\infty \cdot 0$, przekształcamy funkcję do postaci ułamkowej $\frac{0}{0}$:
+	$$ f(x) = \frac{\ln(1 + e^{-x})}{e^{-x}} $$
+	Stosujemy regułę de l'Hôpitala, licząc pochodne licznika i mianownika:
+	$$ \lim_{x\to\infty} \frac{\frac{d}{dx}\left( \ln(1 + e^{-x}) \right)}{\frac{d}{dx}\left( e^{-x} \right)} = \lim_{x\to\infty} \frac{- \frac{e^{-x}}{1 + e^{-x}}}{-e^{-x}} $$
+	Po skróceniu $\left( -e^{-x} \right)$ otrzymujemy:
+	$$ \lim_{x\to\infty} \frac{1}{1 + e^{-x}} $$
+	Obliczamy granicę:
+	$$ \lim_{x\to\infty} \frac{1}{1 + e^{-x}} = \frac{1}{1 + 0} = \mathbf{1} $$
+	
+	\subsection{Porównanie z Wykresem i Wyjaśnienie Zjawiska Numerycznego}
+	
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.8\textwidth]{desmos.png}
+		\caption{Wizualizacja w desmosie.}
+		\label{fig:Wizualizacja w desmosie}
+	\end{figure}
+	
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.8\textwidth]{geogebra.png}
+		\caption{Wizualizacja w geogebrze.}
+		\label{fig:Wizualizacja w geogebrze}
+	\end{figure}
+	
+	\subsubsection{Obserwacja Wykresów Wizualizacyjnych}
+	
+	Wykresy generowane numerycznie dla dużych wartości $x$ (np. $x > 20$) pokazują, że funkcja stabilizuje się na poziomie \textbf{bliskim zeru} (lub bardzo małej, stałej dodatniej wartości), co jest sprzeczne z granicą analityczną równą $\mathbf{1}$.
+	
+	\subsubsection{Wyjaśnienie Numerycznej Utraty Precyzji}
+	
+	Rozbieżność wynika z problemu \textbf{utraty cyfr znaczących} w arytmetyce zmiennoprzecinkowej komputera:
+	
+	\begin{itemize}
+		\item Funkcja $f(x)$ jest \textbf{źle uwarunkowana numerycznie} dla dużych $x$.
+		\item Wartość $e^{-x}$ jest ekstremalnie mała. W $\text{Float64}$, gdy $e^{-x}$ jest bliskie precyzji maszyny ($\epsilon_{\text{mach}}$), dodanie go do 1 w wyrażeniu $\ln(1 + e^{-x})$ może zostać zignorowane (tj. $1 + e^{-x} \approx 1$).
+		\item W rezultacie program błędnie oblicza $\ln(1 + e^{-x}) \approx \ln(1) = 0$.
+		\item Prowadzi to do wyniku $f(x) \approx e^x \cdot 0 = 0$, co generuje błędną asymptotę $y=0$ widoczną na wykresie, zamiast poprawnej granicy $y=1$.
+	\end{itemize}
+	
+	\subsection{Wnioski}
+		Zjawisko to podkreśla konieczność stosowania \textbf{analitycznych przekształceń} (jak reguła de l'Hôpitala) lub stabilnych algorytmów numerycznych, \textbf{zawsze, niezależnie od złożoności funkcji} aby uniknąć błędów w źle uwarunkowanych wyrażeniach.
+	
+	\section{Zadanie 3}
+	
+	Celem eksperymentu była analiza stabilności numerycznej dwóch podstawowych metod rozwiązywania układu równań liniowych $A\mathbf{x} = \mathbf{b}$, a mianowicie: \textbf{eliminacji Gaussa} ($\mathbf{x} = A \setminus \mathbf{b}$) oraz metody opartej na jawnej \textbf{odwrotności macierzy} ($\mathbf{x} = A^{-1}\mathbf{b}$).
+	
+	Badano wpływ \textbf{wskaźnika uwarunkowania} $\text{cond}(A)$ na \textbf{względny błąd rozwiązania} $\frac{\|\mathbf{x}_{\text{dokładne}} - \mathbf{x}_{\text{obliczone}}\|}{\|\mathbf{x}_{\text{dokładne}}\|}$ dla dwóch typów macierzy, które charakteryzują się rosnącym uwarunkowaniem:
+	
+	\begin{enumerate}
+		\item \textbf{Macierze Hilberta $H_n$}: Rosnący stopień $n \in \{1, \dots, 20\}$ generuje macierze o szybko rosnącym wskaźniku uwarunkowania.
+		\item \textbf{Macierze Losowe $R_n$}: Macierze stopnia $n \in \{5, 10, 20\}$ generowane z zadanym, rosnącym wskaźnikiem uwarunkowania $c \in \{1, 10, 10^3, 10^7, 10^{12}, 10^{16}\}$.
+	\end{enumerate}
+	W każdym przypadku wektor $\mathbf{b}$ został skonstruowany na podstawie dokładnego rozwiązania $\mathbf{x} = (1, \dots, 1)^T$.
+	
+	\subsection{Metodologia Rozwiązania}
+	
+	Problem rozwiązano w środowisku Julia, wykorzystując standardową arytmetykę podwójnej precyzji ($\text{Float64}$).
+	
+	\subsubsection{Generowanie Danych}
+	\begin{itemize}
+		\item \textbf{Macierz Hilberta $H_n$}: Użyto funkcji \texttt{hilb(n)}, gdzie $H_{i,j} = \frac{1}{i+j-1}$.
+		\item \textbf{Macierz Losowa $R_n$}: Użyto funkcji \texttt{matcond(n, c)}, która generuje macierz o wskaźniku uwarunkowania bliskim $c$ poprzez dekompozycję SVD, kontrolując wartości singularne.
+		\item \textbf{Wektor $\mathbf{b}$}: Wektor prawej strony $\mathbf{b}$ wyznaczono jako $\mathbf{b} = A \mathbf{x}_{\text{dokładne}}$, gdzie $\mathbf{x}_{\text{dokładne}} = \mathbf{1}$.
+	\end{itemize}
+	
+	\subsubsection{Algorytmy Rozwiązywania Układu}
+	
+	\begin{enumerate}
+		\item \textbf{Metoda Eliminacji Gaussa (Operator \texttt{A\textbackslash{}b})}
+		Ta metoda implementuje algorytm numerycznie stabilniejszy Jest to zalecana metoda numeryczna.
+		\item \textbf{Metoda Odwrotności Macierzy (Operator \texttt{inv(A)*b})}
+		Ta metoda wymaga jawnego obliczenia macierzy odwrotnej $A^{-1}$, co jest zarówno \textbf{wolniejsze} (złożoność $O(n^3)$ zamiast $O(n^3/3)$) i \textbf{numerycznie niestabilniejsze} w przypadku macierzy źle uwarunkowanych.
+	\end{enumerate}
+	
+	\subsubsection{Miara Błędu}
+	Względny błąd rozwiązania obliczono jako:
+	$$ \text{Błąd Względny} = \frac{\|\mathbf{x}_{\text{dokładne}} - \mathbf{x}_{\text{obliczone}}\|_2}{\|\mathbf{x}_{\text{dokładne}}\|_2} $$
+	gdzie $\|\cdot\|_2$ oznacza normę euklidesową (w pakiecie \texttt{LinearAlgebra} jest to funkcja \texttt{norm}).
+	
+	
+	\subsection{Macierz Hilberta $H_n$}
+	
+	Tabela \ref{tab:hilbert_summary} przedstawia wybrane wyniki dla macierzy Hilberta wraz ze wzrostem stopnia $n$.
+	
+	\begin{table}[h]
+		\centering
+		\caption{Wyniki dla Macierzy Hilberta $\mathbf{H_n}$ (wybrane $n$).}
+		\label{tab:hilbert_summary}
+		\begin{tabular}{ccccc}
+			\toprule
+			$n$ & RANK & COND($A$) & Błąd (Gauss) & Błąd (Inverse) \\
+			\midrule
+			5 & 5 & \num{4.766e5} & \num{1.26e-12} & \num{8.13e-12} \\
+			10 & 10 & \num{1.602e13} & \num{4.19e-4} & \num{4.07e-4} \\
+			11 & 10 & \num{5.225e14} & \num{1.00e-2} & \num{1.06e-2} \\
+			12 & 11 & \num{1.643e16} & \num{0.550} & \num{0.670} \\
+			16 & 12 & \num{2.250e18} & \num{10.415} & \num{8.442} \\
+			20 & 13 & \num{6.807e18} & \num{28.793} & \num{30.751} \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	\subsubsection{Interpretacja Wyników dla $H_n$}
+	
+	\begin{itemize}
+		\item \textbf{Wpływ Uwarunkowania}: Macierz Hilberta jest klasycznym przykładem macierzy \textbf{bardzo źle uwarunkowanej}. Wskaźnik $\text{cond}(A)$ rośnie lawinowo wraz ze wzrostem $n$. Już dla $n=10$, $\text{cond}(A)$ przekracza $10^{13}$.
+		\item \textbf{Wzrost Błędu}: Względny błąd rozwiązania bezpośrednio koreluje ze wskaźnikiem uwarunkowania. Dla $n \le 9$ błąd jest na poziomie precyzji maszyny (rzędu $10^{-16}$ do $10^{-5}$), ale po przekroczeniu $\text{cond}(A) \approx 10^{16}$ ($n=12$), błąd staje się rzędu $10^0$ i wyżej.
+		\item \textbf{Utrata Rzędu (RANK)}: Dla $n \ge 11$, funkcja $\text{rank}(A)$ zaczyna zwracać wartość mniejszą niż $n$ (np. dla $n=12$, $\text{rank}(A)=11$). Jest to sygnał, że komputerowa reprezentacja macierzy Hilberta traci pełny rząd ze względu na błędy zaokrągleń, co jest typowe dla macierzy źle uwarunkowanych.
+		\item \textbf{Porównanie Metod}: Dla $H_n$ obie metody (Gauss i Inverse) wykazują podobną wrażliwość na błąd. Nie można jednoznacznie stwierdzić przewagi jednej metody nad drugą, gdy uwarunkowanie jest ekstremalne.
+	\end{itemize}
+	
+	\subsection{Macierz Losowa $R_n$ z Zadanym Uwarunkowaniem}
+	
+	Tabela \ref{tab:random_summary} przedstawia wyniki dla macierzy losowej $R_n$ dla $n=10$ w zależności od zadanego wskaźnika uwarunkowania $c$.
+	
+	\begin{table}[h]
+		\centering
+		\caption{Wyniki dla Macierzy Losowej $\mathbf{R_{10}}$ w zależności od wskaźnika $c$.}
+		\label{tab:random_summary}
+		\begin{tabular}{ccccc}
+			\toprule
+			$c$ (Oczekiwane) & RANK & COND($A$) & Błąd (Gauss) & Błąd (Inverse) \\
+			\midrule
+			\num{1.0} & 10 & \num{1.00} & \num{4.00e-16} & \num{3.26e-16} \\
+			\num{10.0} & 10 & \num{10.00} & \num{3.65e-16} & \num{5.06e-16} \\
+			\num{1.0e3} & 10 & \num{1.00e3} & \num{5.88e-14} & \num{5.33e-14} \\
+			\num{1.0e7} & 10 & \num{1.00e7} & \num{1.11e-10} & \num{1.87e-10} \\
+			\num{1.0e12} & 10 & \num{1.00e12} & \num{1.74e-5} & \num{1.70e-5} \\
+			\num{1.0e16} & 9 & \num{2.44e17} & \num{0.187} & \num{0.211} \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	\subsubsection{Interpretacja Wyników dla $R_n$}
+	
+	\begin{itemize}
+		\item \textbf{Zależność Błędu od Uwarunkowania}:
+		Obserwujemy klasyczną zależność: $\text{Błąd Względny} \approx \text{cond}(A) \cdot \epsilon_{\text{mach}}$, gdzie $\epsilon_{\text{mach}} \approx 2.2 \times 10^{-16}$.
+		\begin{itemize}
+			\item Dla $c \le 10^{12}$, $\text{cond}(A) \cdot \epsilon_{\text{mach}}$ jest mniejsze niż $10^{-4}$, a błąd pozostaje mały i akceptowalny.
+			\item Po przekroczeniu granicy numerycznej (dla $c=10^{16}$, gdzie $\text{cond}(A) \approx 10^{17}$), błąd staje się rzędu $10^{-1}$ ($0.187$), co oznacza, że \textbf{rozwiązanie jest numerycznie bezużyteczne}.
+		\end{itemize}
+		\item \textbf{Utrata Rzędu (RANK)}: Podobnie jak w przypadku macierzy Hilberta, gdy wskaźnik uwarunkowania przekracza krytyczną wartość $10^{16}$, macierz jest postrzegana jako \textbf{numerycznie osobliwa} (dla $c=10^{16}$, $\text{rank}(A)=9$).
+		\item \textbf{Porównanie Metod}: W przypadku macierzy losowej $R_n$ z zadanym uwarunkowaniem, różnice między metodą eliminacji Gaussa (A\textbackslash{}b) a metodą odwrotności macierzy ($\text{inv}(A)*b$) są \textbf{minimalne}. Jest to często spotykane w sytuacjach, gdy błąd rozwiązania jest zdominowany przez złe uwarunkowanie macierzy, a nie przez sam algorytm.
+	\end{itemize}
+	
+	\subsection{Wnioski}
+	Podczas pracy nad procesem, należy stale badać jego współczynnik uwarunkowania - jak widać na przykładzie tego zadania jego wzrost prowadzi do bezużyteczności wyników, niezależnie od użytego algorytmu.
+	Współczynnik ten jest więc kluczowy dla zachowania poprawności procesu.
+	
+	\section{Zadanie 4}
+	\label{sec:zadanie4}
+	
+	Celem eksperymentu jest zbadanie stabilności numerycznej obliczania pierwiastków wielomianu Wilkinsona $P(x)$ o stopniu $n=20$ w standardowej arytmetyce zmiennoprzecinkowej ($\text{Float64}$).
+	
+	\subsection{Opis Wielomianu Wilkinsona $P(x)$}
+	
+	Wielomian Wilkinsona jest zdefiniowany w postaci iloczynowej jako:
+	$$p(x) = \prod_{k=1}^{20} (x - k)$$
+	Jego \textbf{dokładne pierwiastki} to liczby całkowite $\mathbf{k} \in \{1, 2, \dots, 20\}$.
+	Eksperyment polega na obliczeniu pierwiastków $z_k$ z \textbf{postaci naturalnej} wielomianu $P(x) = x^{20} + a_{19}x^{19} + \dots + a_0$.
+	
+	\subsection{Część (a): Wyniki i Analiza Błędów dla Wielomianu $P(x)$}
+	
+	Tabela \ref{tab:wilkinson_a} przedstawia obliczone pierwiastki $z_k$ i analizę trzech miar błędu dla nieperturbowanego wielomianu.
+	
+\begin{table}[h]
+	\centering
+	\caption{Wyniki obliczeń pierwiastków $z_k$ dla wielomianu $P(x)$ w postaci naturalnej. (a)}
+	\label{tab:wilkinson_a}
+	\resizebox{\textwidth}{!}{\begin{tabular}{c S[table-format=2.12] S[table-format=1.3e-1] S[table-format=1.3e+2] S[table-format=1.3e+2]}
+			\toprule
+			$k$ & 
+			\multicolumn{1}{c}{$z_k$ (Obliczony)} &  % <-- FIX: Use \multicolumn{1}{c}{...}
+			\multicolumn{1}{c}{$|z_k - k|$} &      % <-- FIX: Use \multicolumn{1}{c}{...}
+			\multicolumn{1}{c}{$|P(z_k)|$} &        % <-- FIX: Use \multicolumn{1}{c}{...}
+			\multicolumn{1}{c}{$|p(z_k)|$} \\       % <-- FIX: Use \multicolumn{1}{c}{...}
+			\midrule
+			1 & 0.9999999999996989 & \num{3.011e-13} & \num{3.570e+04} & \num{3.663e+04} \\
+			2 & 2.0000000000283182 & \num{2.832e-11} & \num{1.763e+05} & \num{1.813e+05} \\
+			3 & 2.9999999995920965 & \num{4.079e-10} & \num{2.792e+05} & \num{2.902e+05} \\
+			4 & 3.9999999837375317 & \num{1.626e-08} & \num{3.027e+06} & \num{2.042e+06} \\
+			5 & 5.0000006657697910 & \num{6.658e-07} & \num{2.292e+07} & \num{2.089e+07} \\
+			6 & 5.9999892458247730 & \num{1.075e-05} & \num{1.290e+08} & \num{1.125e+08} \\
+			7 & 7.0001020027930080 & \num{1.020e-04} & \num{4.805e+08} & \num{4.573e+08} \\
+			8 & 7.9993558296077620 & \num{6.442e-04} & \num{1.638e+09} & \num{1.556e+09} \\
+			9 & 9.0029152943620530 & \num{2.915e-03} & \num{4.877e+09} & \num{4.688e+09} \\
+			10 & 9.9904130424817250 & \num{9.587e-03} & \num{1.364e+10} & \num{1.263e+10} \\
+			11 & 11.0250229329093180 & \num{2.502e-02} & \num{3.586e+10} & \num{3.300e+10} \\
+			12 & 11.9532832538468570 & \num{4.672e-02} & \num{7.533e+10} & \num{7.389e+10} \\
+			13 & 13.0743140324473400 & \num{7.431e-02} & \num{1.961e+11} & \num{1.848e+11} \\
+			14 & 13.9147555918021270 & \num{8.524e-02} & \num{3.575e+11} & \num{3.551e+11} \\
+			15 & 15.0754937996994760 & \num{7.549e-02} & \num{8.216e+11} & \num{8.423e+11} \\
+			16 & 15.9462867166079720 & \num{5.371e-02} & \num{1.551e+12} & \num{1.571e+12} \\
+			17 & 17.0254271462374120 & \num{2.543e-02} & \num{3.695e+12} & \num{3.317e+12} \\
+			18 & 17.9909213527164800 & \num{9.079e-03} & \num{7.650e+12} & \num{6.345e+12} \\
+			19 & 19.0019098182994400 & \num{1.910e-03} & \num{1.144e+13} & \num{1.229e+13} \\
+			20 & 19.9998092912366370 & \num{1.907e-04} & \num{2.792e+13} & \num{2.318e+13} \\
+			\bottomrule
+	\end{tabular}}
+\end{table}
+	
+	\subsubsection{Wyjaśnienie Rozbieżności (Część a)}
+	
+	\paragraph{Zjawisko:} Obserwowane wyniki pokazują, że \textbf{błąd bezwzględny pierwiastka} ($|z_k - k|$) jest bardzo duży, zwłaszcza w środku zakresu (dla $k=14$ osiąga maksimum $\approx 8.5 \times 10^{-2}$), co dowodzi utraty dokładności. Jest to błąd o wiele rzędów wielkości większy niż maszynowa precyzja ($\epsilon_{mach} \approx 10^{-16}$). Natomiast błąd reszty, chociaż duży w wartości bezwzględnej ($\approx 10^{13}$), jest relatywnie mały w stosunku do współczynników wielomianu.
+	
+	\begin{itemize}
+		\item \textbf{Złe Uwarunkowanie}: Wielomian Wilkinsona jest \textbf{źle uwarunkowany}. Małe błędy zaokrągleń w reprezentacji współczynników $a_i$ w $\text{Float64}$ są \textbf{wzmacniane} przez wskaźnik uwarunkowania problemu.
+		\item \textbf{Utrata Dokładności}: Wzrost błędu w środkowym zakresie pierwiastków jest spowodowany faktem, że pierwiastki w tym obszarze są do siebie bliższe (w skali logarytmicznej), co czyni je bardziej wrażliwymi na perturbacje współczynników (duży wskaźnik uwarunkowania dla tych pierwiastków).
+	\end{itemize}
+	
+	\subsection{Część (b): Eksperyment Wilkinsona z Perturbacją Współczynnika}
+	
+	W eksperymencie powtórzono obliczenia po zmianie współczynnika przy $x^{19}$ z $a_{19} = -210$ na $\tilde{a}_{19} = -210 - 2^{-23}$, co jest bardzo małą perturbacją rzędu $10^{-7}$.
+	
+	\begin{table}[h]
+		\centering
+		\caption{Wyniki obliczeń pierwiastków $\tilde{z}_k$ dla perturbowanego wielomianu $\tilde{P}(x)$. (b)}
+		\label{tab:wilkinson_b}
+		\resizebox{\textwidth}{!}{\begin{tabular}{c c c c c}
+				\toprule
+				$k$ & $z_k$ (Obliczony) & $|z_k - k|$ & $|P(z_k)|$ & $|p(z_k)|$ \\
+				\midrule
+				1 & $0.9999999999998357 + 0.0im$ & $1.643 \times 10^{-13}$ & $2.026 \times 10^{4}$ & $2.000 \times 10^{4}$ \\
+				2 & $2.0000000000550373 + 0.0im$ & $5.504 \times 10^{-11}$ & $3.465 \times 10^{5}$ & $3.524 \times 10^{5}$ \\
+				3 & $2.9999999966034200 + 0.0im$ & $3.397 \times 10^{-9}$ & $2.258 \times 10^{6}$ & $2.416 \times 10^{6}$ \\
+				4 & $4.0000000897243620 + 0.0im$ & $8.972 \times 10^{-8}$ & $1.054 \times 10^{7}$ & $1.126 \times 10^{7}$ \\
+				5 & $4.9999985738879100 + 0.0im$ & $1.426 \times 10^{-6}$ & $3.758 \times 10^{7}$ & $4.476 \times 10^{7}$ \\
+				6 & $6.0000204766730310 + 0.0im$ & $2.048 \times 10^{-5}$ & $1.314 \times 10^{8}$ & $2.142 \times 10^{8}$ \\
+				7 & $6.9996020704224200 + 0.0im$ & $3.979 \times 10^{-4}$ & $3.939 \times 10^{8}$ & $1.785 \times 10^{9}$ \\
+				8 & $8.0077720290994460 + 0.0im$ & $7.772 \times 10^{-3}$ & $1.185 \times 10^{9}$ & $1.869 \times 10^{10}$ \\
+				9 & $8.9158163679325590 + 0.0im$ & $8.418 \times 10^{-2}$ & $2.226 \times 10^{9}$ & $1.375 \times 10^{11}$ \\
+				10 & $10.095455630535774 - 0.6449328236240688i$ & $0.652$ & $1.068 \times 10^{10}$ & $1.490 \times 10^{12}$ \\
+				11 & $10.095455630535774 + 0.6449328236240688i$ & $1.111$ & $1.068 \times 10^{10}$ & $1.490 \times 10^{12}$ \\
+				12 & $11.793890586174369 - 1.6524771364075785i$ & $1.665$ & $3.140 \times 10^{10}$ & $3.296 \times 10^{13}$ \\
+				13 & $11.793890586174369 + 1.6524771364075785i$ & $2.046$ & $3.140 \times 10^{10}$ & $3.296 \times 10^{13}$ \\
+				14 & $13.992406684487216 - 2.5188244257108443i$ & $2.519$ & $2.158 \times 10^{11}$ & $9.546 \times 10^{14}$ \\
+				15 & $13.992406684487216 + 2.5188244257108443i$ & $2.713$ & $2.158 \times 10^{11}$ & $9.546 \times 10^{14}$ \\
+				16 & $16.730744879792670 - 2.8126248967219780i$ & $2.906$ & $4.850 \times 10^{11}$ & $2.742 \times 10^{16}$ \\
+				17 & $16.730744879792670 + 2.8126248967219780i$ & $2.825$ & $4.850 \times 10^{11}$ & $2.742 \times 10^{16}$ \\
+				18 & $19.502442368818100 - 1.9403319786429030i$ & $2.454$ & $4.557 \times 10^{12}$ & $4.252 \times 10^{17}$ \\
+				19 & $19.502442368818100 + 1.9403319786429030i$ & $2.004$ & $4.557 \times 10^{12}$ & $4.252 \times 10^{17}$ \\
+				20 & $20.846910215194790 + 0.0im$ & $0.847$ & $8.756 \times 10^{12}$ & $1.374 \times 10^{18}$ \\
+				\bottomrule
+		\end{tabular}}
+	\end{table}
+	
+	\subsubsection{Wyjaśnienie Zjawiska Niestabilności Numerycznej (Część b)}
+
+	\paragraph{Korekta i Obserwacja Zjawiska:} 
+	Otrzymane wyniki (Tabela \ref{tab:wilkinson_b}) \textbf{nie są numerycznie identyczne} z wynikami z Części (a). W rzeczywistości, demonstrują one klasyczne i drastyczne skutki \textbf{złego uwarunkowania} wielomianu Wilkinson'a. Celowa, minimalna perturbacja współczynnika ($2^{-23} \approx 10^{-7}$) spowodowała fundamentalną zmianę natury pierwiastków, co jest sednem tego eksperymentu.
+
+	\paragraph{Interpretacja Skutków Perturbacji (Wilkinson's Phenomenon):}
+
+	\begin{enumerate}
+		\item \textbf{Transformacja Pierwiastków (Niestabilność Jakościowa):} Najważniejsza zmiana polega na utracie rzeczywistego charakteru pierwiastków. Dziesięć z pierwotnie rzeczywistych pierwiastków przekształciło się w pięć par pierwiastków \textbf{zespolonych sprzężonych} (w zakresie $k=10$ do $k=19$).
+		\item \textbf{Wzrost Błędu (Niestabilność Ilościowa):} Dla większych pierwiastków ($k \geq 10$) błąd bezwzględny $|z_k - k|$ wzrósł od rzędu $10^{-2}$ (dla $P(x)$) do \textbf{rzędu jedności} (dla $\tilde{P}(x)$), osiągając wartość do $\approx 2.9$ (dla $k=16$). Oznacza to, że minimalny błąd współczynnika przesunął pierwiastki na płaszczyźnie zespolonej o odległość porównywalną z samymi pierwiastkami.
+		\item \textbf{Dowód na Złe Uwarunkowanie:} Współczynnik uwarunkowania problemu znajdowania pierwiastków wielomianu Wilkinson'a jest bardzo duży, szczególnie dla większych pierwiastków (np. $\text{cond}(r_{20}) \approx 2 \times 10^{13}$). Perturbacja $\delta c$ wywołuje błąd pierwiastka rzędu $\text{cond}(r) \cdot \|\delta c\|$, co doskonale tłumaczy obserwowany duży błąd.
+	\end{enumerate}
+.
+	\subsection{Wnioski:}
+		Eksperyment dowodzi, że operacje na współczynnikach wielomianów wysokiego stopnia w arytmetyce zmiennoprzecinkowej ($\text{Float64}$) są \textbf{numerycznie źle uwarunkowane}. Nawet błąd rzędu $\mathcal{O}(2^{-23})$, który jest bliski precyzji maszynowej dla pojedynczej precyzji, uniemożliwia dokładne odtworzenie prawdziwych pierwiastków, zwracając bezsensowne wyniki - w tym wypadku z częscią zespoloną.
+	
+	\section{Zadanie 5}
+	\label{sec:zadanie5}
+	
+	Rozważamy równanie rekurencyjne (model logistyczny):
+	$$p_{n+1} := p_n + r p_n(1 - p_n), \quad \text{dla } n = 0, 1, \ldots, \quad \text{gdzie } r = 3 \text{ i } p_0 = 0.01.$$
+	Dla parametru $r=3$, system ten powinien zachowywać się chaotycznie. Przeprowadzono eksperymenty w arytmetyce pojedynczej ($Float32$) i podwójnej ($Float64$) precyzji, badając wpływ błędu obcięcia i błędu maszynowego na ewolucję populacji.
+	
+	\subsection{Tabela Wyników Eksperymentu}
+	
+	Tabela \ref{tab:logistic_results} podsumowuje wartości populacji $p_{40}$ uzyskane po 40 iteracjach w trzech różnych scenariuszach.
+	
+	\begin{table}[h]
+		\centering
+		\caption{Wyniki końcowe ($p_{40}$) dla modelu logistycznego ($r=3, p_0=0.01$) w różnych arytmetykach.}
+		\label{tab:logistic_results}
+		\begin{tabular}{c c c c}
+			\toprule
+			Lp. & Arytmetyka & Warunek & {$p_{40}$ (Wynik Końcowy)} \\
+			\midrule
+			1 & $Float32$ & Obcięcie $p_{10}$ do 3 m. po przecinku (0.722) & 1.093568 \\
+			2 & $Float32$ & Bez obcinania & 0.25860548 \\
+			3 & $Float64$ & Bez obcinania & 0.011611238029748606 \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	\subsection{Analiza i Porównanie Wyników}
+	
+	Otrzymane wyniki demonstrują skrajną wrażliwość modelu logistycznego na błędy numeryczne.
+	
+	\subsubsection{1. Wpływ Błędu Obcięcia (Porównanie 1 i 2)}
+	
+	\paragraph{Eksperyment 1 ($Float32$ z obcięciem):}
+	Ręczne obcięcie wyniku $p_{10}$ do $0.722$ (wprowadzając celowy błąd $\Delta p_{10}$) działa jako \textbf{duża perturbacja warunków początkowych} dla kolejnych iteracji.
+	\begin{itemize}
+		\item System dynamiczny $p_{n+1} = p_n + r p_n(1 - p_n)$ jest bardzo wrażliwy na taką zmianę.
+		\item Wartość $p_{40} = 1.093568$ jest \textbf{niefizyczna} w kontekście modelu populacji ($p_n$ powinno należeć do $[0, 1]$). Oznacza to, że po obcięciu wartość $p_n$ przekroczyła 1, a czynnik wzrostu $(1-p_n)$ stał się ujemny. W tym stanie, $p_{n+1} = p_n + 3 p_n(1-p_n) = 4 p_n - 3 p_n^2$. Jeśli $p_n > 4/3 \approx 1.33$, sekwencja $p_n$ dąży do $-\infty$ (lub $p_{n+1}$ eksploduje do $\infty$ jeśli $p_n \in (1, 4/3)$). W tym przypadku, system natychmiast uległ \textbf{eksplozji numerycznej}.
+	\end{itemize}
+	
+	\subsubsection{2. Wpływ Precyzji Arytmetycznej (Porównanie 2 i 3)}
+	
+	Różnica między wynikami $Float32$ a $Float64$ demonstruje rolę \textbf{błędu maszynowego} ($\epsilon$).
+	
+	\paragraph{Eksperyment 2 ($Float32$ bez obcięcia):}
+	\begin{itemize}
+		\item \textbf{Błąd maszynowy $\epsilon \approx 10^{-7}$}. Ten stosunkowo duży błąd zaokrągleń działa jak silny \textbf{szum numeryczny} zakłócający trajektorię.
+		\item Wynik $p_{40} \approx 0.2586$ nie jest teoretycznie oczekiwany dla $p_0=0.01$ i $r=3$. Silny szum Float32 zakłócił ewolucję i \textbf{zmusił} trajektorię do zbiegnięcia do numerycznie stabilnej, ale fałszywej wartości (tzw. "shadowing effect").
+	\end{itemize}
+	
+	\paragraph{Eksperyment 3 ($Float64$ bez obcięcia):}
+	\begin{itemize}
+		\item \textbf{Błąd maszynowy $\epsilon \approx 10^{-16}$}. Błąd jest na tyle mały, że system zachowuje się niemal jak idealny model matematyczny.
+		\item Wynik $p_{40} \approx 0.0116$ jest \textbf{bardzo bliski $p_0=0.01$}. Oznacza to, że dla małej wartości początkowej $p_0=0.01$, model logistyczny \textbf{rozwija się bardzo powoli}. W ciągu 40 iteracji, wysoka precyzja Float64 zachowała tę wolną ewolucję, dając wynik bliski wartości początkowej, co jest z kolei \textbf{błędem metody numerycznej} (zbyt mała liczba iteracji dla tak małego $p_0$).
+	\end{itemize}
+	
+	\subsection{Wnioski:}
+	Obliczenia pokazują, że Model Logistyczny:
+	\begin{itemize}
+		\item jest \textbf{podatny na chaotyczne zachowanie} przy dużych $r$ (jak $r=3$), gdzie mała zmiana $p_n$ prowadzi do całkowicie różnej trajektorii.
+		\item jest \textbf{wrażliwy na błędy numeryczne} ($\epsilon$), które przy $Float32$ fałszują dynamikę, a przy $Float64$ wiernie odwzorowują powolną ewolucję dla małego $p_0$.
+	\end{itemize}
+	Model Logistyczny jest więc procesem niestabilnym. Podczas pracy z takim modelem należy stosować typy o jak największej precyzji - np. Float64 i unikać tych o słabej precyzji - Float32. 
+	Niestabilność szczególnie widoczna dla przykładu z obcięciem do 3 liczb znaczących - błąd ten jest potęgowany w kolejnych działaniach i ostatecznie powoduje całkowite odrealnienie wyniku.
+	
+	\section{Zadanie 6}
+	\label{sec:zadanie6}
+	
+	Rozważamy iteracyjne mapowanie kwadratowe (zmodyfikowane odwzorowanie logistyczne):
+	$$x_{n+1} = x_n^2 + c$$
+	Przeprowadzono 40 iteracji dla różnych wartości stałej $c$ i punktu początkowego $x_0$.
+	
+	\subsection{Wyniki dla poszczególnych danych wejściowych}
+	
+	\subsubsection{c=-2.0 i $x_0$=1.0}
+	
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.8\textwidth]{spider_diagram_c_-2_0_x0_1_0.png}
+			\label{fig:cobweb-2_1}
+		\end{figure}
+		
+		Jak widać na załączonym powyżej obrazku, dla tych danych wejściowych mapowanie kwadratowe wpada w cykl $(-1.0, -1.0)$ <-> $(1.0, -1.0)$. Jest to spodziewane zachowanie więc można z pewnością stwierdzić, że Float64 dla tego przykładu posiada wystarczająca precyzję, tak, że w ciągu 40 iteracji błedy nie kumulują się na tyle by wypaść po za cykl.
+	
+	\subsubsection{c=-2.0 i $x_0$=2.0}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{spider_diagram_c_-2_0_x0_2_0.png}
+		\label{fig:cobweb-2_2}
+	\end{figure}
+	
+	Tym razem funkcja osiąga punkt stały - $(2.0, 2.0)$. Błędy zaokrąglenia nie powodują różnych wyników.
+	
+	\subsubsection{c=-2.0 i $x_0$=1.9999999999999999}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{spider_diagram_c_-2_0_x0_1_99999999999999.png}
+		\label{fig:cobweb-2_199}
+	\end{figure}
+	
+	Mała zmiana danych wejściowych bez wątpienia zaburzyła działanie mapowania kwadratowego. Jak widać na grafie funkcja zachowuje się chaotycznie. Błąd na poziomie machepsa powoduje potęgowanie się błędu w kolejnych operacjach. 
+	
+	\subsubsection{c=-1.0 i $x_0$=1.0}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{spider_diagram_c_-1_0_x0_1_0.png}
+		\label{fig:cobweb-1_1}
+	\end{figure}
+	
+	Funkcja wpada w 4 krokowy cykl.
+	
+	\subsubsection{c=-1.0 i $x_0$=-1.0}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{spider_diagram_c_-1_0_x0_-1_0.png}
+		\label{fig:cobweb-1_-1}
+	\end{figure}
+	
+	Funkcja wpada w 4 krokowy cykl.
+	
+	\subsubsection{c=-1.0 i $x_0$=0.75}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{spider_diagram_c_-1_0_x0_0_75.png}
+		\label{fig:cobweb-1_075}
+	\end{figure}
+	
+	Funkcja zbiega powoli do punktu stałego.
+	
+	\subsubsection{c=-1.0 i $x_0$=0.25}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{spider_diagram_c_-1_0_x0_0_25.png}
+		\label{fig:cobweb-1_025}
+	\end{figure}
+	
+	Funkcja zbiega do punktu stałego a następnie wpada w cykl.
+	
+	
+	\subsection{Wnioski}
+	
+	Dla wszystkich danych całkowitych funkcja, dla 40 iteracji, działała w przewidywalny sposób.
+	Natomiast przykład $x_0=1.999999999999$ i $x_0=2.0$ udowodnił problem ze stabilnością mapowania kwadratowego. Mały błąd w danych wejściowych, był kumulowany w kolejnych etapach rekurencji. Z tego powodu, w przypadku dużej ilości działań w metodzie należy dbać o poprawność danych w szczególny sposób. Nawet odchylenie rzędu machepsu ma bowiem ogromny wpływ na ostateczny rezultat.
+	
+\end{document}

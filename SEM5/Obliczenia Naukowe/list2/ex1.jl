@@ -1,5 +1,4 @@
 # KAJETAN PLEWA
-
 function first(T::Type, x, y)
     x = T.(x)
     y = T.(y)

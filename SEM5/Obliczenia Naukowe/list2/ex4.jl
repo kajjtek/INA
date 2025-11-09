@@ -4,7 +4,7 @@ function conductWilsonExperiment(p::Array)
     polynomial = Polynomial(p)
 
     rroots = roots(polynomial)
-    rroots = sort(rroots)
+    # rroots = sort(rroots)
     k = 1
     for root in rroots
         println("----------------------")
@@ -42,7 +42,7 @@ function main()
     conductWilsonExperiment(p)
 
 
-    p=[1, -210.0-2e-23, 20615.0,-1256850.0,
+    p=[1, -210.0-2^(-23), 20615.0,-1256850.0,
     53327946.0,-1672280820.0, 40171771630.0, -756111184500.0,          
     11310276995381.0, -135585182899530.0,
     1307535010540395.0,     -10142299865511450.0,
