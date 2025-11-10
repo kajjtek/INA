@@ -89,6 +89,16 @@ First Set
 0, 3, 4, 5, 6, 
 Second Set
 1, 2, 7, 8, 9, 10, 11, 12, 13, 14, 
+   Wykonuję: ./ex4 "..//testfiles/4/g4-a-own.txt" "t"
+Operation took 0.006875 ms to execute
+The graph IS bipariate
+First Set
+0, 1, 2, 3, 4, 
+Second Set
+5, 6, 7, 8, 9, 
+ Wykonuję: ./ex4 "..//testfiles/4/g4-b-own.txt" "t"
+Operation took 0.003875 ms to execute
+Graph IS NOT bipartiate
 --------------------------------------------------------
 🏁 Wszystkie testy zakończone.
 kajtek@Air-Kajetan bin % tmux capture-pane -p -S'-' -E'-' -J > ./log               

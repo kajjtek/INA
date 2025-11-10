@@ -61,3 +61,18 @@ Size of a component: 40000
 Size of a component: 20000
 Size of a component: 1
 --------------------------------------------------------
+▶️ Wykonuję: ./ex3 "..//testfiles/3/g3-b-own.txt" "t"
+Operation took 0.014167 ms to execute
+Number of components: 3
+Size of a component: 4
+1, 4, 3, 2, 
+Size of a component: 1
+5, 
+Size of a component: 5
+6, 10, 9, 8, 7, 
+--------------------------------------------------------
+▶️ Wykonuję: ./ex3 "..//testfiles/3/g3-a-own.txt" "t"
+Operation took 0.047125 ms to execute
+Number of components: 1
+Size of a component: 10
+1, 2, 10, 3, 9, 4, 8, 5, 7, 6, 

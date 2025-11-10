@@ -40,4 +40,10 @@ GRAPH HAS A CYCLE
    ▶️ Wykonuję: ./ex2 "..//testfiles/2/g2b-1.txt" "t"
 A cycle has been found
 GRAPH HAS A CYCLE
+▶️ Wykonuję: ./ex2 "..//testfiles/2/g2-b-own.txt" "t"
+Operation took 0.007125 ms to execute
+NO CYCLE DETECTED
+▶️ Wykonuję: ./ex2 "..//testfiles/2/g2-a-own.txt" "t"
+A cycle has been found
+GRAPH HAS A CYCLE
 --------------------------------------------------------

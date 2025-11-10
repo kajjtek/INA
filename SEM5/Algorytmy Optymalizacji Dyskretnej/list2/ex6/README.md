@@ -1,0 +1,4 @@
+EXPECTED INPUT:
+N = 10
+M = 12
+K = 2
