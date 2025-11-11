@@ -1,147 +1,120 @@
 using JuMP
 import HiGHS
 
-function read_graph_data(filepath::String)
+using DelimitedFiles
+
+function parse_graph_data(filename::String)
+    data_lines = readlines(filename)
     
-    # Inicjalizacja skalarnych
-    N_VERTICES = 0
-    START_NODE = 0
-    FINAL_NODE = 0
-    MAX_TIME = 0.0
+    # 1. Wczytanie stałych (Linia 1)
+    constants = parse.(Int, filter!(!isempty, split(data_lines[1])))
+    n_vertices = constants[1]
+    n_edges = constants[2]
+    start = constants[3]
+    final = constants[4]
+    T = constants[5]
 
-    # Inicjalizacja macierzy krawedzi
-    Edges_List = Vector{Vector{Float64}}()
-
-    current_section = :dimensions
-    lines = readlines(filepath)
-    line_index = 1
+    # 2. Wczytanie krawędzi (Linia 2 do końca)
+    # Każda krawędź to (src, dst, cost, time)
+    edges = zeros(Int, n_edges, 4)
     
-    function parse_numbers(str)
-        # Parsuje liczby, ale oczekuje Int dla Source/Destination, Float dla Cost/Time
-        return parse.(Float64, split(str))
+    for k in 1:n_edges
+        edges[k, :] = parse.(Int, filter!(!isempty, split(data_lines[1 + k])))
     end
 
-    while line_index <= length(lines)
-        line = strip(lines[line_index])
-        line_index += 1
-        
-        # Ignoruj komentarze i puste linie
-        if startswith(line, "#") || isempty(line)
-            if occursin("LISTA KRAWĘDZI", line)
-                current_section = :edges
-            end
-            continue
-        end
-
-        # --- Parsowanie sekcji ---
-        
-        if current_section == :dimensions
-            parts = split(line, '='; limit=2)
-            if length(parts) == 2
-                key = strip(parts[1])
-                # Wymiary sa Int, MAX_TIME jest Float
-                if key == "MAX_TIME"
-                    MAX_TIME = parse(Float64, strip(parts[2]))
-                else
-                    value = parse(Int, strip(parts[2]))
-                    if key == "N_VERTICES"
-                        N_VERTICES = value
-                    elseif key == "START_NODE"
-                        START_NODE = value
-                    elseif key == "FINAL_NODE"
-                        FINAL_NODE = value
-                    end
-                end
-            end
-            
-        elseif current_section == :edges
-            # Wczytywanie macierzy krawedzi
-            push!(Edges_List, parse_numbers(line))
-        end
-    end
-
-    # Walidacja
-    if N_VERTICES == 0 || START_NODE == 0 || FINAL_NODE == 0 || MAX_TIME == 0.0 || isempty(Edges_List)
-        error("Brak wszystkich wymaganych danych (wymiary, węzły, limit czasu lub krawędzie).")
-    end
-    
-    # Konwersja Edges_List do Array{Float64, 2}
-    Edges_Matrix = reduce(vcat, transpose.(Edges_List))
-
-    # Walidacja krawedzi (powinny miec 4 kolumny)
-    if size(Edges_Matrix, 2) != 4
-         error("Błąd: Macierz krawędzi musi mieć 4 kolumny (Source, Destination, Cost, Time).")
-    end
-
-    return Edges_Matrix, N_VERTICES, START_NODE, FINAL_NODE, MAX_TIME
+    return edges, start, final, T, n_vertices, n_edges
 end
 
+
+
 function flow_out(v::Int, x::Array{<:Any, 1}, edges::Array)
-    return sum(x[k] for (k, edge) in enumerate(edges) if edge[1] == v)
+    return sum((x[k] for k in 1:size(edges, 1) if edges[k, 1] == v); init=0)
 end
 
 function flow_in(v::Int, x::Array{<:Any, 1}, edges::Array)
-    return sum(x[k] for (k, edge) in enumerate(edges) if edge[2] == v)
+    return sum((x[k] for k in 1:size(edges, 1) if edges[k, 2] == v); init=0)
 end
 
 function sumOccurences(edges::Array, cur::Int, x::Array)
-    return flow_in(cur, x, edges) - flow_out(cur, x, edges)
+    return flow_out(cur, x, edges)  - flow_in(cur, x, edges)
 end
 
-function graphModel(edges::Array, start::Int, final::Int, T::Int, n_vertices::Int)
+function graphModel(edges::Array, start::Int, final::Int, T::Int, n_vertices::Int, n_edges::Int)
     model = Model(HiGHS.Optimizer)
 
-    @variable(model, x[i in 1:edges.size()], Bin)
+    @variable(model, x[i in 1:n_edges], Bin)
 
-    @constraint(model, timeLimit, sum(x[i]*edges[i][4] for i in 1:edges.size()) <= T)
+    @constraint(model, timeLimit, sum(x[i]*edges[i, 4] for i in 1:n_edges) <= T)
 
-    @constraint(model, flowStart, sumOccurences(edges, start, edges)==1)
+    @constraint(model, flowStart, sumOccurences(edges, start, x)==1)
     
     @constraint(model, flowEnd, sumOccurences(edges, final, x)==-1)
     
-    @constraint(model, flow[i in 1:n_vertices], sumOccurences(edges, i, x)==0)
+    @constraint(model, flow[i in 1:n_vertices; i != start && i != final], sumOccurences(edges, i, x)==0)
 
-    @objective(model, min, sum(x[i]*edges[i][3]))
+    @objective(model, Min, sum(x[i]*edges[i,3] for i in 1:n_edges))
     
     optimize!(model)
 
     println("\n--- Wyniki Optymalizacji ---")
-    if termination_status(model) == MOI.OPTIMAL
+    status = termination_status(model)
+    if status == MOI.OPTIMAL
         println("STATUS: OPTYMALNY")
         println("Minimalny koszt ścieżki: ", objective_value(model))
-        
-        X_val = value.(x)
-        
-        println("\nWybrana ścieżka (krawędź -> koszt, czas):")
-        total_cost = 0.0
-        total_time = 0.0
-        
-        for k in 1:n_edges
-            if round(Int, X_val[k]) == 1
-                src = Int(edges[k, 1])
-                dst = Int(edges[k, 2])
-                cost = costs[k]
-                time = times[k]
-                
-                println("Krawędź $src -> $dst (Koszt: $cost, Czas: $time)")
-                total_cost += cost
-                total_time += time
-            end
-        end
-        println("\nCałkowity koszt: $total_cost")
-        println("Całkowity czas: $total_time (Limit: $T)")
 
+        X_val = value.(x)
+        sel = [k for k in 1:n_edges if round(Int, X_val[k]) == 1]
+
+        if isempty(sel)
+            println("Brak wybranych krawędzi w rozwiązaniu.")
+        else
+            println("\nWybrane krawędzie (idx: src -> dst | koszt, czas):")
+            for k in sel
+                println(" ", k, ": ", edges[k,1], " -> ", edges[k,2], " | koszt=", edges[k,3], ", czas=", edges[k,4])
+            end
+
+            total_cost = sum(edges[k,3] for k in sel)
+            total_time = sum(edges[k,4] for k in sel)
+            println("\nCałkowity koszt: ", total_cost)
+            println("Całkowity czas: ", total_time, " (Limit: ", T, ")")
+
+            # Rekonstrukcja ścieżki (kolejno od start do final)
+            path = [start]
+            cur = start
+            visited = Set([start])
+            for _ in 1:n_edges
+                idx_in_sel = findfirst(i -> edges[i,1] == cur, sel)
+                if idx_in_sel === nothing
+                    break
+                end
+                edge_idx = sel[idx_in_sel]
+                nxt = edges[edge_idx, 2]
+                push!(path, nxt)
+                if nxt == final
+                    break
+                end
+                if nxt in visited
+                    println("Uwaga: wykryto cykl podczas rekonstruowania ścieżki.")
+                    break
+                end
+                push!(visited, nxt)
+                cur = nxt
+            end
+            println("\nZrekonstruowana ścieżka (wierzchołki): ", join(path, " -> "))
+        end
     else
-        println("STATUS: NIEOPTYMALNY (", termination_status(model), ")")
+        println("STATUS: NIEOPTYMALNY (", status, ")")
     end
 end
 
+DATA_FILE = "graph2.txt"
 try
+    
     # Odczyt danych
-    Edges, N_V, S_Node, F_Node, Max_T = read_graph_data(DATA_FILE)
+    edges, start, final, T, n_vertices, n_edges = parse_graph_data(DATA_FILE)
     
     # Uruchomienie rozwiazania
-    createGraphModel(Edges, S_Node, F_Node, Max_T, N_V)
+    graphModel(edges, start, final, T, n_vertices, n_edges)
 
 catch e
     println("\nBLAD PRZY URUCHAMIANIU MODELU:")

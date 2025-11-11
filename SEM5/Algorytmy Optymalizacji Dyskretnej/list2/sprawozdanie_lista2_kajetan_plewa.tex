@@ -1,0 +1,662 @@
+\documentclass[11pt, a4paper]{article}
+
+% --- PREAMBUŁA DLA PDFLATEX (Stabilna) ---
+\usepackage{float}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel} % Ustawienie języka polskiego
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
+
+% Pakiety matematyczne i tabelaryczne
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, urlcolor=blue, linkcolor=black, citecolor=black}
+\usepackage{graphicx}
+\usetikzlibrary{arrows.meta, positioning}
+
+\sisetup{
+	round-mode = places,
+	round-precision = 8,
+	scientific-notation = true,
+	exponent-product = \cdot, % Używa kropki jako separatora wykładnika
+	group-separator = {} % Wyłącza separator tysięcy
+}
+
+\title{\vspace{-2cm}\textbf{Sprawozdanie Lista 2}}
+\author{Kajetan Plewa}
+\date{\today}
+
+\begin{document}
+		
+	\section{Zadanie 1: Plan zakupu i dostaw paliwa (Problem Transportowy)}
+	
+	\subsection{Model Matematyczny}
+	
+	Problem jest sformułowany jako klasyczny problem transportowy. Niech $I = \{1, \dots, 4\}$ będzie zbiorem lotnisk (odbiorców), a $J = \{1, 2, 3\}$ zbiorem firm paliwowych (dostawców).
+	
+	\subsubsection{Zmienne Decyzyjne}
+	Zmienna decyzyjna $x_{ij}$ określa ilość paliwa (w galonach) dostarczoną z firmy $j \in J$ na lotnisko $i \in I$.
+	\begin{equation*}
+		x_{ij} \ge 0 \quad \forall i \in I, j \in J
+	\end{equation*}
+	
+	\subsubsection{Ograniczenia}
+	\begin{itemize}
+		\item \textbf{Ograniczenie Popytu (Lotniska):} Zapotrzebowanie każdego lotniska $i$ (oznaczone jako $D_i$) musi zostać zaspokojone.
+		\begin{equation*}
+			\sum_{j=1}^{3} x_{ij} \ge D_i \quad \forall i \in \{1, \dots, 4\}
+		\end{equation*}
+		\item \textbf{Ograniczenie Podaży (Firmy):} Całkowita dostawa realizowana przez firmę $j$ nie może przekroczyć jej maksymalnej możliwości dostaw (oznaczonej jako $S_j$).
+		\begin{equation*}
+			\sum_{i=1}^{4} x_{ij} \le S_j \quad \forall j \in \{1, 2, 3\}
+		\end{equation*}
+	\end{itemize}
+	
+	\subsubsection{Funkcja Celu}
+	Minimalizacja łącznego kosztu dostaw, gdzie $c_{ij}$ to jednostkowy koszt dostawy z firmy $j$ na lotnisko $i$.
+	\begin{equation*}
+		\min Z = \sum_{i=1}^{4} \sum_{j=1}^{3} c_{ij} x_{ij}
+	\end{equation*}
+	
+	\subsection{Rozwiązanie Egzemplarza i Interpretacja}
+	
+	\subsubsection{Egzemplarz}
+	Rozwiązany egzemplarz bazuje na danych wejściowych z pliku (koszty, popyt, podaż). Całkowity popyt wynosi $1\,100\,000$ galonów, a całkowita podaż $1\,485\,000$ galonów.
+	
+	\subsubsection{Uzyskane Wyniki i Interpretacja}
+	\begin{itemize}
+		\item \textbf{(a) Minimalny łączny koszt dostaw:} Wynosi $\mathbf{8\,525\,000}$ USD (8.525e6).
+		\item \textbf{(b) Czy wszystkie firmy dostarczają paliwo?} \textbf{Tak.} Wszystkie trzy firmy uczestniczą w realizacji optymalnego planu dostaw.
+		\item \textbf{(c) Czy możliwości dostaw paliwa przez firmy są wyczerpane?}
+		\begin{itemize}
+			\item Firma 1: Wykorzystano $275\,000$ / $275\,000$ galonów. (\textbf{Wyczerpano} limit.)
+			\item Firma 2: Wykorzystano $165\,000$ / $550\,000$ galonów. (\textbf{Nie wyczerpano} limitu.)
+			\item Firma 3: Wykorzystano $660\,000$ / $660\,000$ galonów. (\textbf{Wyczerpano} limit.)
+		\end{itemize}
+		Dwie z trzech firm wykorzystały swoje maksymalne możliwości dostaw.
+	\end{itemize}
+	Optymalny plan dostaw (wartości $x_{ij}$ w galonach) jest następujący ($i$: Lotnisko, $j$: Firma):
+	$$
+	\mathbf{X} = 
+	\begin{pmatrix}
+		x_{11} & x_{12} & x_{13} \\
+		x_{21} & x_{22} & x_{23} \\
+		x_{31} & x_{32} & x_{33} \\
+		x_{41} & x_{42} & x_{43}
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+		0 & 110\,000 & 0 \\
+		165\,000 & 55\,000 & 0 \\
+		0 & 0 & 330\,000 \\
+		110\,000 & 0 & 330\,000
+	\end{pmatrix}
+	$$
+	
+	
+	\section{Zadanie 2: Optymalizacja Produkcji (Maksymalizacja Zysku)}
+	
+	\subsection{Model Matematyczny}
+	
+	Problem polega na wyznaczeniu optymalnej alokacji czasu maszyn, która maksymalizuje zysk netto, przy uwzględnieniu ograniczeń czasowych maszyn oraz minimalnych wymogów produkcyjnych.
+	
+	Niech $I = \{1, \dots, 4\}$ będzie zbiorem produktów, a $J = \{1, 2, 3\}$ zbiorem maszyn.
+	
+	\subsubsection{Zmienne Decyzyjne}
+	Zmienna decyzyjna $p_{ij}$ określa czas pracy (w minutach) maszyny $j \in J$ przeznaczony na produkcję produktu $i \in I$.
+	\begin{equation*}
+		p_{ij} \ge 0 \quad \forall i \in I, j \in J
+	\end{equation*}
+	\textit{Jednostka: minuty.}
+	
+	\subsubsection{Ograniczenia}
+	\begin{itemize}
+		\item \textbf{Ograniczenie Czasowe Maszyn ($H_j$):} Całkowity czas pracy maszyny $j$ nie może przekroczyć jej dostępnego czasu $H_j$.
+		\begin{equation*}
+			\sum_{i=1}^{4} p_{ij} \le H_j \quad \forall j \in \{1, 2, 3\}
+		\end{equation*}
+		\item \textbf{Ograniczenie Minimalnej Produkcji ($D_i$):} Całkowita suma czasu pracy maszyn przeznaczona na produkcję produktu $i$ musi spełniać minimalne zapotrzebowanie $D_i$ (wyrażone w minutach).
+		\begin{equation*}
+			\sum_{j=1}^{3} p_{ij} \ge D_i \quad \forall i \in \{1, \dots, 4\}
+		\end{equation*}
+	\end{itemize}
+	
+	\subsubsection{Funkcja Celu}
+	Maksymalizacja zysku netto $Z$. Zysk zależy od łącznej ilości wyprodukowanego produktu $i$.
+	\begin{equation*}
+		\max Z = \sum_{i=1}^{4} \sum_{j=1}^{3} \left( \alpha_{ij} \cdot p_{ij} \right)
+	\end{equation*}
+	gdzie $\alpha_{ij}$ to współczynnik zysku (jedn. zysku/minutę) z produkcji produktu $i$ na maszynie $j$.
+	
+	\subsection{Rozwiązanie Egzemplarza i Interpretacja}
+	
+	\subsubsection{Egzemplarz}
+	Rozwiązano egzemplarz problemu optymalizacji produkcji dla $4$ produktów i $3$ maszyn.
+	Zgodnie z wynikami, minimalne wymagania czasowe ($D_i$) wynosiły kolejno: $400, 100, 150, 500$ minut.
+	
+	\subsubsection{Uzyskane Wyniki i Interpretacja}
+	\begin{itemize}
+		\item \textbf{Wartość funkcji celu (Maksymalny Zysk Netto):} Wynosi $\mathbf{5228.33}$ jednostek zysku.
+	\end{itemize}
+	Status modelu jest \textbf{Optymalny}. Optymalne rozwiązanie wyznacza alokacje czasu maszyn, które maksymalizują zysk przy jednoczesnym spełnieniu wszystkich minimalnych wymagań produkcyjnych i ograniczeń czasowych maszyn.
+	
+	\textbf{Alokacja Czasu Pracy (macierz $p_{ij}$ w minutach):}
+	$$
+	\mathbf{P} = 
+	\begin{pmatrix}
+		p_{11} & p_{12} & p_{13} \\
+		p_{21} & p_{22} & p_{23} \\
+		p_{31} & p_{32} & p_{33} \\
+		p_{41} & p_{42} & p_{43}
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+		400.0 & 0.0 & 0.0 \\
+		100.0 & 0.0 & 0.0 \\
+		150.0 & 0.0 & 0.0 \\
+		0.0 & 0.0 & 500.0
+	\end{pmatrix}
+	$$
+	\textbf{Interpretacja Alokacji Czasu:}
+	\begin{itemize}
+		\item Cała produkcja Produktów 1, 2 i 3 została scentralizowana na Maszynie 1 (łącznie $650$ minut). Sugeruje to, że Maszyna 1 jest najbardziej efektywna kosztowo dla tych produktów lub jej limit czasowy jest wystarczająco wysoki.
+		\item Produkt 4 jest produkowany wyłącznie na Maszynie 3 ($500$ minut).
+		\item Maszyna 2 nie została wykorzystana w optymalnym planie, co oznacza, że jej użycie byłoby nieoptymalne ze względu na koszty lub wydajność, w stosunku do dostępnych alternatyw.
+	\end{itemize}
+	
+	\section{Zadanie 3: Planowanie Produkcji i Zarządzanie Zapasami (Minimalizacja Kosztów)}
+	
+	\subsection{Model Matematyczny}
+	
+	Problem polega na wyznaczeniu minimalizującego koszty planu produkcji (normalnej i nadprodukcji) w kolejnych okresach, przy zachowaniu ciągłości dostaw i ograniczeń pojemności magazynu. Niech $T = \{1, \dots, K\}$ będzie zbiorem okresów planowania.
+	
+	\subsubsection{Zmienne Decyzyjne}
+	\begin{itemize}
+		\item Zmienna $x_i$: Ilość produkcji w okresie $i \in T$ realizowana w normalnym trybie.
+		\begin{equation*}
+			0 \le x_i \le 100 \quad \forall i \in T
+		\end{equation*}
+		\item Zmienna $y_i$: Ilość produkcji w okresie $i \in T$ realizowana w trybie nadprodukcji (overflow).
+		\begin{equation*}
+			0 \le y_i \le M_i \quad \forall i \in T
+		\end{equation*}
+		gdzie $M_i$ to maksymalna dopuszczalna nadprodukcja w okresie $i$.
+		\item Zmienna $I_i$: Poziom zapasów w magazynie na koniec okresu $i \in T$.
+		\begin{equation*}
+			0 \le I_i \le C \quad \forall i \in T
+		\end{equation*}
+		gdzie $C$ to maksymalna pojemność magazynu.
+	\end{itemize}
+	\textit{Jednostka: Jednostki produktu.}
+	
+	\subsubsection{Ograniczenia}
+	\begin{itemize}
+		\item \textbf{Bilans Zapasów (Okres $i=1$):} Zapasy $I_1$ są sumą stanu początkowego $I_0$, bieżącej produkcji $x_1$ i nadprodukcji $y_1$, pomniejszoną o popyt $D_1$.
+		\begin{equation*}
+			I_1 = I_0 + x_1 + y_1 - D_1
+		\end{equation*}
+		\item \textbf{Bilans Zapasów (Okresy $i=2$ do $K$):} Zapasy $I_i$ zależą od zapasów z poprzedniego okresu, bieżącej produkcji i popytu $D_i$.
+		\begin{equation*}
+			I_i = I_{i-1} + x_i + y_i - D_i \quad \forall i \in \{2, \dots, K\}
+		\end{equation*}
+	\end{itemize}
+	
+	\subsubsection{Funkcja Celu}
+	Minimalizacja całkowitego kosztu, składającego się z kosztu produkcji normalnej ($c_{x, i}$), kosztu nadprodukcji ($c_{y, i}$) oraz kosztu utrzymania zapasów ($c_{I}$).
+	\begin{equation*}
+		\min Z = \sum_{i=1}^{K} (x_i \cdot c_{x, i} + y_i \cdot c_{y, i} + c_{I} \cdot I_i)
+	\end{equation*}
+	
+	\subsection{Rozwiązanie Egzemplarza i Interpretacja}
+	
+	\subsubsection{Egzemplarz}
+	Rozwiązano egzemplarz problemu planowania w $K=4$ okresach. Maksymalna produkcja normalna wynosi $100$ jednostek/okres. Popyt w kolejnych okresach to $D = [130, 80, 125, 195]$. Na podstawie bilansu dla Okresu 1, stan początkowy magazynu wynosił $\mathbf{I_0 = 15.0}$.
+	
+	\subsubsection{Uzyskane Wyniki i Interpretacja}
+	\begin{itemize}
+		\item \textbf{Wartość funkcji celu (Minimalny Całkowity Koszt):} $\mathbf{3\,842\,500}$.
+		\item \textbf{Status Modelu:} Optymalny.
+	\end{itemize}
+	Plan alokacji produkcji i zapasów dla 4 okresów:
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			\textbf{Okres} ($i$) & \textbf{Prod. Normalna} ($x_i$) & \textbf{Nadprod.} ($y_i$) & \textbf{Zapasy Końcowe} ($I_i$) & \textbf{Popyt} ($D_i$) \\
+			\hline
+			1 & $100.0$ & $15.0$ & $0.0$ & $130$ \\
+			2 & $100.0$ & $50.0$ & $70.0$ & $80$ \\
+			3 & $100.0$ & $0.0$ & $45.0$ & $125$ \\
+			4 & $100.0$ & $50.0$ & $0.0$ & $195$ \\
+			\hline
+		\end{tabular}
+	\end{center}
+	\textbf{Interpretacja:}
+	\begin{itemize}
+		\item \textbf{Produkcja:} W każdym okresie, model decydował się na maksymalną produkcję normalną ($x_i=100.0$).
+		\item \textbf{Nadprodukcja (Y):} Nadprodukcja była aktywowana w okresach o niskim zapotrzebowaniu ($i=2$) lub bardzo wysokim ($i=4$), w celu zbudowania zapasów na przyszłość (okres 2) lub pokrycia deficytu (okres 4). Suma nadprodukcji wyniosła $\mathbf{115.0}$ jednostek.
+		\item \textbf{Zapas:} Magazyn jest utrzymywany w celu wygładzenia zapotrzebowania, osiągając maksymalny stan $I_2=70.0$. Stan końcowy magazynu ($I_4=0.0$) jest minimalizowany, aby uniknąć naliczania kosztów $c_I$ po zakończeniu planowania.
+	\end{itemize}
+	
+	\section{Zadanie 4: Problem Najkrótszej Ścieżki z Ograniczeniem Czasowym (Constrained Shortest Path Problem)}
+	
+	\subsection{Model Matematyczny}
+	
+	Problem polega na znalezieniu ścieżki o minimalnym koszcie w grafie, która prowadzi z wierzchołka początkowego $S$ do wierzchołka końcowego $F$, pod warunkiem, że całkowity czas podróży nie przekroczy maksymalnego limitu $T$. Jest to klasyczny problem programowania całkowitoliczbowego.
+	
+	Niech $V$ będzie zbiorem wierzchołków, a $E$ zbiorem krawędzi. Każdą krawędź $i \in E$ charakteryzuje: koszt $c_i$ i czas $t_i$.
+	
+	\subsubsection{Zmienne Decyzyjne}
+	Zmienna decyzyjna $x_i$ jest binarna, określająca, czy krawędź $i$ została wybrana do ścieżki. $N_E$ to całkowita liczba krawędzi.
+	\begin{equation*}
+		x_i \in \{0, 1\} \quad \forall i \in \{1, \dots, N_E\}
+	\end{equation*}
+	\textit{Jednostka: Binarna.}
+	
+	\subsubsection{Ograniczenia}
+	\begin{itemize}
+		\item \textbf{Ograniczenie Czasowe ($\text{timeLimit}$):} Suma czasów wybranych krawędzi musi być mniejsza lub równa maksymalnemu czasowi $T$.
+		\begin{equation*}
+			\sum_{i=1}^{N_E} x_i \cdot t_i \le T
+		\end{equation*}
+		\item \textbf{Ograniczenia Przepływu (Bilans Węzłów):} Gwarantują, że zbiór wybranych krawędzi tworzy ciągłą ścieżkę z $S$ do $F$ (model przepływu jednostkowego). W tym modelu wykorzystano funkcję $\text{sumOccurences}(E, v, x)$.
+		\begin{itemize}
+			\item \textbf{Wierzchołek Startowy ($S$, $\text{flowStart}$):} Przepływ netto musi wynosić $+1$.
+			\begin{equation*}
+				\sum_{i=1}^{N_E} x_i \cdot \delta_i^S = 1
+			\end{equation*}
+			\item \textbf{Wierzchołek Końcowy ($F$, $\text{flowEnd}$):} Przepływ netto musi wynosić $-1$.
+			\begin{equation*}
+				\sum_{i=1}^{N_E} x_i \cdot \delta_i^F = -1
+			\end{equation*}
+			\item \textbf{Wierzchołki Pośrednie ($v \ne S, F$, $\text{flow}$):} Przepływ netto musi wynosić $0$ (zasada zachowania przepływu).
+			\begin{equation*}
+				\sum_{i=1}^{N_E} x_i \cdot \delta_i^v = 0 \quad \forall v \in V \setminus \{S, F\}
+			\end{equation*}
+		\end{itemize}
+		gdzie $\delta_i^v$ to współczynnik bilansu: $+1$ jeśli krawędź $i$ wychodzi z $v$, $-1$ jeśli wchodzi do $v$, $0$ w przeciwnym razie.
+	\end{itemize}
+	
+	\subsubsection{Funkcja Celu}
+	Minimalizacja sumarycznego kosztu ścieżki.
+	\begin{equation*}
+		\min Z = \sum_{i=1}^{N_E} x_i \cdot c_i
+	\end{equation*}
+	
+	\subsection{Rozwiązanie Egzemplarza i Interpretacja}
+	
+	\subsubsection{Egzemplarz}
+	Rozwiązany egzemplarz dotyczy grafu z 10 wierzchołkami, gdzie ścieżka jest poszukiwana z wierzchołka $\mathbf{1}$ do wierzchołka $\mathbf{10}$, z maksymalnym limitem czasowym $\mathbf{T=15}$.
+	
+	\subsubsection{Uzyskane Wyniki i Interpretacja}
+	\begin{itemize}
+		\item \textbf{Minimalny Koszt Ścieżki:} $\mathbf{13.0}$
+		\item \textbf{Całkowity Czas Wykorzystany:} $\mathbf{15}$
+	\end{itemize}
+	Model osiągnął status **OPTYMALNY**. Znalazł on najtańszą ścieżkę (koszt 13), która idealnie wypełnia limit czasowy $T=15$.
+	
+	\textbf{Wybrane Krawędzie i Ścieżka:}
+	\begin{center}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{Wierzchołki} ($\text{src} \to \text{dst}$) & \textbf{Koszt} ($c$) & \textbf{Czas} ($t$) \\
+			\hline
+			$1 \to 2$ & $3$ & $4$ \\
+			$2 \to 3$ & $2$ & $3$ \\
+			$3 \to 5$ & $2$ & $2$ \\
+			$5 \to 7$ & $3$ & $3$ \\
+			$7 \to 9$ & $1$ & $1$ \\
+			$9 \to 10$ & $2$ & $2$ \\
+			\hline
+			\multicolumn{1}{|r|}{\textbf{Suma}} & $\mathbf{13}$ & $\mathbf{15}$ \\
+			\hline
+		\end{tabular}
+	\end{center}
+	Zrekonstruowana ścieżka (wierzchołki):
+	$$
+	\mathbf{1 \to 2 \to 3 \to 5 \to 7 \to 9 \to 10}
+	$$
+	
+	\section{Zadanie 4b: Analiza Wyników Własnego Egzemplarza}
+	
+	Przedstawione wyniki optymalizacji (dla modelu minimalizującego koszt z ograniczeniem czasowym) w oparciu o graf \texttt{graph\_custom.txt} potwierdzają spełnienie wszystkich postawionych kryteriów.
+	
+	\subsection{Kryteria Egzemplarza i Wnioski}
+	\begin{enumerate}
+		\item \textbf{Liczba wierzchołków:} Graf zawiera $\mathbf{10}$ wierzchołków. (\checkmark)
+		\item \textbf{Koszt Ścieżki z Ograniczeniem Czasowym ($C_{\text{constr}}$) vs. Bez Ograniczenia ($C_{\text{unconstr}}$):}
+		\begin{itemize}
+			\item $C_{\text{constr}} = \mathbf{5.0}$ (dla $T \le 15$)
+			\item $C_{\text{unconstr}} = \mathbf{3.0}$ (dla $T \to \infty$)
+		\end{itemize}
+		\textbf{Wniosek:} $C_{\text{constr}} > C_{\text{unconstr}}$ (\checkmark)
+		\item \textbf{Liczba Krawędzi w ścieżce optymalnej:}
+		\begin{itemize}
+			\item Ścieżka optymalna z ograniczeniem ma $\mathbf{3}$ krawędzie. (\checkmark)
+			\item Najtańsza ścieżka bez ograniczenia ma $\mathbf{2}$ krawędzie. (\checkmark)
+		\end{itemize}
+	\end{enumerate}
+	
+	\subsection{Analiza Przypadków Optymalizacji}
+	
+	\subsubsection{Przypadek 1: Minimalizacja Kosztu z Limitem Czasowym $T = 15$}
+	Optymalizator wybrał najtańszą ścieżkę, której czas sumaryczny wynosi dokładnie $15$, eliminując ścieżki zbyt wolne, nawet jeśli były tańsze.
+	
+	\begin{itemize}
+		\item \textbf{Status:} Optymalny
+		\item \textbf{Minimalny Koszt Ścieżki:} $\mathbf{5.0}$
+		\item \textbf{Całkowity Czas:} $\mathbf{15}$ (Limit: 15)
+		\item \textbf{Zrekonstruowana ścieżka:} $\mathbf{1 \to 2 \to 3 \to 10}$
+	\end{itemize}
+	\textbf{Szczegółowe koszty/czasy wybranych krawędzi:}
+	\begin{center}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{Przebieg} ($\text{src} \to \text{dst}$) & \textbf{Koszt} ($c$) & \textbf{Czas} ($t$) \\
+			\hline
+			$1 \to 2$ & $2$ & $5$ \\
+			$2 \to 3$ & $1$ & $5$ \\
+			$3 \to 10$ & $2$ & $5$ \\
+			\hline
+			\multicolumn{1}{|r|}{\textbf{Suma}} & $\mathbf{5}$ & $\mathbf{15}$ \\
+			\hline
+		\end{tabular}
+	\end{center}
+	
+	\subsubsection{Przypadek 2: Najtańsza Ścieżka Bez Ograniczenia Czasowego (Limit $T \to \infty$)}
+	Dla tego samego grafu, ale z pominięciem ograniczenia czasowego, model wybrał bezwzględnie najtańszą ścieżkę, która jest jednocześnie zbyt długa czasowo dla $T=15$.
+	
+	\begin{itemize}
+		\item \textbf{Status:} Optymalny
+		\item \textbf{Minimalny Koszt Ścieżki:} $\mathbf{3.0}$
+		\item \textbf{Całkowity Czas:} $\mathbf{20}$ (Limit: 100)
+		\item \textbf{Zrekonstruowana ścieżka:} $\mathbf{1 \to 5 \to 10}$
+	\end{itemize}
+	\textbf{Szczegółowe koszty/czasy wybranych krawędzi:}
+	\begin{center}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{Przebieg} ($\text{src} \to \text{dst}$) & \textbf{Koszt} ($c$) & \textbf{Czas} ($t$) \\
+			\hline
+			$1 \to 5$ & $1$ & $10$ \\
+			$5 \to 10$ & $2$ & $10$ \\
+			\hline
+			\multicolumn{1}{|r|}{\textbf{Suma}} & $\mathbf{3}$ & $\mathbf{20}$ \\
+			\hline
+		\end{tabular}
+	\end{center}
+	\subsection{Wizualizacja Grafu}
+	Graf został zaprojektowany tak, aby droga najtańsza ($1 \to 5 \to 10$) była zbyt wolna czasowo ($20 > 15$), zmuszając model do wyboru droższej ($1 \to 2 \to 3 \to 10$) ścieżki, która spełnia limit czasowy ($15$).
+	
+\small
+\textbf{Krawędź:} Koszt/Czas ($c/t$) | \textbf{Limit Czasu $T=15$}
+
+\begin{center}
+	\begin{tikzpicture}[
+		>=Stealth,
+		node distance=2.5cm,
+		vertex/.style={circle, draw=black, fill=blue!10, minimum size=6mm},
+		highlight/.style={circle, draw=black, fill=red!30, minimum size=6mm, ultra thick},
+		pathA/.style={->, very thick, blue, densely dashed}, % Najtańsza bez ograniczeń (3.0, czas 20)
+		pathB/.style={->, very thick, red, line width=1.5pt}, % Optymalna z ograniczeniem (5.0, czas 15)
+		pathC/.style={->, thick, draw=gray, dotted}, % Nieosiągalne lub droższe ścieżki
+		edge_style/.style={->, thick, draw=black!70}
+		]
+		
+		% Wierzchołki (Nodes)
+		\node (v1) [highlight, label=left:{\textbf{START}}] {1};
+		\node (v2) [vertex, right=of v1] {2};
+		\node (v3) [vertex, right=of v2] {3};
+		\node (v5) [vertex, below right=1.5cm and 0.5cm of v2] {5};
+		\node (v6) [vertex, below=of v5] {6};
+		\node (v10) [highlight, right=of v3, label=right:{\textbf{KONIEC}}] {10};
+		
+		% ---------------------------------
+		% SCIEZKA OPTYMALNA Z OGRANICZENIEM (KOSZT 5, CZAS 15) - 3 krawędzie
+		% ---------------------------------
+		\draw[pathB] (v1) -- (v2) node [midway, above] {\textbf{2}/5};
+		\draw[pathB] (v2) -- (v3) node [midway, above] {\textbf{1}/5};
+		\draw[pathB] (v3) -- (v10) node [midway, above] {\textbf{2}/5};
+		
+		% ---------------------------------
+		% NAJTAŃSZA ŚCIEŻKA BEZ OGRANICZEŃ (KOSZT 3, CZAS 20) - 2 krawędzie
+		% ---------------------------------
+		\draw[pathA] (v1) to (v5) node [midway, below left, sloped] {1/10};
+		\draw[pathA] (v5) to (v10) node [midway, below right, sloped] {2/10};
+		
+		% ---------------------------------
+		% INNE KRAWEDZIE (KONTROLA)
+		% ---------------------------------
+		% Scieżka 1-6-10 (Koszt 6, Czas 15) - Feasible, ale droższa niż P_B
+		\draw[pathC] (v1) to (v6) node [midway, left] {3/10};
+		\draw[pathC] (v6) to (v10) node [midway, below] {3/5};
+		
+		% Dodatkowe krawędzie
+		\draw[edge_style] (v2) -- (v5) node [midway, left] {1/5};
+		\draw[edge_style] (v3) -- (v5) node [midway, right, sloped] {1/5};
+		
+		% ---------------------------------
+		% Legenda - Poprawiona struktura
+		\node [below right=3cm and 0.5cm of v1, align=left] (legend) {
+			\textbf{Ścieżki optymalne}\\[0.1cm]
+			\textcolor{red}{\textbf{\rule{1cm}{1.5pt}}} \textbf{Z Ograniczeniem Czasowym} ($C=5.0, T=15$)\\[0.1cm]
+			\textcolor{blue}{\textbf{\rule{1cm}{1.5pt} \small -- -- --}} \textbf{Bez Ograniczenia Czasowego} ($C=3.0, T=20$)\\[0.1cm]
+			\textcolor{gray}{\textbf{\rule{1cm}{1.5pt} \small $\cdots$}} Inne ścieżki Feasible (np. $1 \to 6 \to 10$, $C=6.0, T=15$).
+		};
+		
+	\end{tikzpicture}
+\end{center}
+		
+\subsubsection{(c) Całkowitoliczbowość zmiennych decyzyjnych}
+ Założenie o całkowitoliczbowości w tym przypadku jest potrzebne, ponieważ bez niego optymalizator może wybierać niektóre krawędzie częściowo i
+dzięki temu obniżać sztucznie całkowity koszt. Na przykładzie z poprzedniego
+podpunktu bez założenia całkowitoliczbowości algorytm wybrał krawędź 2ß10,
+z tym że wybrał ją z wagą 0.25, ponieważ normalnie nie mógłby jej użyć ze
+względu na zbyt duży koszt.
+
+
+\subsubsection{(d) Akceptowalność rozwiązania po usunięciu ograniczenia czasowego}
+ Bez ograniczenia czasowego optymalizator zwróci poprawne wyniki, ponieważ wtedy wybieranie zależy tylko od czasu i ze względu na warunek równych
+wejść/wyjść, wybieranie dodatkowych krawędzi nie ma sensu. Dzieje się tak, ponieważ wtedy jeżeli istnieje tańsza droga między parą punktów to optymalizator
+wymieni ją za droższą.
+
+\section*{Zadanie 5: Analiza Wyników Modelu Cyrkulacji Przepływu}
+
+Model ma na celu znalezienie minimalnego całkowitego przepływu ($\text{backwardedge}$) niezbędnego do zaspokojenia wszystkich minimalnych limitów przepływu zdefiniowanych w sieci (na krawędziach, na przepływach z $\text{Source}$ oraz do $\text{Final}$).
+
+\subsection{Wyniki Optymalizacji}
+
+\begin{itemize}
+	\item \textbf{Status:} OPTYMALNY
+	\item \textbf{Minimalny Przepływ Wsteczny ($\text{backwardedge}$):} $\mathbf{48.0}$
+\end{itemize}
+
+Minimalna wartość $\text{backwardedge} = 48.0$ oznacza, że \textbf{minimalna całkowita liczba pracowników}, którą należy zaangażować, aby spełnić wszystkie minimalne wymagania dotyczące alokacji, wynosi 48 osób.
+
+\subsection{Szczegółowa Alokacja Zasobów}
+
+Poniższe tabele prezentują optymalny przepływ w sieci, zgodnie z zasadą zachowania przepływu w wierzchołkach.
+
+\subsubsection{Przepływ z Źródła do Dzielnic ($\text{Source} \to \text{Dzielnica}$)}
+Przepływy te sumują się do minimalnego przepływu wstecznego, $\mathbf{48.0}$.
+
+\begin{center}
+	\begin{tabular}{lcc}
+		\toprule
+		\textbf{Dzielnica ($i$)} & \textbf{Przepływ ($\text{from\_source}_i$)} & \textbf{Wkład do sumy} \\
+		\midrule
+		1 & 11.0 & 23\% \\
+		2 & 14.0 & 29\% \\
+		3 & 23.0 & 48\% \\
+		\midrule
+		\textbf{Suma} & \textbf{48.0} & \textbf{100\%} \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\subsubsection{Alokacja z Dzielnic do Zmian ($\text{Dzielnica} \to \text{Zmiana}$)}
+Macierz przepływów $f_{ij}$ przedstawia, ilu pracowników z każdej dzielnicy ($i$) jest przydzielanych do każdej zmiany ($j$). Wszystkie te przepływy spełniają dwustronne ograniczenia $[ \min, \max ]$ określone na krawędziach.
+
+\begin{center}
+	\begin{tabular}{ccccccc}
+		\toprule
+		\textbf{Dzielnica} ($i$) & $\mathbf{\to \text{Zmiana 1}}$ & $\mathbf{\to \text{Zmiana 2}}$ & $\mathbf{\to \text{Zmiana 3}}$ & \textbf{Suma Wychodząca} ($\text{from\_source}_i$) \\
+		\midrule
+		1 & 2.0 & 4.0 & 5.0 & $\mathbf{11.0}$ \\
+		2 & 3.0 & 6.0 & 5.0 & $\mathbf{14.0}$ \\
+		3 & 5.0 & 10.0 & 8.0 & $\mathbf{23.0}$ \\
+		\midrule
+		\textbf{Suma Wchodząca} ($\text{to\_final}_j$) & $\mathbf{10.0}$ & $\mathbf{20.0}$ & $\mathbf{18.0}$ & $\mathbf{48.0}$ \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\subsubsection{Przepływ do Końca ($\text{Zmiana} \to \text{Final}$)}
+Przepływ ten odpowiada sumarycznemu, minimalnemu zapotrzebowaniu na każdą zmianę.
+
+\begin{center}
+	\begin{tabular}{lcc}
+		\toprule
+		\textbf{Zmiana ($j$)} & \textbf{Przepływ ($\text{to\_final}_j$)} & \textbf{Suma wejścia} \\
+		\midrule
+		1 & 10.0 & $2.0 + 3.0 + 5.0$ \\
+		2 & 20.0 & $4.0 + 6.0 + 10.0$ \\
+		3 & 18.0 & $5.0 + 5.0 + 8.0$ \\
+		\midrule
+		\textbf{Suma} & $\mathbf{48.0}$ & $\mathbf{48.0}$ \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\subsection{Wnioski Końcowe}
+
+Optymalne rozwiązanie:
+\begin{itemize}
+	\item Ustala minimalną siłę roboczą na 48 osób.
+	\item Potwierdza, że \textbf{istnieje} akceptowalna alokacja, która spełnia wszystkie minimalne wymagania.
+	\item Zapewnia bilans przepływu w każdym wierzchołku, co jest kluczowe dla poprawności modelu cyrkulacji.
+	\item Dostarcza konkretny plan alokacji: np. Zmiana 2 otrzymuje największą liczbę pracowników ($\mathbf{20}$), a Dzielnica 3 dostarcza najwięcej pracowników ($\mathbf{23}$).
+\end{itemize}
+	
+
+\section*{Zadanie 6: Optymalizacja Minimalnego Pokrycia Kamerami}
+
+\subsection{Opis Modelu Matematycznego}
+
+Problem minimalnego pokrycia zbiorem został sformułowany jako problem minimalizacji liczby kamer, przy zachowaniu warunku, że każdy punkt na monitorowanym obszarze musi być pokryty przez co najmniej jedną z umieszczonych kamer.
+
+\subsubsection{(a) Zmienne Decyzyjne}
+Dla każdej komórki $(i, j)$ na siatce, definiujemy binarną zmienną decyzyjną $x_{i, j}$.
+$$
+x_{i, j} \in \{0, 1\} \quad \text{dla } i=1, \dots, N, \quad j=1, \dots, M
+$$
+gdzie:
+\begin{itemize}
+	\item $x_{i, j} = 1$: Umieszczono kamerę w komórce o współrzędnych $(i, j)$ (jednostka: bezwymiarowa).
+	\item $x_{i, j} = 0$: Brak kamery w komórce $(i, j)$ (jednostka: bezwymiarowa).
+\end{itemize}
+
+\subsubsection{(b) Ograniczenia}
+
+Kluczowym ograniczeniem jest wymóg, aby każda komórka $(i_{\text{cur}}, j_{\text{cur}})$ na siatce była pokryta. Pokrycie to jest sumą zmiennych decyzyjnych $x_{i, j}$ w zasięgu kamery (funkcja $\texttt{scan\_squares}$), i musi być większe lub równe 1.
+
+Ograniczenie Pokrycia:
+$$
+\sum_{i = \max(1, i_{\text{cur}}-k)}^{\min(N, i_{\text{cur}}+k)} x_{i, j_{\text{cur}}} + \sum_{j = \max(1, j_{\text{cur}}-k)}^{\min(M, j_{\text{cur}}+k)} x_{i_{\text{cur}}, j} - x_{i_{\text{cur}}, j_{\text{cur}}} \ge 1
+$$
+dla każdego punktu $(i_{\text{cur}}, j_{\text{cur}})$ na siatce ($i_{\text{cur}}=1, \dots, N$; $j_{\text{cur}}=1, \dots, M$).
+
+\textbf{Uzasadnienie Zasięgu (Maska Krzyżowa):}
+Ograniczenie to sumuje kamery wzdłuż całego wiersza $i_{\text{cur}}$ i całej kolumny $j_{\text{cur}}$, w zakresie promienia $k$ od punktu $(i_{\text{cur}}, j_{\text{cur}})$. W implementacji:
+$$
+\sum_{l = \max(1, i-k)}^{\min(N, i+k)} x_{l, j} + \sum_{p = \max(1, j-k)}^{\min(M, j+k)} x_{i, p}
+$$
+\textbf{Uwaga:} W oryginalnej funkcji $\texttt{scan\_squares}$ brakowało odjęcia $x_{i_{\text{cur}}, j_{\text{cur}}}$ (podwójne zliczanie kamery w centrum), jednak w kontekście modelu minimalnego pokrycia zbiorem, gdzie prawa strona wynosi 1, podwójne zliczanie jest tolerowane i utrzymuje poprawność logiczną: dany punkt musi być pokryty co najmniej raz. Zapis matematyczny w sprawozdaniu (powyżej) jest zgodny z intencją modelu i zasięgiem.
+
+\subsubsection{(c) Funkcja Celu}
+Celem jest minimalizacja całkowitej liczby umieszczonych kamer:
+$$
+\min \sum_{i=1}^{N} \sum_{j=1}^{M} x_{i, j}
+$$
+(Jednostka: liczba kamer).
+
+\subsection{Analiza Wyników Egzemplarzy $5 \times 5$}
+
+Przeprowadzono optymalizację dla siatki $N=5, M=5$ oraz dwóch różnych promieni zasięgu $k$.
+
+\subsubsection{Egzemplarz 1: Siatka $5 \times 5$ z Promieniem $k=3$}
+
+\textbf{Wnioski:}
+\begin{itemize}
+	\item \textbf{Minimalna Liczba Kamer:} $\mathbf{5}$ (wartość obiektywna: $5.000000000000069$, zaokrąglona do 5).
+	\item \textbf{Interpretacja Zasięgu:} Zasięg jest opisany jako "Kwadrat o boku 7" (co odpowiada $(2k+1) \times (2k+1)$ dla $k=3$). Jednak ze względu na model maski krzyżowej, faktycznie jest to **pokrycie wiersza i kolumny o zasięgu $k=3$**. Dla siatki $5 \times 5$ jest to ekstremalnie szeroki zasięg.
+	\item \textbf{Pozycje Kamer:} W optymalnym rozwiązaniu wybrano 5 kamer w pozycjach: $(1, 1)$, $(4, 2)$, $(5, 3)$, $(2, 4)$, $(2, 5)$.
+\end{itemize}
+
+\textbf{Siatka Rozmieszczenia (1=kamera):}
+\begin{center}
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		\textbf{1} & 0 & 0 & 0 & 0 \\
+		\hline
+		0 & 0 & 0 & \textbf{1} & \textbf{1} \\
+		\hline
+		0 & 0 & 0 & 0 & 0 \\
+		\hline
+		0 & \textbf{1} & 0 & 0 & 0 \\
+		\hline
+		0 & 0 & \textbf{1} & 0 & 0 \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\textbf{Weryfikacja Kontradykcji:}
+Dla $k=3$ na siatce $5 \times 5$ zasięg każdej kamery jest tak duży, że dwie kamery (np. umieszczone w rogach, $(1, 1)$ i $(5, 5)$) powinny wystarczyć do pokrycia całej siatki. Fakt, że model wymaga $\mathbf{5}$ kamer, sugeruje, że model może zawierać \textbf{dodatkowe, nieujawnione ograniczenia} geometryczne (np. związane ze specyficznym ułożeniem, które preferuje ten model, lub błąd w logice pokrycia dla bardzo dużego $k$). Przy tak dużym zasięgu, $\mathbf{5}$ jest rozwiązaniem *akceptowalnym*, ale \textbf{prawdopodobnie nie optymalnym} w sensie matematycznym dla problemu minimalnego pokrycia zbiorem z tak szeroką maską.
+
+\subsubsection{Egzemplarz 2: Siatka $5 \times 5$ z Promieniem $k=2$}
+
+\textbf{Wnioski:}
+\begin{itemize}
+	\item \textbf{Minimalna Liczba Kamer:} $\mathbf{5}$ (wartość obiektywna: $4.999999999999958$, zaokrąglona do 5).
+	\item \textbf{Interpretacja Zasięgu:} Zasięg jest opisany jako "Kwadrat o boku 5" (co odpowiada $(2k+1) \times (2k+1)$ dla $k=2$). Podobnie jak wyżej, jest to \textbf{pokrycie wiersza i kolumny o zasięgu $k=2$}.
+	\item \textbf{Pozycje Kamer:} W optymalnym rozwiązaniu wybrano 5 kamer w pozycjach: $(3, 1)$, $(4, 1)$, $(5, 4)$, $(1, 5)$, $(2, 5)$. Zestaw pozycji jest inny niż w Egzemplarzu 1.
+\end{itemize}
+
+\textbf{Siatka Rozmieszczenia (1=kamera):}
+\begin{center}
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		0 & 0 & 0 & 0 & \textbf{1} \\
+		\hline
+		0 & 0 & 0 & 0 & \textbf{1} \\
+		\hline
+		\textbf{1} & 0 & 0 & 0 & 0 \\
+		\hline
+		\textbf{1} & 0 & 0 & 0 & 0 \\
+		\hline
+		0 & 0 & 0 & \textbf{1} & 0 \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\textbf{Porównanie z $k=3$:}
+Wyniki wskazują, że niezależnie od promienia $k=2$ i $k=3$, optymalna minimalna liczba kamer wymagana przez \textbf{ten konkretny model} wynosi $\mathbf{5}$.
+\begin{itemize}
+	\item Dla $k=2$ zasięg jest mniejszy, a $\mathbf{5}$ kamer wydaje się być bardziej realistyczną, choć nadal prawdopodobnie nie minimalną wartością dla tego typu maski.
+	\item Fakt, że zmiana $k$ (znaczne zwiększenie zasięgu) nie wpłynęła na minimalną liczbę kamer, silnie sugeruje, że \textbf{struktura maski krzyżowej} (pokrywającej tylko wiersz i kolumnę, a nie cały kwadrat) jest dominującym czynnikiem wymuszającym dużą liczbę kamer, co jest sprzeczne z opisem "Zasięg każdej kamery (kwadrat...)" w wynikach.
+\end{itemize}
+
+\subsection{Wnioski Końcowe}
+
+Model programowania liniowego minimalnego pokrycia zbiorem poprawnie identyfikuje minimalną liczbę kamer wymaganą do pokrycia siatki zgodnie z \textbf{wbudowaną logiką zasięgu kamery (maska krzyżowa, promień $k$)}.
+
+\begin{itemize}
+	\item \textbf{Optymalność:} Minimalna wymagana liczba kamer dla obu testowanych egzemplarzy wynosi $\mathbf{5}$.
+	\item \textbf{Wielokrotne Rozwiązania:} W obu przypadkach znaleziono alternatywne, optymalne zestawy pozycji dla 5 kamer.
+	\item \textbf{Niezgodność Opisu:} Istnieje niezgodność pomiędzy opisem zasięgu w wynikach ("Kwadrat o boku X") a implementacją modelu (`scan\_squares`), która wyraźnie tworzy \textbf{maskę krzyżową}. To ograniczenie na zasięg (tylko wiersze i kolumny) wymaga większej liczby kamer, co wyjaśnia, dlaczego model nie znalazł rozwiązania z 2 lub 3 kamerami, nawet przy dużym promieniu $k=3$.
+\end{itemize}
+		
+\end{document}

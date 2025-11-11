@@ -1,121 +1,57 @@
 using JuMP
 import HiGHS
 
-function read_flow_data(filepath::String)
+using DelimitedFiles
+
+function parse_circulation_data(filename::String)
+    lines = readlines(filename)
     
-    # Inicjalizacja wynikow
-    N_D = 0
-    N_S = 0
+    # Row 1: dimensions
+    dims = parse.(Int, split(lines[1]))
+    n_district = dims[1]
+    n_shift = dims[2]
+
+    # Rows 2 to 1+n_district: min_array
+    min_array = zeros(Int, n_district, n_shift)
+    for i in 1:n_district
+        values = parse.(Int, filter!(!isempty, split(lines[1 + i])))
+        min_array[i, :] = values
+    end
     
-    # Macierze przeplywu D->S (D x S)
-    Min_Flow_DS = Array{Float64}(undef, 0, 0)
-    Max_Flow_DS = Array{Float64}(undef, 0, 0)
+    # Rows 2+n_district to 1+2*n_district: max_array
+    max_array = zeros(Int, n_district, n_shift)
+    for i in 1:n_district
+        values = parse.(Int, filter!(!isempty, split(lines[1 + n_district + i])))
+        max_array[i, :] = values
+    end
     
-    # Wektory przeplywu Source->D (N_D)
-    Min_Flow_SD = Vector{Float64}()
-    Max_Flow_SD = Vector{Float64}()
-
-    # Wektory przeplywu S->Final (N_S)
-    Min_Flow_SF = Vector{Float64}()
-    Max_Flow_SF = Vector{Float64}()
-
-    current_section = :dimensions
-    lines = readlines(filepath)
-    line_index = 1
+    # Row 2+2*n_district: source_min
+    source_min = parse.(Int, filter!(!isempty, split(lines[2 + 2*n_district])))
     
-    # Funkcja pomocnicza do parsowania pojedynczej linii z liczbami
-    function parse_numbers(str)
-        return parse.(Float64, split(str))
-    end
+    # Row 3+2*n_district: source_max
+    source_max = parse.(Int, filter!(!isempty, split(lines[3 + 2*n_district])))
+    
+    # Row 4+2*n_district: final_min
+    final_min = parse.(Int, filter!(!isempty, split(lines[4 + 2*n_district])))
+    
+    # Row 5+2*n_district: final_max
+    final_max = parse.(Int, filter!(!isempty, split(lines[5 + 2*n_district])))
 
-    # Funkcja pomocnicza do czytania macierzy (N_ROWS x N_COLS)
-    function read_matrix(N_ROWS, N_COLS, current_line_index)
-        temp_rows = Vector{Vector{Float64}}()
-        
-        for _ in 1:N_ROWS
-            if current_line_index > length(lines)
-                error("Plik danych zakonczyl sie zbyt wczesnie podczas czytania macierzy.")
-            end
-            
-            row_data = parse_numbers(lines[current_line_index])
-            if length(row_data) != N_COLS
-                error("Bład: Wiersz macierzy ma $(length(row_data)) kolumn, oczekiwano $N_COLS.")
-            end
-            push!(temp_rows, row_data)
-            current_line_index += 1
-        end
-        
-        # Zmiana z Array of Arrays na Macierz
-        return reduce(vcat, transpose.(temp_rows)), current_line_index
-    end
+    println("--- Wczytane Dane (Zadanie 5) ---")
+    println("Minimalny przydział P -> Z:\n", min_array)
+    println("Maksymalny przydział P -> Z:\n", max_array)
+    println("Minima dla Dzielnic (Source): ", source_min)
+    println("Maksima dla Dzielnic (Source): ", source_max)
+    println("Minima dla Zmian (Final): ", final_min)
+    println("Maksima dla Zmian (Final): ", final_max)
+    println("-----------------------")
 
-    while line_index <= length(lines)
-        line = strip(lines[line_index])
-        line_index += 1
-        
-        # Ignoruj komentarze i puste linie, uzywaj ich jako markery sekcji
-        if startswith(line, "#") || isempty(line)
-            if occursin("D->S", line)
-                current_section = :flow_ds_min
-            elseif occursin("SOURCE->D", line)
-                current_section = :flow_sd
-            elseif occursin("S->FINAL", line)
-                current_section = :flow_sf
-            end
-            continue
-        end
-
-        # --- Parsowanie sekcji ---
-        
-        if current_section == :dimensions
-            parts = split(line, '='; limit=2)
-            if length(parts) == 2
-                key = strip(parts[1])
-                value = parse(Int, strip(parts[2]))
-                if key == "N_DISTRICT"
-                    N_D = value
-                elseif key == "N_SHIFT"
-                    N_S = value
-                end
-            end
-            
-        elseif current_section == :flow_ds_min
-            # Czytanie macierzy MIN_FLOW_D_S
-            Min_Flow_DS, line_index = read_matrix(N_D, N_S, line_index - 1)
-            current_section = :flow_ds_max
-
-        elseif current_section == :flow_ds_max
-            # Czytanie macierzy MAX_FLOW_D_S
-            Max_Flow_DS, line_index = read_matrix(N_D, N_S, line_index - 1)
-            current_section = :after_flow_ds
-            
-        elseif current_section == :flow_sd
-            # Czytanie wektorow Source->D
-            if isempty(Min_Flow_SD)
-                Min_Flow_SD = parse_numbers(line)
-            elseif isempty(Max_Flow_SD)
-                Max_Flow_SD = parse_numbers(line)
-                current_section = :after_flow_sd
-            end
-            
-        elseif current_section == :flow_sf
-            # Czytanie wektorow S->Final
-            if isempty(Min_Flow_SF)
-                Min_Flow_SF = parse_numbers(line)
-            elseif isempty(Max_Flow_SF)
-                Max_Flow_SF = parse_numbers(line)
-                current_section = :after_flow_sf
-            end
-        end
-    end
-
-    # Walidacja koncowa
-    if N_D == 0 || N_S == 0 || size(Min_Flow_DS) != (N_D, N_S) || length(Min_Flow_SD) != N_D || length(Min_Flow_SF) != N_S
-        error("Błąd w danych: Niepoprawne wymiary lub brakujące macierze/wektory.")
-    end
-
-    return N_D, N_S, Min_Flow_DS, Max_Flow_DS, Min_Flow_SD, Max_Flow_SD, Min_Flow_SF, Max_Flow_SF
+    return n_district, n_shift, max_array, min_array, source_min, source_max, final_min, final_max
 end
+
+# Przykładowe użycie:
+# n_d, n_s, max_a, min_a, s_min, s_max, f_min, f_max = parse_circulation_data("dane_cyrkulacja.txt")
+# graphModel(n_d, n_s, max_a, min_a, s_min, s_max, f_min, f_max)
 
 function createEdges(n_district::Int, n_shift::Int, max_array::Array, min_array::Array)
     temp = Dict{Tuple{Int, Int}, Tuple{Float64, Float64}}()
@@ -141,8 +77,6 @@ function graphModel(n_district::Int, n_shift::Int, max_array::Array, min_array::
 
     @variable(model, backwardedge >= 0)
 
-    @constraint(model, flow, sum(x[i]*edges[i][4] for i in 1:edges.size()) <= T)
-
     @constraint(model, flowStart, backwardedge - sum(from_source[i] for i in 1:n_district) == 0)
     
     @constraint(model, flow1stlayer[i in 1:n_district], from_source[i] - sum(f[i, j] for j in 1:n_shift)==0)
@@ -155,10 +89,47 @@ function graphModel(n_district::Int, n_shift::Int, max_array::Array, min_array::
     
     optimize!(model)
 
-    if termination_status(model) == MOI.OPTIMAL
-        println("OPTIMAL")
+    println("\n--- Wyniki Modelu Cyrkulacji Przepływu ---")
+    status = termination_status(model)
+    if status == MOI.OPTIMAL
+        println("STATUS: OPTYMALNY")
+        println("Minimalny przepływ wsteczny (backward edge): ", objective_value(model))
+        
+        f_val = value.(f)
+        from_source_val = value.(from_source)
+        to_final_val = value.(to_final)
+        backward_val = value.(backwardedge)
+
+        println("\nPrzepływ z źródła (Source -> Dzielnice):")
+        for i in 1:n_district
+            println(" Dzielnica ", i, ": ", round(from_source_val[i]; digits=3))
+        end
+
+        println("\nPrzepływ między warstwami (Dzielnice -> Zmiany):")
+        for i in 1:n_district
+            for j in 1:n_shift
+                if round(f_val[i,j]; digits=3) > 0.001
+                    println(" Z-> ", i, " do ", j, ": ", round(f_val[i,j]; digits=3), " [min: ", min_array[i,j], ", max: ", max_array[i,j], "]")
+                end
+            end
+        end
+
+        println("\nPrzepływ do końca (Zmiany -> Final):")
+        for j in 1:n_shift
+            println(" Zmiana ", j, ": ", round(to_final_val[j]; digits=3))
+        end
+
+        println("\nBackward edge (przepływ wsteczny): ", round(backward_val; digits=3))
+        
+        # Sprawdzenie bilansu
+        total_from_source = sum(from_source_val)
+        total_to_final = sum(to_final_val)
+        println("\nBilans:")
+        println(" Razem z źródła: ", round(total_from_source; digits=3))
+        println(" Razem do końca: ", round(total_to_final; digits=3))
+        println(" Backward edge:  ", round(backward_val; digits=3))
     else
-        println("NON OPTIMAL: ", termination_status)
+        println("STATUS: NIEOPTYMALNY (", status, ")")
     end
 end
 
@@ -167,10 +138,10 @@ const DATA_FILE = "flow_data.txt"
 # Wczytanie danych z pliku
 try
     # Odczyt danych
-    N_D, N_S, Min_DS, Max_DS, Min_SD, Max_SD, Min_SF, Max_SF = read_flow_data(DATA_FILE)
+    n_district, n_shift, max_array, min_array, source_min, source_max, final_min, final_max = parse_circulation_data(DATA_FILE)
     
     # Uruchomienie rozwiazania
-    create_flow_model(N_D, N_S, Min_DS, Max_DS, Min_SD, Max_SD, Min_SF, Max_SF)
+    graphModel(n_district, n_shift, max_array, min_array, source_min, source_max, final_min, final_max)
 
 catch e
     println("\nBLAD PRZY URUCHAMIANIU MODELU:")

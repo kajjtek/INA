@@ -1,92 +1,43 @@
 using JuMP
 import HiGHS
+using DelimitedFiles
 
-function read_assignment_data(filepath::String)
+function parse_data(filename::String)
+    # Wczytanie wszystkich linii z pliku jako tekst (readlines)
+    data_lines = readlines(filename)
     
-    # Inicjalizacja wynikow
-    N_AIRPORTS = 0
-    N_COMPANIES = 0
-    C_matrix = Array{Float64}(undef, 0, 0)
-    Min_Limits = Vector{Float64}()
-    Max_Limits = Vector{Float64}()
+    # Funkcja pomocnicza do parsowania linii i ignorowania pustych elementów
+    parse_line(line) = parse.(Int, filter!(!isempty, split(line, ' ')))
 
-    # Flagi do sledzenia aktualnie przetwarzanej sekcji
-    current_section = :dimensions
-    
-    lines = readlines(filepath)
-    line_index = 1
-    
-    while line_index <= length(lines)
-        line = strip(lines[line_index])
-        line_index += 1
-        
-        # Ignoruj komentarze i puste linie, ale uzywaj ich jako markery sekcji
-        if startswith(line, "#") || isempty(line)
-            if occursin("KOSZTÓW C", line)
-                current_section = :cost_matrix
-            elseif occursin("MINIMALNE WYMAGANIA LOTNISK", line)
-                current_section = :min_limits
-            elseif occursin("MAKSYMALNE ZDOLNOŚCI FIRM", line)
-                current_section = :max_limits
-            end
-            continue
-        end
+    # 1. Liczba firm i lotnisk (Linia 1)
+    dimensions = parse_line(data_lines[1])
+    n_companies = dimensions[1]
+    n_airports = dimensions[2]
 
-        # --- Parsowanie sekcji ---
-        
-        if current_section == :dimensions
-            parts = split(line, '='; limit=2)
-            if length(parts) == 2
-                key = strip(parts[1])
-                value = parse(Int, strip(parts[2]))
-                if key == "N_AIRPORTS"
-                    N_AIRPORTS = value
-                elseif key == "N_COMPANIES"
-                    N_COMPANIES = value
-                end
-            end
-            
-        elseif current_section == :cost_matrix
-            # Wczytywanie macierzy C (N_AIRPORTS x N_COMPANIES)
-            if N_AIRPORTS > 0 && N_COMPANIES > 0
-                temp_rows = Vector{Vector{Float64}}()
-                
-                # Wczytuj N_AIRPORTS wierszy macierzy C
-                for _ in 1:N_AIRPORTS
-                    # Wyczytanie, parsowanie i dodanie wiersza
-                    row_data = parse.(Float64, split(lines[line_index-1]))
-                    if length(row_data) != N_COMPANIES
-                        error("Bład: Wiersz kosztów ma $(length(row_data)) kolumn, oczekiwano $N_COMPANIES.")
-                    end
-                    push!(temp_rows, row_data)
-                    line_index += 1 # Przesuniecie indeksu po udanym parsowaniu wiersza
-                end
-                
-                # Zmiana z Array of Arrays na Macierz
-                C_matrix = reduce(vcat, transpose.(temp_rows))
-                current_section = :after_cost_matrix # Zmien sekcje, aby nie czytac dalej wierszy macierzy
-                line_index -= 1 # Cofniecie, poniewaz ostatni wiersz zostal juz przetworzony
-            end
-            
-        elseif current_section == :min_limits
-            # Wczytanie wektora minimalnych wymagan lotnisk
-            Min_Limits = parse.(Float64, split(line))
-            
-        elseif current_section == :max_limits
-            # Wczytanie wektora maksymalnych zdolnosci firm
-            Max_Limits = parse.(Float64, split(line))
-        end
+    # 2. Limity maksymalne firm (Linia 2)
+    max_limits = parse_line(data_lines[2])
+    
+    # 3. Limity minimalne lotnisk (Linia 3)
+    min_limits = parse_line(data_lines[3])
+    
+    # 4. Macierz kosztów (Linie 4 do końca)
+    c_matrix_data = data_lines[4:end]
+    c_matrix = Matrix{Int}(undef, n_airports, n_companies)
+
+    for i in 1:n_airports
+        row_data = parse_line(c_matrix_data[i])
+        c_matrix[i, :] = row_data
     end
 
-    # Walidacja koncowa
-    if isempty(C_matrix) || isempty(Min_Limits) || isempty(Max_Limits)
-        error("Brak wszystkich wymaganych danych (C, Min/Max Limits).")
-    end
-    if length(Min_Limits) != N_AIRPORTS || length(Max_Limits) != N_COMPANIES
-        error("Bład wymiarów: Wektory granic nie pasuja do N_AIRPORTS / N_COMPANIES.")
-    end
+    println("--- Wczytane Dane ---")
+    println("Liczba firm (n_companies): ", n_companies)
+    println("Liczba lotnisk (n_airports): ", n_airports)
+    println("Max Limity Firm: ", max_limits)
+    println("Min Limity Lotnisk: ", min_limits)
+    println("Macierz Kosztów (c):\n", c_matrix)
+    println("-----------------------")
 
-    return N_AIRPORTS, N_COMPANIES, C_matrix, Max_Limits, Min_Limits
+    return c_matrix, max_limits, min_limits, n_companies, n_airports
 end
 
 function createModel(c::Array, max_limits::Array, min_limits::Array, n_companies::Int, n_airports::Int)
@@ -102,37 +53,65 @@ function createModel(c::Array, max_limits::Array, min_limits::Array, n_companies
 
     optimize!(model)
 
+    println("\n--- Wyniki Optymalizacji Zadanie 1 ---")
     if termination_status(model) == MOI.OPTIMAL
-        println("OPTIMAL")
+        println("STATUS: OPTYMALNY")
+        
+        # (a) Minimalny koszt
+        min_cost = objective_value(model)
+        println("a) Minimalny łączny koszt dostaw: ", min_cost)
+
+        X_val = value.(x)
+        
+        # Całkowita dostawa wykorzystana przez każdą firmę (j)
+        supply_used = [sum(X_val[i, j] for i in 1:n_airports) for j in 1:n_companies]
+        
+        # (b) Sprawdzenie, czy wszystkie firmy dostarczają paliwo
+        all_deliver = all(supply_used .> 1.0) # Sprawdzamy czy przepływ > 0
+        println("\nb) Czy wszystkie firmy dostarczają paliwo? ", all_deliver ? "TAK" : "NIE")
+        
+        # (c) Sprawdzenie, czy możliwości dostaw są wyczerpane
+        println("\nc) Czy możliwości dostaw paliwa przez firmy są wyczerpane?")
+        for j in 1:n_companies
+            limit_used = supply_used[j]
+            limit_max = max_limits[j]
+            # Używamy tolerancji 1e-5 ze względu na błędy numeryczne
+            exhausted = isapprox(limit_used, limit_max, atol=1e-5) 
+            
+            println("   Firma ", j, ": Wykorzystano ", round(Int, limit_used), "/", limit_max, " galonów. ", exhausted ? "(Wyczerpano)" : "(Nie wyczerpano)")
+        end
+        
+        # Optymalny plan dostaw (x[lotnisko, firma])
+        println("\nOptymalny plan dostaw (x[lotnisko, firma]):")
+        display(round.(Int, X_val))
+
     else
-        println("NON OPTIMAL: ", termination_status)
+        println("STATUS: NIEOPTYMALNY (", termination_status(model), ")")
     end
 end 
 
-c = [
-    10 7 8;
-    10 11 14;
-    9 12 4;
-    11 13 9
-]
+# c = [
+#     10 7 8;
+#     10 11 14;
+#     9 12 4;
+#     11 13 9
+# ]
 
-min_limits = [1.1e5, 2.2e5, 3.3e5, 4.4e5]
-max_limits = [2.75e5, 5.5e5, 6.6e5]
+# min_limits = [1.1e5, 2.2e5, 3.3e5, 4.4e5]
+# max_limits = [2.75e5, 5.5e5, 6.6e5]
 
 
 
-n_companies = 3
-n_airports = 4
+# n_companies = 3
+# n_airports = 4
 
-const DATA_FILE = "assignment_data.txt"
+const DATA_FILE = "./assignment_data.txt"
 
-# Wczytanie danych z pliku
+
 try
-    # Odczyt danych
-    N_A, N_C, C, Max_L, Min_L = read_assignment_data(DATA_FILE)
+    C, Max_L, Min_L, N_C, N_A = parse_data(DATA_FILE)
     
-    # Uruchomienie rozwiazania
-    createModel(C, Max_L, Min_L, N_A, N_C)
+    createModel(C, Max_L, Min_L, N_C, N_A)
 
 catch e
     println("\nBLAD PRZY URUCHAMIANIU MODELU:")

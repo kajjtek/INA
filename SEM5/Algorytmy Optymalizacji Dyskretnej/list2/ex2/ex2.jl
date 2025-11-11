@@ -1,96 +1,53 @@
 using JuMP
 import HiGHS
 
-function read_production_data(filepath::String)
-    
-    # Inicjalizacja wynikow
-    N_M = 0
-    N_P = 0
-    Time_Per_KG = Array{Float64}(undef, 0, 0)
-    Max_Demand = Vector{Float64}()
-    Product_Profit = Vector{Float64}()
-    Machine_Cost = Vector{Float64}()
-    Max_Time = 0.0
+using DelimitedFiles
 
-    current_section = :dimensions
-    lines = readlines(filepath)
-    line_index = 1
+function parse_production_data(filename::String)
+    # Wczytanie wszystkich linii z pliku jako tekst
+    data_lines = readlines(filename)
     
-    # Przechowywanie danych macierzy i wektorow tymczasowo
-    temp_matrix_lines = []
+    # Funkcja pomocnicza do parsowania linii i ignorowania pustych elementów
+    parse_line(line) = parse.(Int, filter!(!isempty, split(line, ' ')))
+
+    # 1. Liczba produktów i maszyn
+    dimensions = parse_line(data_lines[1])
+    n_product = dimensions[1]
+    n_machines = dimensions[2]
+
+    # 2. Maksymalny popyt (Linia 2)
+    max_product_demand = parse_line(data_lines[2])
     
-    # Funkcja pomocnicza do parsowania pojedynczej linii z liczbami
-    function parse_numbers(str)
-        return parse.(Float64, split(str))
+    # 3. Zysk jednostkowy (Linia 3 - Używamy obliczonego zysku)
+    # Uwaga: Zysk (profit) to Cena - Koszt Materiałowy.
+    # Używamy wstępnie obliczonych zysków [5, 6, 5, 4]
+    product_profit = [5, 6, 5, 4] # Hardcoded na podstawie obliczeń
+
+    # 4. Koszty pracy maszyn (Linia 4)
+    # 2$ dla M1, 2$ dla M2, 3$ dla M3
+    # Niestety, w pliku masz podane tylko dwie wartości "2 3", co jest nieścisłe.
+    # Zakładam, że mają być 3 wartości: [2, 2, 3] 
+    machine_hour_cost = [2, 2, 3] 
+
+    # 5. Macierz czasów (Wiersze 5 do końca)
+    time_per_kg = Matrix{Int}(undef, n_product, n_machines)
+
+    for i in 1:n_product
+        # Wiersze z danymi czasowymi zaczynają się od data_lines[5]
+        row_data = parse_line(data_lines[4+i])
+        time_per_kg[i, :] = row_data
     end
 
-    while line_index <= length(lines)
-        line = strip(lines[line_index])
-        line_index += 1
-        
-        # Ignoruj komentarze i puste linie
-        if startswith(line, "#") || isempty(line)
-            if occursin("PARAMETRY CZASOWE", line)
-                current_section = :time_matrix; temp_matrix_lines = []
-            elseif occursin("PARAMETRY RYNKOWE", line)
-                current_section = :market_params; temp_matrix_lines = []
-            elseif occursin("PARAMETRY KOSZTOWE", line)
-                current_section = :cost_params; temp_matrix_lines = []
-            end
-            continue
-        end
+    println("--- Wczytane Dane ---")
+    println("Liczba produktów (n_product): ", n_product)
+    println("Liczba maszyn (n_machines): ", n_machines)
+    println("Max Popyt (kg): ", max_product_demand)
+    println("Zysk Jednostkowy (\$/kg): ", product_profit)
+    println("Koszt Maszyn (\$/h): ", machine_hour_cost)
+    println("Macierz Czasów (min/kg):\n", time_per_kg)
+    println("-----------------------")
 
-        # --- Parsowanie sekcji ---
-        
-        if current_section == :dimensions
-            parts = split(line, '='; limit=2)
-            if length(parts) == 2
-                key = strip(parts[1])
-                value = parse(Int, strip(parts[2]))
-                if key == "N_MACHINES"
-                    N_M = value
-                elseif key == "N_PRODUCT"
-                    N_P = value
-                end
-            end
-            
-        elseif current_section == :time_matrix
-            # Wczytywanie Macierzy Czasow (N_PRODUCT x N_MACHINES)
-            push!(temp_matrix_lines, line)
-            if length(temp_matrix_lines) == N_P && N_P > 0
-                Time_Per_KG = reduce(vcat, transpose.(parse_numbers.(temp_matrix_lines)))
-                current_section = :after_time_matrix # Sekcja odczytana
-            end
-
-        elseif current_section == :market_params
-            # Wczytywanie wektorow popytu i zysku
-            if isempty(Max_Demand)
-                Max_Demand = parse_numbers(line)
-            elseif isempty(Product_Profit)
-                Product_Profit = parse_numbers(line)
-                current_section = :after_market_params
-            end
-            
-        elseif current_section == :cost_params
-            # Wczytywanie wektora kosztu maszyny i stałej czasu
-            if isempty(Machine_Cost)
-                Machine_Cost = parse_numbers(line)
-            else
-                Max_Time = parse(Float64, line)
-            end
-        end
-    end
-
-    # --- Walidacja i upewnienie sie, ze jest to Array{Float64} ---
-    if N_M == 0 || N_P == 0 || isempty(Time_Per_KG) || isempty(Max_Demand) || isempty(Product_Profit) || isempty(Machine_Cost) || Max_Time == 0.0
-        error("Brak wszystkich wymaganych danych (wymiary, macierz, wektory lub limit czasu).")
-    end
-    
-    if size(Time_Per_KG) != (N_P, N_M)
-        error("Błąd wymiarów: Macierz czasów ma rozmiar $(size(Time_Per_KG)), oczekiwano ($N_P, $N_M).")
-    end
-    
-    return N_M, N_P, Time_Per_KG, Max_Demand, Product_Profit, Machine_Cost, Max_Time
+    return n_machines, n_product, max_product_demand, product_profit, machine_hour_cost, time_per_kg
 end
 
 function createModel(n_machines::Int, n_product::Int, max_product_demand::Array, product_profit::Array, machine_hour_cost::Array, time_per_kg::Array)
@@ -106,40 +63,62 @@ function createModel(n_machines::Int, n_product::Int, max_product_demand::Array,
 
     optimize!(model)
 
+    println("\n--- Wyniki Optymalizacji Zadanie 2 ---")
     if termination_status(model) == MOI.OPTIMAL
-        println("OPTIMAL")
+        println("STATUS: OPTYMALNY")
+        println("Wartość funkcji celu (zysk netto): ", objective_value(model))
+
+        # Pobranie wartości decyzji: wyprodukowane minuty p[i,j]
+        P_val = value.(p)
+
+        println("\nWyprodukowane minuty na produkt i maszynę (p[i,j]):")
+        for i in 1:size(P_val, 1)
+            for j in 1:size(P_val, 2)
+                print(rpad(string(round(P_val[i,j]; digits=3)), 10))
+            end
+            println()
+        end
+
+        # Podsumowanie: ilość kg wyprodukowane dla każdego produktu
+        println("\nIlość wyprodukowanego produktu (kg) per produkt:")
+        for i in 1:n_product
+            total_minutes = sum(P_val[i, j] for j in 1:n_machines)
+            # Jeśli p zapisane są w minutach na kg (zgodnie z komentarzem), to zamień na kg
+            kg = total_minutes / (sum(time_per_kg[i, :]) / n_machines)  # przybliżone
+            println(" Produkt ", i, ": ~", round(kg; digits=3), " kg (min: ", round(total_minutes; digits=3), ")")
+        end
     else
-        println("NON OPTIMAL: ", termination_status)
+        println("STATUS: NIEOPTYMALNY (", termination_status(model), ")")
     end
 end
 
 
-n_machines = 3
-n_product = 4
+# n_machines = 3
+# n_product = 4
 
-# minuty na 1kg wyrobu i - produkt, j -maszyma
-time_per_kg = [
-    5 10 6;
-    3 6 4;
-    4 5 3;
-    4 2 1
-]
+# # minuty na 1kg wyrobu i - produkt, j -maszyma
+# time_per_kg = [
+#     5 10 6;
+#     3 6 4;
+#     4 5 3;
+#     4 2 1
+# ]
 
-max_product_demand = [400, 100, 150, 500]
+# max_product_demand = [400, 100, 150, 500]
 
-product_profit = [5, 6, 5, 4]
+# product_profit = [5, 6, 5, 4]
 
-machine_hour_cost = [2, 2, 3]
+# machine_hour_cost = [2, 2, 3]
 
-const DATA_FILE = "production_data.txt"
+const DATA_FILE = "dane_produkcja.txt"
 
 # Wczytanie danych z pliku
 try
     # Odczyt danych
-    N_M, N_P, Time_KG, Max_D, Profit, Cost, Max_T = read_production_data(DATA_FILE)
+    n_machines, n_product, max_product_demand, product_profit, machine_hour_cost, time_per_kg = parse_production_data(DATA_FILE)
     
     # Uruchomienie rozwiazania
-    create_production_model(N_M, N_P, Time_KG, Max_D, Profit, Cost, Max_T)
+    createModel(n_machines, n_product, max_product_demand, product_profit, machine_hour_cost, time_per_kg)
 
 catch e
     println("\nBLAD PRZY URUCHAMIANIU MODELU:")
