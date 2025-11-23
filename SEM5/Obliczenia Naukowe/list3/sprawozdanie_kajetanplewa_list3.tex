@@ -1,0 +1,292 @@
+\documentclass[11pt, a4paper]{article}
+
+% --- PREAMBUŁA DLA PDFLATEX (Stabilna) ---
+\usepackage{float}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel} % Ustawienie języka polskiego
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
+
+% Pakiety matematyczne i tabelaryczne
+\usepackage{amsmath}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, urlcolor=blue, linkcolor=black, citecolor=black}
+\usepackage{graphicx}
+\usepackage{multirow}
+
+\sisetup{
+	round-mode = places,
+	round-precision = 1,
+	scientific-notation = true,
+	exponent-product = \cdot, % Używa kropki jako separatora wykładnika
+	group-separator = {} % Wyłącza separator tysięcy
+}
+
+\title{\vspace{-2cm}\textbf{Obliczenia Naukowe Laboratoria - Lista 3}}
+\author{Kajetan Plewa}
+\date{\today}
+
+\begin{document}
+	\maketitle
+	\thispagestyle{empty}
+	
+	\section{Metoda bisekcji}
+	
+	\subsection{Krótki opis problemu}
+	
+	Celem zadania było opracowanie i implementacja numerycznej funkcji o nazwie \texttt{bisection}, której zadaniem jest znalezienie przyblizonej wartosci pierwiastka $r$ podanej funkcji. 
+	
+	Funkcja bisection wymaga podania:
+	\begin{itemize}
+		\item funkcji $f(x)$ (jako funkcji lambda),
+		\item krańców początkowego przedziału $[a, b]$,
+		\item dwóch kryteriów dokładności: $\delta$ (tolerancja długości przedziału) oraz $\epsilon$ (tolerancja wartości funkcji).
+	\end{itemize}
+	Wynikiem działania funkcji miała być czwórka $\texttt{(r, v, it, err)}$, zawierająca przybliżenie pierwiastka, wartość funkcji w tym punkcie, liczbę wykonanych iteracji oraz kod błędu ($1$ w przypadku braku zmiany znaku funkcji w przedziale $[a, b]$, $0$ w przeciwnym razie).
+	
+	\subsection{Rozwiązanie}
+	
+	Implementacja algorytmu została wykonana na podstawie zaprezentowanego na wykładzie pseudokodu. Kod źródłowy został napisany w języku Julia, co pozwoliło na spełnienie wymogu precyzji $\textbf{Float64}$.
+	
+	\subsubsection*{Kroki Algorytmu}
+	
+	\begin{enumerate}
+		\item \textbf{Sprawdzenie Wstępne:} Na początku sprawdzono, czy funkcja $f(x)$ zmienia znak na krańcach zadanego przedziału $[a, b]$. Jeśli $f(a) \cdot f(b) > 0$, oznacza to, że w tym przedziale nie ma pierwiastka (lub jest parzysta ich liczba), a funkcja zwraca błąd $\texttt{err}=1$.
+		\item \textbf{Pętla Iteracyjna:} Dopóki długość przedziału $|b - a|$ jest większa niż tolerancja $\delta$ (główne kryterium stopu) i nie jest spełnione kryterium $\epsilon$, algorytm wykonuje następujące kroki:
+		\begin{itemize}
+			\item Obliczenie punktu środkowego: $r = (a + b) / 2$.
+			\item Sprawdzenie kryterium wartości: Jeśli $|f(r)| \le \epsilon$, algorytm kończy działanie i zwraca $r$ jako pierwiastek.
+			\item Wybór nowego przedziału: Sprawdzenie, w której z nowych połówek ($[a, r]$ czy $[r, b]$) funkcja zmienia znak. Nowy przedział jest wybierany tak, aby $f(x)$ wciąż zmieniała w nim znak, skutecznie zmniejszając jego długość o połowę.
+			\item Inkrementacja licznika iteracji $\texttt{it}$.
+		\end{itemize}
+		\item \textbf{Zakończenie:} Po zakończeniu pętli $\texttt{for}$ (gdy $|b-a| \le \delta$), ostateczne przybliżenie pierwiastka $r$ jest przyjmowane jako środek ostatniego przedziału, a funkcja zwraca wyniki wraz z $\texttt{err}=0$.
+	\end{enumerate}
+	
+	\section{Metoda newtona}
+	\subsection{Krótki opis problemu}
+	
+	Podobnie jak ostatnio, celem implementacji tej metody jest znalezienie pierwiastka podanej funkcji $f$. 
+	
+	Funkcja newton wymaga podania:
+	\begin{itemize}
+		\item funkcji $f(x)$ (jako funkcji lambda),
+		\item funkcji $f'(x)$ - pochodnej funkcji lambda,
+		\item przybliżenie początkowe $[x0]$,
+		\item dwóch kryteriów dokładności: $\delta$ (tolerancja długości przedziału) oraz $\epsilon$ (tolerancja wartości funkcji).
+		\item $maxit$ - maksymalnej liczby iteracji
+	\end{itemize}
+	Wynikiem działania funkcji miała być czwórka $\texttt{(r, v, it, err)}$, zawierająca przybliżenie pierwiastka, wartość funkcji w tym punkcie, liczbę wykonanych iteracji oraz kod błędu ($1$ w przypadku nie osiągnięcia wymaganej dokładności w $maxit$ iteracji, $2$ w przypadku pochodnej bliskiej zeru i $0$ w przeciwnym razie).
+	
+	\subsection{Rozwiązanie}
+	Implementacja algorytmu została wykonana na podstawie zaprezentowanego na wykładzie pseudokodu. Kod źródłowy został napisany w języku Julia, co pozwoliło na spełnienie wymogu precyzji $\textbf{Float64}$.
+	
+	\subsubsection*{Kroki Algorytmu}
+	
+	\begin{enumerate}
+		\item \textbf{Wstępna weryfikacja}: Na początku sprawdzamy czy podane na wejściu przybliżenie nie jest wystarczająco dokładne. Jeśli $|v| \le \epsilon$ kończymy działanie algorytmu.
+		\item W przeciwnym wypadku rozpoczynamy działanie algorytmu.
+		\textbf{Pętla iteracyjna}
+		\begin{itemize}
+			\item Obliczenie wartości pochodnej w punkcie $x0$.
+			\item Sprawdzenie czy $|pv| \le \num{1e-15}$. If \textbf{true} -> zwracamy error $2$ gdyż pochodna jest praktycznie równoległa do osi \textbf{OX}. Przecięcie znajduje się daleko - funkcja zwracałaby nieprawidłowe wyniki.
+			\item Wyliczenie nowej wartości $x_1 = x_0 - \frac{v}{pv}$
+			\item Obliczenie nowego $v = f(x_1)$ i sprawdzenie czy $|x_1-x_0| \le \delta || |v| \le \epsilon$. If \textbf{true} -> zwracamy wyniki.
+			\item w przeciwnym przypadku $x_0 = x_1$
+		\end{itemize}
+		\item Jeśli nie uda osiągnąć się oczekiwanej precyzji w $maxit$ zwracamy $error = 1$
+	\end{enumerate}
+	
+	\section{Metoda siecznych}
+	\subsection{Krótki opis problemu}
+	Przybliżenie pierwiastka funkcji $f$ poprzez geomatryczne wykorzystanie równania siecznej:
+	$ x_(n+1) = x_n - v_0 * \frac{x_(n+1) - x_n}{v_(n+1) - v_n}$.
+	
+	Funkcja secant wymaga podania:
+	\begin{itemize}
+		\item funkcji $f(x)$ (jako funkcji lambda),
+		\item przybliżenie początkowe $x_0, x_1$,
+		\item dwóch kryteriów dokładności: $\delta$ (tolerancja długości przedziału) oraz $\epsilon$ (tolerancja wartości funkcji).
+		\item $maxit$ - maksymalnej liczby iteracji
+	\end{itemize}
+	Wynikiem działania funkcji miała być czwórka $\texttt{(r, v, it, err)}$, zawierająca przybliżenie pierwiastka, wartość funkcji w tym punkcie, liczbę wykonanych iteracji oraz kod błędu ($1$ w przypadku  nie osiągnięci wymaganej dokładności w $maxit$ iteracji, $0$ w przeciwnym razie).
+	
+	\subsection{Rozwiązanie}
+	Implementacja algorytmu została wykonana na podstawie zaprezentowanego na wykładzie pseudokodu. Kod źródłowy został napisany w języku Julia, co pozwoliło na spełnienie wymogu precyzji $\textbf{Float64}$.
+	
+	\subsubsection*{Kroki Algorytmu}
+	
+	\begin{enumerate}
+		\item Wyliczenie początkowych wartości $v_0 = f(x_0)$ i $v_1 = f(x_1)$. Co ważne $x_1$ jest wartością nowszą i bliższą pierwiastkowi.
+		\item \textbf{Pętla iteracyjna:}
+		\begin{itemize}
+			\item Sprawdza czy $|v_0| \ge |v_1|$ -> If \textbf{true} wtedy ją zamienia - ta linijka kodu ma na zadaniu utrzymanie niezmiennika - $x_1$ jest zawsze bliższym przybliżeniem.
+			\item Sprawdza czy $|v_1 - v_0| \le \num{1e-15}$ -> If \textbf{true} zwraca wyniki gdyż sieczna jest praktycznie równoległa do osi \textbf{OX}. Przecięcie znajduje się daleko - funkcja zwracałaby niedokładne wyniki.
+			\item Wyliczenie nowego przybliżenia ze wzoru na sieczną - $ x_1 = x_0 - v_0 * \frac{x_1 - x_0}{v_1 - v_0}$.
+			\item Sprawdzenie $|x_1 - x_0| \le \delta || |v_0| \le \epsilon$ -> If \textbf{true} znaczy że spełnilismy wymogi zadania - zwracamy wynik.
+		\end{itemize}
+		\item \textbf{Zakończenie:} Jeśli przekroczyliśmy $maxit$ zwracamy $error = 1$.
+	\end{enumerate}
+	
+	\section{Zadanie 4}
+	
+	\subsection{Krótki opis problemu}
+	Zadanie polegało na przetestowaniu zaimplementowanych metod i porównanie otrzymanych wyników.
+	
+	\subsection{Wyniki i ich interpretacja}
+	
+	Poniższa tabela zestawienia wyniki uzyskane dla każdej metody. Wszystkie metody osiągnęły wymaganą zbieżność ($\text{err}=0$).
+	
+	\begin{table}[h!]
+	\centering % Wyśrodkowanie tabeli
+	\caption{Porównanie Metod dla $f(x) = \sin(x) - (0.5x)^2$}
+	\label{tab:zad4_results}
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		\textbf{Metoda} & \textbf{Liczba Iteracji (it)} & \textbf{Pierwiastek $r$} & \textbf{Wartość $f(r)$} & \textbf{Rząd Zbieżności} \\
+		\hline
+		Bisekcji & 16 & $1.933753967\dots$ & $-2.70 \cdot 10^{-7}$ & Liniowy ($p=1$) \\
+		\hline
+		Newtona & \textbf{4} & $1.933753780\dots$ & $-2.24 \cdot 10^{-8}$ & Kwadratowy ($p=2$) \\
+		\hline
+		Siecznych & 5 & $1.933753877\dots$ & $-1.51 \cdot 10^{-7}$ & Nadliniowy ($p \approx 1.618$) \\
+		\hline
+	\end{tabular}
+	\end{table}
+	
+	\subsection{Interpretacja Wyników}
+	
+	Wyniki są w pełni zgodne z teorią rzędów zbieżności metod numerycznych:
+	
+	\begin{enumerate}
+		\item \textbf{Metoda Newtona} okazała się najszybsza, osiągając wymaganą dokładność już po \textbf{4 iteracjach}. Jest to bezpośrednią konsekwencją jej \textbf{kwadratowego} rzędu zbieżności ($p=2$), gdzie liczba poprawnych cyfr podwaja się w każdej iteracji. Uzyskana wartość funkcji ($|v| \approx 2.24 \cdot 10^{-8}$) jest najmniejsza, potwierdzając najwyższą precyzję.
+		
+		\item \textbf{Metoda Siecznych} osiągnęła zbieżność w \textbf{5 iteracjach}. Jej wydajność jest bliska Metodzie Newtona dzięki \textbf{nadliniowemu} rzędowi zbieżności ($p \approx 1.618$).
+		
+		\item \textbf{Metoda Bisekcji} wymagała \textbf{16 iteracji}. Jej \textbf{liniowy} rząd zbieżności ($p=1$) powoduje, że jest najwolniejsza, ponieważ długość przedziału jest dzielona tylko przez dwa w każdym kroku.
+	\end{enumerate}
+	
+	\vspace{0.5cm}
+	\subsection{Wnioski}
+	Metoda Newtona okazała się najbardziej efektywną funkcją aproksymacji pierwiastka. Posiada ona jednak dość istotny minus - wymaga policzenia pochodnej. W pojedynczym przypadku nie jest to problem - łatwo jest ją wyprowadzić samemu, lecz po wprowadzeniu możliwości wpisywania funkcji przez użytkownika, należałoby zastosować metody aproksymacji pochodnej. Przykładem takiej aproksymacji jest metoda siecznych - jak widać wyniki przez nią zwrócone są tylko o rząd mniej dokładne, a liczba iteracji nieznaczącą większa. \newline
+	W przypadku metody bisekcji widać, że precyzja nie jest o wiele gorsza od tej zwrócnej przez funkcje siecznej. Natomiast liczba iteracji rośnie kwadratowo co jest poważnym problemem. \newline
+	Podsumowując - metoda Newtona jest bezsprzecznie najszybsza i najdokładniejsza. Jednakże, w przypadku projektowania algorytmu ogólnego, przyjmującego dowolną funkcje, metoda siecznych wydaje się być najlepszym kompromisem.
+	
+	\section{Zadanie 5}
+	
+	\subsection{Opis Problemu}
+	
+	Zadanie polegało na znalezieniu wartości zmiennej $x$, dla której wykresy funkcji $y = 3x$ oraz $y = e^x$ się przecinają. Problem został przekształcony do znalezienia pierwiastków równania:
+	$$f(x) = e^x - 3x = 0$$
+	Z analizy wynika, że równanie to posiada dwa pierwiastki. Do rozwiązania użyto \textbf{Metody Bisekcji} z wymaganej dokładności obliczeń $\delta = 10^{-4}$ i $\epsilon = 10^{-4}$.
+	
+	\subsection{Dobór Przedziałów i Wyniki}
+	
+	Pierwiastki zostały znalezione poprzez dobór dwóch różnych przedziałów, w których funkcja $f(x)$ zmienia znak (co jest koniecznym warunkiem dla Metody Bisekcji).
+	
+	\begin{table}[h!]
+		\centering
+		\caption{Wyniki Metody Bisekcji dla $f(x) = e^x - 3x$}
+		\label{tab:zad5_results}
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			\textbf{Pierwiastek} & \textbf{Przedział Startowy} & \textbf{Liczba Iteracji (it)} & \textbf{Pierwiastek $r$} & \textbf{Wartość $f(r)$} \\
+			\hline
+			$r_1$ & $[0.5, 1.0]$ & 9 & $0.619140625$ & $9.07 \cdot 10^{-5}$ \\
+			\hline
+			$r_2$ & $[1.5, 2.0]$ & 13 & $1.5120849609375$ & $7.62 \cdot 10^{-5}$ \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	\subsection{Interpretacja Wyników}
+	
+	\begin{enumerate}
+		\item \textbf{Zbieżność Gwarantowana:} Metoda Bisekcji, będąca metodą przedziałową, z powodzeniem znalazła oba pierwiastki w zadanym przedziale, co jest typowe dla tej niezawodnej metody. Oba wyniki osiągnęły wymaganą dokładność ($\text{err}=0$).
+		
+		\item \textbf{Liczba Iteracji (it):}
+		Dla pierwiastka $r_1$, startując z przedziału o długości $L_0 = 0.5$, wymagane 9 iteracji jest w pełni zgodne z liniowym rzędem zbieżności. \newline
+		Dla pierwiastka $r_2$, startując z przedziału o długości $L_0 = 0.5$, wymagane 13 iteracji jest wyższe, co wskazuje, że kryterium stopu mogło być kontrolowane przez dokładność wartości $\epsilon$, lub przedział zbieżności był nieco wolniejszy. 
+	\end{enumerate}
+	
+	\subsection{Wnioski}
+	Funkcja bisekcji prawidłowo znajduje miejsce zerowe funkcji $ y = 3x - e^x $. Co więcej widać, że im bliżej pierwiastek jest któregoś z ograniczeń przedziałów, tym więcej iteracji musi wykonać bisekcja.
+	
+	\section{Zadanie 6}
+	
+	\subsection{Opis Problemu}
+	
+	Celem zadania było wyznaczenie miejsc zerowych dla dwóch funkcji $f_1(x) = e^{1-x} - 1$ oraz $f_2(x) = x \cdot e^{-x}$, stosując metody Bisekcji, Newtona i Siecznych. Wymagana dokładność to $\delta = 10^{-5}$ i $\epsilon = 10^{-5}$. Drugą częścią zadania była analiza zachowania Metody Newtona w niekorzystnych warunkach początkowych.
+	
+	\subsection{Wyniki Standardowe (Porównanie Metod)}
+	
+	Wszystkie metody skutecznie znalazły pierwiastki ($r=1$ dla $f_1$ i $r=0$ dla $f_2$).
+	
+	\begin{table}[h!]
+		\centering
+		\caption{Porównanie Metod dla Zadania 6}
+		\label{tab:zad6_results_std}
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			\textbf{Funkcja} & \textbf{Metoda} & \textbf{Liczba Iteracji (it)} & \textbf{Pierwiastek $r$} & \textbf{Wartość $f(r)$} \\
+			\hline
+			\hline
+			\multirow{3}{*}{$f_1(x) = e^{1-x} - 1$} & Bisekcji & 16 & $0.99999237\dots$ & $7.63 \cdot 10^{-6}$ \\
+			\cline{2-5}
+			& Newtona & \textbf{4} & $0.99999843\dots$ & $1.56 \cdot 10^{-6}$ \\
+			\cline{2-5}
+			& Siecznych & \textbf{4} & $0.99999941\dots$ & $5.90 \cdot 10^{-7}$ \\
+			\hline
+			\hline
+			\multirow{3}{*}{$f_2(x) = x \cdot e^{-x}$} & Bisekcji & 16 & $7.63 \cdot 10^{-6}$ & $7.63 \cdot 10^{-6}$ \\
+			\cline{2-5}
+			& Newtona & 5 & $-3.06 \cdot 10^{-7}$ & $-3.06 \cdot 10^{-7}$ \\
+			\cline{2-5}
+			& Siecznych & 5 & $-1.22 \cdot 10^{-7}$ & $-1.22 \cdot 10^{-7}$ \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	\subsubsection*{Interpretacja Wyników Standardowych}
+	\begin{enumerate}
+		\item Metody Newtona i Siecznych osiągnęły zbieżność w zaledwie 4-5 iteracjach, demonstrując swoje wyższe rzędy zbieżności ($p=2$ i $p \approx 1.618$).
+		\item Metoda Bisekcji, o liniowym rzędzie ($p=1$), wymagała 16 iteracji, co jest zgodne z teoretycznym minimum dla osiągnięcia dokładności $\delta = 10^{-5}$ w przedziałach startowych o długości około $1.0$.
+	\end{enumerate}
+	
+	\subsection{Analiza Przypadków Granicznych Metody Newtona}
+	
+	Zbadano zachowanie Metody Newtona w warunkach, które naruszają warunki zbieżności lub stabilności.
+	
+	\begin{table}[h!]
+		\centering
+		\caption{Wyniki Analizy Przypadków Granicznych Metody Newtona}
+		\label{tab:zad6_results_edge}
+		% Zmodyfikowano ostatnią kolumnę na p{3.5cm} w celu wymuszenia łamania linii (fix Overfull \hbox)
+		\begin{tabular}{|c|c|c|c|c|p{3.5cm}|}
+			\hline
+			\textbf{Funkcja} & \textbf{Warunek Startowy} & \textbf{Wynik $r$} & \textbf{Iteracje (it)} & \textbf{Err} & \textbf{Wniosek} \\
+			\hline
+			\hline
+			$f_1(x) = e^{1-x} - 1$ & $x_0 \in (1, \infty]$ & $14.39866\dots$ & 10 & 0 & Zbieżność do dużej wartości, poza pierwiastkiem $r=1$. \\
+			\hline
+			$f_2(x) = x \cdot e^{-x}$ & $x_0 > 1$ & $14.39866\dots$ & 10 & 0 & Zbieżność do fałszywego pierwiastka ($r \ne 0$). Zły wybór $x_0$. \\
+			\hline
+			$f_2(x) = x \cdot e^{-x}$ & $x_0 = 1$ & $1.0$ & 1 & 2 & \textbf{Błąd Stabilności}: Wykryto $f'(x_0) \approx 0$ (punkt krytyczny). \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	\subsubsection*{Interpretacja Przypadków Granicznych}
+	
+	1.  \textbf{Niestabilna Zbieżność (Warunki $x_0 > 1$):} Zły wybór przybliżenia początkowego spowodował zbieżność algorytmu do niepoprawnej, bardzo dużej wartości ($r \approx 14.4$). To podkreśla wrażliwość Metody Newtona na wybór $x_0$, gdy nie ma gwarancji zbieżności. \newline
+	2.  \textbf{Dzielenie przez Zero ($x_0 = 1$ dla $f_2$):} W punkcie $x_0=1$ pochodna $f_2'(x)$ wynosi zero, co powoduje próbę dzielenia przez zero we wzorze Newtona. Algorytm słusznie zwrócił kod błędu $2$, sygnalizując niestabilność numeryczną w pobliżu lokalnego ekstremum.
+	
+	\subsection{Wnioski}
+	Dla wyników standardowych wnioski byłyby podobne co w zadaniu 4. \newline
+	Warto zająć się więc podanymi przykładami "granicznymi". Pokazują one cechę metody Newtona, która wcześniej nie musiała być oczywista - jest ona podatna na niestabilność spowodowaną m.in. równelogłości pochodnej do osi OX. \newline
+	Podsumowując, podczas wybierania metody do aproksymacji pierwiastka funkcji należy brać pod uwagę nie tylko szybkość i dokładność, ale także niezawodność. Z wprowadzonych w tym sprawozdaniu funkcji tylko metoda bisekcji gwarantuje nam zwrócenie prawidłowego wyniku - dzieje się to jednak kosztem efektywności.
+	Zadanie to jest świetnym przykładem że, programista zawsze powinien dobierać odpowiednie narzędzia z ostrożnością, analizując wymagania zadania. Osobiście traktowałbym metodę bisekcji jako funkcje "fallback", która byłaby wykonywana w przypadku zwrócenia błędu przez którąś z pozostałych metod.
+
+\end{document}
