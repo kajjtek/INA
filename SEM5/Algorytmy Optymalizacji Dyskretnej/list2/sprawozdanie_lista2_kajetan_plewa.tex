@@ -31,6 +31,8 @@
 \date{\today}
 
 \begin{document}
+		\maketitle
+	\thispagestyle{empty}
 		
 	\section{Zadanie 1: Plan zakupu i dostaw paliwa (Problem Transportowy)}
 	
@@ -142,7 +144,6 @@
 	\begin{itemize}
 		\item \textbf{Wartość funkcji celu (Maksymalny Zysk Netto):} Wynosi $\mathbf{5228.33}$ jednostek zysku.
 	\end{itemize}
-	Status modelu jest \textbf{Optymalny}. Optymalne rozwiązanie wyznacza alokacje czasu maszyn, które maksymalizują zysk przy jednoczesnym spełnieniu wszystkich minimalnych wymagań produkcyjnych i ograniczeń czasowych maszyn.
 	
 	\textbf{Alokacja Czasu Pracy (macierz $p_{ij}$ w minutach):}
 	$$
@@ -320,11 +321,11 @@
 	\mathbf{1 \to 2 \to 3 \to 5 \to 7 \to 9 \to 10}
 	$$
 	
-	\section{Zadanie 4b: Analiza Wyników Własnego Egzemplarza}
+	\subsection{Zadanie 4b: Analiza Wyników Własnego Egzemplarza}
 	
 	Przedstawione wyniki optymalizacji (dla modelu minimalizującego koszt z ograniczeniem czasowym) w oparciu o graf \texttt{graph\_custom.txt} potwierdzają spełnienie wszystkich postawionych kryteriów.
 	
-	\subsection{Kryteria Egzemplarza i Wnioski}
+	\subsubsection{Kryteria Egzemplarza i Wnioski}
 	\begin{enumerate}
 		\item \textbf{Liczba wierzchołków:} Graf zawiera $\mathbf{10}$ wierzchołków. (\checkmark)
 		\item \textbf{Koszt Ścieżki z Ograniczeniem Czasowym ($C_{\text{constr}}$) vs. Bez Ograniczenia ($C_{\text{unconstr}}$):}
@@ -340,9 +341,10 @@
 		\end{itemize}
 	\end{enumerate}
 	
-	\subsection{Analiza Przypadków Optymalizacji}
+	\subsubsection{Analiza Przypadków Optymalizacji}
 	
-	\subsubsection{Przypadek 1: Minimalizacja Kosztu z Limitem Czasowym $T = 15$}
+	
+	\paragraph{Przypadek 1: Minimalizacja Kosztu z Limitem Czasowym $T = 15$}
 	Optymalizator wybrał najtańszą ścieżkę, której czas sumaryczny wynosi dokładnie $15$, eliminując ścieżki zbyt wolne, nawet jeśli były tańsze.
 	
 	\begin{itemize}
@@ -395,75 +397,28 @@
 \textbf{Krawędź:} Koszt/Czas ($c/t$) | \textbf{Limit Czasu $T=15$}
 
 \begin{center}
-	\begin{tikzpicture}[
-		>=Stealth,
-		node distance=2.5cm,
-		vertex/.style={circle, draw=black, fill=blue!10, minimum size=6mm},
-		highlight/.style={circle, draw=black, fill=red!30, minimum size=6mm, ultra thick},
-		pathA/.style={->, very thick, blue, densely dashed}, % Najtańsza bez ograniczeń (3.0, czas 20)
-		pathB/.style={->, very thick, red, line width=1.5pt}, % Optymalna z ograniczeniem (5.0, czas 15)
-		pathC/.style={->, thick, draw=gray, dotted}, % Nieosiągalne lub droższe ścieżki
-		edge_style/.style={->, thick, draw=black!70}
-		]
-		
-		% Wierzchołki (Nodes)
-		\node (v1) [highlight, label=left:{\textbf{START}}] {1};
-		\node (v2) [vertex, right=of v1] {2};
-		\node (v3) [vertex, right=of v2] {3};
-		\node (v5) [vertex, below right=1.5cm and 0.5cm of v2] {5};
-		\node (v6) [vertex, below=of v5] {6};
-		\node (v10) [highlight, right=of v3, label=right:{\textbf{KONIEC}}] {10};
-		
-		% ---------------------------------
-		% SCIEZKA OPTYMALNA Z OGRANICZENIEM (KOSZT 5, CZAS 15) - 3 krawędzie
-		% ---------------------------------
-		\draw[pathB] (v1) -- (v2) node [midway, above] {\textbf{2}/5};
-		\draw[pathB] (v2) -- (v3) node [midway, above] {\textbf{1}/5};
-		\draw[pathB] (v3) -- (v10) node [midway, above] {\textbf{2}/5};
-		
-		% ---------------------------------
-		% NAJTAŃSZA ŚCIEŻKA BEZ OGRANICZEŃ (KOSZT 3, CZAS 20) - 2 krawędzie
-		% ---------------------------------
-		\draw[pathA] (v1) to (v5) node [midway, below left, sloped] {1/10};
-		\draw[pathA] (v5) to (v10) node [midway, below right, sloped] {2/10};
-		
-		% ---------------------------------
-		% INNE KRAWEDZIE (KONTROLA)
-		% ---------------------------------
-		% Scieżka 1-6-10 (Koszt 6, Czas 15) - Feasible, ale droższa niż P_B
-		\draw[pathC] (v1) to (v6) node [midway, left] {3/10};
-		\draw[pathC] (v6) to (v10) node [midway, below] {3/5};
-		
-		% Dodatkowe krawędzie
-		\draw[edge_style] (v2) -- (v5) node [midway, left] {1/5};
-		\draw[edge_style] (v3) -- (v5) node [midway, right, sloped] {1/5};
-		
-		% ---------------------------------
-		% Legenda - Poprawiona struktura
-		\node [below right=3cm and 0.5cm of v1, align=left] (legend) {
-			\textbf{Ścieżki optymalne}\\[0.1cm]
-			\textcolor{red}{\textbf{\rule{1cm}{1.5pt}}} \textbf{Z Ograniczeniem Czasowym} ($C=5.0, T=15$)\\[0.1cm]
-			\textcolor{blue}{\textbf{\rule{1cm}{1.5pt} \small -- -- --}} \textbf{Bez Ograniczenia Czasowego} ($C=3.0, T=20$)\\[0.1cm]
-			\textcolor{gray}{\textbf{\rule{1cm}{1.5pt} \small $\cdots$}} Inne ścieżki Feasible (np. $1 \to 6 \to 10$, $C=6.0, T=15$).
-		};
-		
-	\end{tikzpicture}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.8\textwidth]{graph.png}
+		\label{fig:graph}
+		\caption{Wizualizacja grafu}
+	\end{figure}
 \end{center}
 		
 \subsubsection{(c) Całkowitoliczbowość zmiennych decyzyjnych}
- Założenie o całkowitoliczbowości w tym przypadku jest potrzebne, ponieważ bez niego optymalizator może wybierać niektóre krawędzie częściowo i
+ Założenie o całkowitoliczbowości w tym przypadku jest kluczowo - bez niego optymalizator może wybierać niektóre krawędzie częściowo i
 dzięki temu obniżać sztucznie całkowity koszt. Na przykładzie z poprzedniego
-podpunktu bez założenia całkowitoliczbowości algorytm wybrał krawędź 2ß10,
-z tym że wybrał ją z wagą 0.25, ponieważ normalnie nie mógłby jej użyć ze
+podpunktu bez założenia całkowitoliczbowości algorytm wybrał krawędź 1,5,
+z tym że wybrał ją z wagą mniejszą - normalnie nie mógłby jej użyć ze
 względu na zbyt duży koszt.
 
 
 \subsubsection{(d) Akceptowalność rozwiązania po usunięciu ograniczenia czasowego}
- Bez ograniczenia czasowego optymalizator zwróci poprawne wyniki, ponieważ wtedy wybieranie zależy tylko od czasu i ze względu na warunek równych
+ Bez ograniczenia czasowego optymalizator zwróci poprawne wyniki, ponieważ wtedy wybieranie zależy tylko od kosztu i ze względu na warunek równych
 wejść/wyjść, wybieranie dodatkowych krawędzi nie ma sensu. Dzieje się tak, ponieważ wtedy jeżeli istnieje tańsza droga między parą punktów to optymalizator
 wymieni ją za droższą.
 
-\section*{Zadanie 5: Analiza Wyników Modelu Cyrkulacji Przepływu}
+\section{Zadanie 5: Analiza Wyników Modelu Cyrkulacji Przepływu}
 
 Model ma na celu znalezienie minimalnego całkowitego przepływu ($\text{backwardedge}$) niezbędnego do zaspokojenia wszystkich minimalnych limitów przepływu zdefiniowanych w sieci (na krawędziach, na przepływach z $\text{Source}$ oraz do $\text{Final}$).
 
@@ -535,14 +490,14 @@ Przepływ ten odpowiada sumarycznemu, minimalnemu zapotrzebowaniu na każdą zmi
 
 Optymalne rozwiązanie:
 \begin{itemize}
-	\item Ustala minimalną siłę roboczą na 48 osób.
+	\item Ustala minimalną liczbę samochodów na 48.
 	\item Potwierdza, że \textbf{istnieje} akceptowalna alokacja, która spełnia wszystkie minimalne wymagania.
 	\item Zapewnia bilans przepływu w każdym wierzchołku, co jest kluczowe dla poprawności modelu cyrkulacji.
-	\item Dostarcza konkretny plan alokacji: np. Zmiana 2 otrzymuje największą liczbę pracowników ($\mathbf{20}$), a Dzielnica 3 dostarcza najwięcej pracowników ($\mathbf{23}$).
+	\item Dostarcza konkretny plan alokacji: np. Zmiana 2 otrzymuje największą liczbę pojazdów ($\mathbf{20}$), a Dzielnica 3 dostarcza najwięcej samochodów ($\mathbf{23}$).
 \end{itemize}
 	
 
-\section*{Zadanie 6: Optymalizacja Minimalnego Pokrycia Kamerami}
+\section{Zadanie 6: Optymalizacja Minimalnego Pokrycia Kamerami}
 
 \subsection{Opis Modelu Matematycznego}
 
@@ -613,8 +568,6 @@ Przeprowadzono optymalizację dla siatki $N=5, M=5$ oraz dwóch różnych promie
 	\end{tabular}
 \end{center}
 
-\textbf{Weryfikacja Kontradykcji:}
-Dla $k=3$ na siatce $5 \times 5$ zasięg każdej kamery jest tak duży, że dwie kamery (np. umieszczone w rogach, $(1, 1)$ i $(5, 5)$) powinny wystarczyć do pokrycia całej siatki. Fakt, że model wymaga $\mathbf{5}$ kamer, sugeruje, że model może zawierać \textbf{dodatkowe, nieujawnione ograniczenia} geometryczne (np. związane ze specyficznym ułożeniem, które preferuje ten model, lub błąd w logice pokrycia dla bardzo dużego $k$). Przy tak dużym zasięgu, $\mathbf{5}$ jest rozwiązaniem *akceptowalnym*, ale \textbf{prawdopodobnie nie optymalnym} w sensie matematycznym dla problemu minimalnego pokrycia zbiorem z tak szeroką maską.
 
 \subsubsection{Egzemplarz 2: Siatka $5 \times 5$ z Promieniem $k=2$}
 
@@ -645,8 +598,8 @@ Dla $k=3$ na siatce $5 \times 5$ zasięg każdej kamery jest tak duży, że dwie
 \textbf{Porównanie z $k=3$:}
 Wyniki wskazują, że niezależnie od promienia $k=2$ i $k=3$, optymalna minimalna liczba kamer wymagana przez \textbf{ten konkretny model} wynosi $\mathbf{5}$.
 \begin{itemize}
-	\item Dla $k=2$ zasięg jest mniejszy, a $\mathbf{5}$ kamer wydaje się być bardziej realistyczną, choć nadal prawdopodobnie nie minimalną wartością dla tego typu maski.
-	\item Fakt, że zmiana $k$ (znaczne zwiększenie zasięgu) nie wpłynęła na minimalną liczbę kamer, silnie sugeruje, że \textbf{struktura maski krzyżowej} (pokrywającej tylko wiersz i kolumnę, a nie cały kwadrat) jest dominującym czynnikiem wymuszającym dużą liczbę kamer, co jest sprzeczne z opisem "Zasięg każdej kamery (kwadrat...)" w wynikach.
+	\item Dla $k=2$ zasięg jest mniejszy
+	\item Fakt, że zmiana $k$ (znaczne zwiększenie zasięgu) nie wpłynęła na minimalną liczbę kamer, silnie sugeruje, że kształt siatki również m ogromne znaczenia dla wyników. Można podejrzewać, że istnieje moment od którego zwiększanie k nie powoduje szbykiego zmniejszania liczby kamer.
 \end{itemize}
 
 \subsection{Wnioski Końcowe}
@@ -656,7 +609,6 @@ Model programowania liniowego minimalnego pokrycia zbiorem poprawnie identyfikuj
 \begin{itemize}
 	\item \textbf{Optymalność:} Minimalna wymagana liczba kamer dla obu testowanych egzemplarzy wynosi $\mathbf{5}$.
 	\item \textbf{Wielokrotne Rozwiązania:} W obu przypadkach znaleziono alternatywne, optymalne zestawy pozycji dla 5 kamer.
-	\item \textbf{Niezgodność Opisu:} Istnieje niezgodność pomiędzy opisem zasięgu w wynikach ("Kwadrat o boku X") a implementacją modelu (`scan\_squares`), która wyraźnie tworzy \textbf{maskę krzyżową}. To ograniczenie na zasięg (tylko wiersze i kolumny) wymaga większej liczby kamer, co wyjaśnia, dlaczego model nie znalazł rozwiązania z 2 lub 3 kamerami, nawet przy dużym promieniu $k=3$.
 \end{itemize}
 		
 \end{document}

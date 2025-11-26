@@ -13,10 +13,10 @@
 #.*\n {printf("\n");}
 
 <ONECOMMA>\' {ECHO;BEGIN(INITIAL);}
-<ONECOMMA>[^']* {ECHO;}
+<ONECOMMA>[^'] {ECHO;}
 
 <DOUBLECOMMA>\" {ECHO;BEGIN(INITIAL);}
-<DOUBLECOMMA>[^"]* {ECHO;}
+<DOUBLECOMMA>[^"] {ECHO;}
 
 <COMMENT_O>\'\'\' {BEGIN(INITIAL);}
 <COMMENT_O>\'\'|\' {}

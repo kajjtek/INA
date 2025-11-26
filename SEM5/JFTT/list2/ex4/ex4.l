@@ -28,7 +28,9 @@
     }
 %}
 %option reentrant noyywrap
+%x PANIC
 %%
+<PANIC>. {printf("dsadas");}
 [ \t]+ ;
 \-{0,1}[0-9]+ {
     if(!error_flag){
@@ -100,6 +102,7 @@
 void yyerror(const char *s) {
     fprintf(stderr, "Error: %s\n", s);
     error_flag = 1;
+    BEGIN(PANIC);
 }
 
 int main(int argc, char **argv) {
