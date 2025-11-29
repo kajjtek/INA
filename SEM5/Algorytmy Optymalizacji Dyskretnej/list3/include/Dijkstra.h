@@ -6,10 +6,10 @@
 
 class Dijkstra {
     public:
-    std::vector<int> findAllPaths(Graph g, int start);
-    std::pair<int, int> findPath(Graph g, int start, int target);
+    std::vector<long long> findAllPaths(Graph g, int start);
+    std::pair<int, long long> findPath(Graph g, int start, int target);
     private:
-    std::vector<int> dijkstra(Graph g, int start);
+    std::vector<long long> dijkstra(Graph g, int start);
 };
 
 #endif

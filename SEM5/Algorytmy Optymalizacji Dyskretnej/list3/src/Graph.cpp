@@ -9,6 +9,7 @@
 Graph Graph::reverseGraph(){
     int* nCounts = new int[v_size]{};
     int* nEdges = new int[e_size];
+    int* nWeights = new int[w_size];
     int* position = new int[v_size-1]{};
 
     for(int i=0; i<v_size-1; i++){
@@ -38,17 +39,18 @@ Graph Graph::reverseGraph(){
             int shift = position[v];
             position[v]++;
             nEdges[left+shift]=u;
+            nWeights[left+shift]=weights[j];
         }
     }
     delete[] nCounts;
     delete[] position;
 
-    Graph nGraph(nVertices, nEdges, v_size, e_size);
+    Graph nGraph(nVertices, nEdges, nWeights, v_size, e_size, w_size);
 
     return nGraph;
 }
 
-Graph::Graph(int numberOfVertices, char t, std::vector<std::pair<int,int>> edges){
+Graph::Graph(int numberOfVertices, char t, std::vector<std::pair<int ,std::pair<int,int>>> edges){
     try {
         setType(t);
         setArrays(numberOfVertices, edges);
@@ -71,23 +73,23 @@ void Graph::setType(char t){
     else throw std::invalid_argument("The type input must be either U or D");
 }
 
-std::vector<int> Graph::getNeighbours(int current) {
+std::vector<std::pair<int, int>> Graph::getNeighbours(int current) {
     int start = this->vertices[current];
     int end = this->vertices[current+1];
-    std::vector<int> temp;
+    std::vector<std::pair<int, int>> temp;
     for(int i=start; i<end; i++) {
-        temp.push_back(this->edges[i]);
+        temp.push_back({this->weights[i], this->edges[i]});
     }
     return temp;
 }
 
-void Graph::setArrays(int n, std::vector<std::pair<int,int>> edgesImported){//to dziala dla posortowanych edgesImproted TODO dodac to w pliku ktory przerabia stdina
+void Graph::setArrays(int n, std::vector<std::pair<int ,std::pair<int,int>>> edgesImported){//to dziala dla posortowanych edgesImproted TODO dodac to w pliku ktory przerabia stdina
     int* counts = new int[n]{};//to inicjalizuje na zero zapameitaj sobie
     int* position = new int[n]{};
     this->vertices=new int[n+1];
     this->edges=new int[edgesImported.size()];
     for(int i=0; i<edgesImported.size();i++){
-        std::pair<int,int> Pair = edgesImported.at(i);
+        std::pair<int,int> Pair = edgesImported.at(i).second;
         int u = Pair.first-1;
         counts[u]++;//pamietaj ze u na koncu musi miec dodane +1 bo 0-index
     }
@@ -96,13 +98,15 @@ void Graph::setArrays(int n, std::vector<std::pair<int,int>> edgesImported){//to
         this->vertices[i]=this->vertices[i-1]+counts[i-1];
     }
     for(int i=0; i<edgesImported.size(); i++){
-        std::pair<int,int> Pair = edgesImported.at(i);
+        std::pair<int,int> Pair = edgesImported.at(i).second;
+        int weight = edgesImported.at(i).first;
         int u = Pair.first-1;
         int v = Pair.second-1;
         int left = vertices[u];
         int shift = position[u];
         position[u]++;
         edges[left+shift]=v;
+        weights[left+shift]=weight;
     }
     delete[] counts;
     delete[] position;
@@ -111,16 +115,20 @@ void Graph::setArrays(int n, std::vector<std::pair<int,int>> edgesImported){//to
 Graph::~Graph(){
     delete[] this->vertices;
     delete[] this->edges;
+    delete[] this->weights;
     this->vertices=nullptr;
     this->edges=nullptr;
+    this->weights=nullptr;
 }
 
-Graph::Graph(const Graph& other) : v_size(other.v_size), e_size(other.e_size) {
+Graph::Graph(const Graph& other) : v_size(other.v_size), e_size(other.e_size), w_size(other.w_size) {
     this->vertices=new int[v_size];
     this->edges=new int[e_size];
+    this->weights=new int[w_size];
 
     std::copy(other.vertices, other.vertices+other.v_size, this->vertices);
     std::copy(other.edges, other.edges+other.e_size, this->edges);
+    std::copy(other.weights, other.weights+other.w_size, this->weights);
 }
 
 Graph& Graph::operator=(const Graph& other){
@@ -130,23 +138,29 @@ Graph& Graph::operator=(const Graph& other){
 
     delete[] this->vertices;
     delete[] this->edges;
+    delete[] this->weights;
 
     this->v_size=other.v_size;
     this->e_size=other.e_size;
+    this->w_size=other.w_size;
 
     this->vertices=new int[v_size];
     this->edges=new int[e_size];
+    this->weights=new int[v_size];
 
     std::copy(other.vertices, other.vertices+other.v_size, this->vertices);
     std::copy(other.edges, other.edges+other.e_size, this->edges);
+    std::copy(other.weights, other.weights+other.w_size, this->weights);
     return *this;
 }
 
-Graph::Graph(Graph&& other) noexcept : v_size(other.v_size), e_size(other.e_size) {
+Graph::Graph(Graph&& other) noexcept : v_size(other.v_size), e_size(other.e_size), w_size(other.w_size) {
     other.vertices=nullptr;
     other.edges=nullptr;
+    other.weights=nullptr;
     other.v_size=0;
     other.e_size=0;
+    other.w_size=0;
 }
 
 Graph& Graph::operator=(Graph&& other) noexcept{
@@ -156,16 +170,21 @@ Graph& Graph::operator=(Graph&& other) noexcept{
 
     delete[] this->vertices;
     delete[] this->edges;
+    delete[] this->weights;
 
     this->v_size=other.v_size;
     this->e_size=other.e_size;
+    this->w_size=other.w_size;
     this->vertices=other.vertices;
     this->edges=other.edges;
+    this->weights=other.weights;
     
     other.vertices=nullptr;
     other.edges=nullptr;
+    other.weights=nullptr;
     other.v_size=0;
     other.e_size=0;
+    other.w_size=0;
     
     return *this;
 }
