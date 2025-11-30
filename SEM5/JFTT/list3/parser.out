@@ -1,0 +1,501 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> input
+Rule 1     input -> <empty>
+Rule 2     input -> input line
+Rule 3     line -> NEWLINE
+Rule 4     line -> exp NEWLINE
+Rule 5     line -> error NEWLINE
+Rule 6     exp -> NUM
+Rule 7     exp -> exp SUM exp
+Rule 8     exp -> exp SUB exp
+Rule 9     exp -> exp MUL exp
+Rule 10    exp -> exp DIV exp
+Rule 11    exp -> exp POW exp
+Rule 12    exp -> SUB NUM
+Rule 13    exp -> SUB LPAREN exp RPAREN
+Rule 14    exp -> LPAREN exp RPAREN
+
+Terminals, with rules where they appear
+
+DIV                  : 10
+LPAREN               : 13 14
+MUL                  : 9
+NEWLINE              : 3 4 5
+NUM                  : 6 12
+POW                  : 11
+RPAREN               : 13 14
+SUB                  : 8 12 13
+SUM                  : 7
+error                : 5
+
+Nonterminals, with rules where they appear
+
+exp                  : 4 7 7 8 8 9 9 10 10 11 11 13 14
+input                : 2 0
+line                 : 2
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . input
+    (1) input -> .
+    (2) input -> . input line
+
+    NEWLINE         reduce using rule 1 (input -> .)
+    error           reduce using rule 1 (input -> .)
+    NUM             reduce using rule 1 (input -> .)
+    SUB             reduce using rule 1 (input -> .)
+    LPAREN          reduce using rule 1 (input -> .)
+    $end            reduce using rule 1 (input -> .)
+
+    input                          shift and go to state 1
+
+state 1
+
+    (0) S' -> input .
+    (2) input -> input . line
+    (3) line -> . NEWLINE
+    (4) line -> . exp NEWLINE
+    (5) line -> . error NEWLINE
+    (6) exp -> . NUM
+    (7) exp -> . exp SUM exp
+    (8) exp -> . exp SUB exp
+    (9) exp -> . exp MUL exp
+    (10) exp -> . exp DIV exp
+    (11) exp -> . exp POW exp
+    (12) exp -> . SUB NUM
+    (13) exp -> . SUB LPAREN exp RPAREN
+    (14) exp -> . LPAREN exp RPAREN
+
+    NEWLINE         shift and go to state 3
+    error           shift and go to state 5
+    NUM             shift and go to state 6
+    SUB             shift and go to state 7
+    LPAREN          shift and go to state 8
+
+    line                           shift and go to state 2
+    exp                            shift and go to state 4
+
+state 2
+
+    (2) input -> input line .
+
+    NEWLINE         reduce using rule 2 (input -> input line .)
+    error           reduce using rule 2 (input -> input line .)
+    NUM             reduce using rule 2 (input -> input line .)
+    SUB             reduce using rule 2 (input -> input line .)
+    LPAREN          reduce using rule 2 (input -> input line .)
+    $end            reduce using rule 2 (input -> input line .)
+
+
+state 3
+
+    (3) line -> NEWLINE .
+
+    NEWLINE         reduce using rule 3 (line -> NEWLINE .)
+    error           reduce using rule 3 (line -> NEWLINE .)
+    NUM             reduce using rule 3 (line -> NEWLINE .)
+    SUB             reduce using rule 3 (line -> NEWLINE .)
+    LPAREN          reduce using rule 3 (line -> NEWLINE .)
+    $end            reduce using rule 3 (line -> NEWLINE .)
+
+
+state 4
+
+    (4) line -> exp . NEWLINE
+    (7) exp -> exp . SUM exp
+    (8) exp -> exp . SUB exp
+    (9) exp -> exp . MUL exp
+    (10) exp -> exp . DIV exp
+    (11) exp -> exp . POW exp
+
+    NEWLINE         shift and go to state 9
+    SUM             shift and go to state 10
+    SUB             shift and go to state 11
+    MUL             shift and go to state 12
+    DIV             shift and go to state 13
+    POW             shift and go to state 14
+
+
+state 5
+
+    (5) line -> error . NEWLINE
+
+    NEWLINE         shift and go to state 15
+
+
+state 6
+
+    (6) exp -> NUM .
+
+    NEWLINE         reduce using rule 6 (exp -> NUM .)
+    SUM             reduce using rule 6 (exp -> NUM .)
+    SUB             reduce using rule 6 (exp -> NUM .)
+    MUL             reduce using rule 6 (exp -> NUM .)
+    DIV             reduce using rule 6 (exp -> NUM .)
+    POW             reduce using rule 6 (exp -> NUM .)
+    RPAREN          reduce using rule 6 (exp -> NUM .)
+
+
+state 7
+
+    (12) exp -> SUB . NUM
+    (13) exp -> SUB . LPAREN exp RPAREN
+
+    NUM             shift and go to state 16
+    LPAREN          shift and go to state 17
+
+
+state 8
+
+    (14) exp -> LPAREN . exp RPAREN
+    (6) exp -> . NUM
+    (7) exp -> . exp SUM exp
+    (8) exp -> . exp SUB exp
+    (9) exp -> . exp MUL exp
+    (10) exp -> . exp DIV exp
+    (11) exp -> . exp POW exp
+    (12) exp -> . SUB NUM
+    (13) exp -> . SUB LPAREN exp RPAREN
+    (14) exp -> . LPAREN exp RPAREN
+
+    NUM             shift and go to state 6
+    SUB             shift and go to state 7
+    LPAREN          shift and go to state 8
+
+    exp                            shift and go to state 18
+
+state 9
+
+    (4) line -> exp NEWLINE .
+
+    NEWLINE         reduce using rule 4 (line -> exp NEWLINE .)
+    error           reduce using rule 4 (line -> exp NEWLINE .)
+    NUM             reduce using rule 4 (line -> exp NEWLINE .)
+    SUB             reduce using rule 4 (line -> exp NEWLINE .)
+    LPAREN          reduce using rule 4 (line -> exp NEWLINE .)
+    $end            reduce using rule 4 (line -> exp NEWLINE .)
+
+
+state 10
+
+    (7) exp -> exp SUM . exp
+    (6) exp -> . NUM
+    (7) exp -> . exp SUM exp
+    (8) exp -> . exp SUB exp
+    (9) exp -> . exp MUL exp
+    (10) exp -> . exp DIV exp
+    (11) exp -> . exp POW exp
+    (12) exp -> . SUB NUM
+    (13) exp -> . SUB LPAREN exp RPAREN
+    (14) exp -> . LPAREN exp RPAREN
+
+    NUM             shift and go to state 6
+    SUB             shift and go to state 7
+    LPAREN          shift and go to state 8
+
+    exp                            shift and go to state 19
+
+state 11
+
+    (8) exp -> exp SUB . exp
+    (6) exp -> . NUM
+    (7) exp -> . exp SUM exp
+    (8) exp -> . exp SUB exp
+    (9) exp -> . exp MUL exp
+    (10) exp -> . exp DIV exp
+    (11) exp -> . exp POW exp
+    (12) exp -> . SUB NUM
+    (13) exp -> . SUB LPAREN exp RPAREN
+    (14) exp -> . LPAREN exp RPAREN
+
+    NUM             shift and go to state 6
+    SUB             shift and go to state 7
+    LPAREN          shift and go to state 8
+
+    exp                            shift and go to state 20
+
+state 12
+
+    (9) exp -> exp MUL . exp
+    (6) exp -> . NUM
+    (7) exp -> . exp SUM exp
+    (8) exp -> . exp SUB exp
+    (9) exp -> . exp MUL exp
+    (10) exp -> . exp DIV exp
+    (11) exp -> . exp POW exp
+    (12) exp -> . SUB NUM
+    (13) exp -> . SUB LPAREN exp RPAREN
+    (14) exp -> . LPAREN exp RPAREN
+
+    NUM             shift and go to state 6
+    SUB             shift and go to state 7
+    LPAREN          shift and go to state 8
+
+    exp                            shift and go to state 21
+
+state 13
+
+    (10) exp -> exp DIV . exp
+    (6) exp -> . NUM
+    (7) exp -> . exp SUM exp
+    (8) exp -> . exp SUB exp
+    (9) exp -> . exp MUL exp
+    (10) exp -> . exp DIV exp
+    (11) exp -> . exp POW exp
+    (12) exp -> . SUB NUM
+    (13) exp -> . SUB LPAREN exp RPAREN
+    (14) exp -> . LPAREN exp RPAREN
+
+    NUM             shift and go to state 6
+    SUB             shift and go to state 7
+    LPAREN          shift and go to state 8
+
+    exp                            shift and go to state 22
+
+state 14
+
+    (11) exp -> exp POW . exp
+    (6) exp -> . NUM
+    (7) exp -> . exp SUM exp
+    (8) exp -> . exp SUB exp
+    (9) exp -> . exp MUL exp
+    (10) exp -> . exp DIV exp
+    (11) exp -> . exp POW exp
+    (12) exp -> . SUB NUM
+    (13) exp -> . SUB LPAREN exp RPAREN
+    (14) exp -> . LPAREN exp RPAREN
+
+    NUM             shift and go to state 6
+    SUB             shift and go to state 7
+    LPAREN          shift and go to state 8
+
+    exp                            shift and go to state 23
+
+state 15
+
+    (5) line -> error NEWLINE .
+
+    NEWLINE         reduce using rule 5 (line -> error NEWLINE .)
+    error           reduce using rule 5 (line -> error NEWLINE .)
+    NUM             reduce using rule 5 (line -> error NEWLINE .)
+    SUB             reduce using rule 5 (line -> error NEWLINE .)
+    LPAREN          reduce using rule 5 (line -> error NEWLINE .)
+    $end            reduce using rule 5 (line -> error NEWLINE .)
+
+
+state 16
+
+    (12) exp -> SUB NUM .
+
+    NEWLINE         reduce using rule 12 (exp -> SUB NUM .)
+    SUM             reduce using rule 12 (exp -> SUB NUM .)
+    SUB             reduce using rule 12 (exp -> SUB NUM .)
+    MUL             reduce using rule 12 (exp -> SUB NUM .)
+    DIV             reduce using rule 12 (exp -> SUB NUM .)
+    POW             reduce using rule 12 (exp -> SUB NUM .)
+    RPAREN          reduce using rule 12 (exp -> SUB NUM .)
+
+
+state 17
+
+    (13) exp -> SUB LPAREN . exp RPAREN
+    (6) exp -> . NUM
+    (7) exp -> . exp SUM exp
+    (8) exp -> . exp SUB exp
+    (9) exp -> . exp MUL exp
+    (10) exp -> . exp DIV exp
+    (11) exp -> . exp POW exp
+    (12) exp -> . SUB NUM
+    (13) exp -> . SUB LPAREN exp RPAREN
+    (14) exp -> . LPAREN exp RPAREN
+
+    NUM             shift and go to state 6
+    SUB             shift and go to state 7
+    LPAREN          shift and go to state 8
+
+    exp                            shift and go to state 24
+
+state 18
+
+    (14) exp -> LPAREN exp . RPAREN
+    (7) exp -> exp . SUM exp
+    (8) exp -> exp . SUB exp
+    (9) exp -> exp . MUL exp
+    (10) exp -> exp . DIV exp
+    (11) exp -> exp . POW exp
+
+    RPAREN          shift and go to state 25
+    SUM             shift and go to state 10
+    SUB             shift and go to state 11
+    MUL             shift and go to state 12
+    DIV             shift and go to state 13
+    POW             shift and go to state 14
+
+
+state 19
+
+    (7) exp -> exp SUM exp .
+    (7) exp -> exp . SUM exp
+    (8) exp -> exp . SUB exp
+    (9) exp -> exp . MUL exp
+    (10) exp -> exp . DIV exp
+    (11) exp -> exp . POW exp
+
+    NEWLINE         reduce using rule 7 (exp -> exp SUM exp .)
+    SUM             reduce using rule 7 (exp -> exp SUM exp .)
+    SUB             reduce using rule 7 (exp -> exp SUM exp .)
+    RPAREN          reduce using rule 7 (exp -> exp SUM exp .)
+    MUL             shift and go to state 12
+    DIV             shift and go to state 13
+    POW             shift and go to state 14
+
+  ! MUL             [ reduce using rule 7 (exp -> exp SUM exp .) ]
+  ! DIV             [ reduce using rule 7 (exp -> exp SUM exp .) ]
+  ! POW             [ reduce using rule 7 (exp -> exp SUM exp .) ]
+  ! SUM             [ shift and go to state 10 ]
+  ! SUB             [ shift and go to state 11 ]
+
+
+state 20
+
+    (8) exp -> exp SUB exp .
+    (7) exp -> exp . SUM exp
+    (8) exp -> exp . SUB exp
+    (9) exp -> exp . MUL exp
+    (10) exp -> exp . DIV exp
+    (11) exp -> exp . POW exp
+
+    NEWLINE         reduce using rule 8 (exp -> exp SUB exp .)
+    SUM             reduce using rule 8 (exp -> exp SUB exp .)
+    SUB             reduce using rule 8 (exp -> exp SUB exp .)
+    RPAREN          reduce using rule 8 (exp -> exp SUB exp .)
+    MUL             shift and go to state 12
+    DIV             shift and go to state 13
+    POW             shift and go to state 14
+
+  ! MUL             [ reduce using rule 8 (exp -> exp SUB exp .) ]
+  ! DIV             [ reduce using rule 8 (exp -> exp SUB exp .) ]
+  ! POW             [ reduce using rule 8 (exp -> exp SUB exp .) ]
+  ! SUM             [ shift and go to state 10 ]
+  ! SUB             [ shift and go to state 11 ]
+
+
+state 21
+
+    (9) exp -> exp MUL exp .
+    (7) exp -> exp . SUM exp
+    (8) exp -> exp . SUB exp
+    (9) exp -> exp . MUL exp
+    (10) exp -> exp . DIV exp
+    (11) exp -> exp . POW exp
+
+    NEWLINE         reduce using rule 9 (exp -> exp MUL exp .)
+    SUM             reduce using rule 9 (exp -> exp MUL exp .)
+    SUB             reduce using rule 9 (exp -> exp MUL exp .)
+    MUL             reduce using rule 9 (exp -> exp MUL exp .)
+    DIV             reduce using rule 9 (exp -> exp MUL exp .)
+    RPAREN          reduce using rule 9 (exp -> exp MUL exp .)
+    POW             shift and go to state 14
+
+  ! POW             [ reduce using rule 9 (exp -> exp MUL exp .) ]
+  ! SUM             [ shift and go to state 10 ]
+  ! SUB             [ shift and go to state 11 ]
+  ! MUL             [ shift and go to state 12 ]
+  ! DIV             [ shift and go to state 13 ]
+
+
+state 22
+
+    (10) exp -> exp DIV exp .
+    (7) exp -> exp . SUM exp
+    (8) exp -> exp . SUB exp
+    (9) exp -> exp . MUL exp
+    (10) exp -> exp . DIV exp
+    (11) exp -> exp . POW exp
+
+    NEWLINE         reduce using rule 10 (exp -> exp DIV exp .)
+    SUM             reduce using rule 10 (exp -> exp DIV exp .)
+    SUB             reduce using rule 10 (exp -> exp DIV exp .)
+    MUL             reduce using rule 10 (exp -> exp DIV exp .)
+    DIV             reduce using rule 10 (exp -> exp DIV exp .)
+    RPAREN          reduce using rule 10 (exp -> exp DIV exp .)
+    POW             shift and go to state 14
+
+  ! POW             [ reduce using rule 10 (exp -> exp DIV exp .) ]
+  ! SUM             [ shift and go to state 10 ]
+  ! SUB             [ shift and go to state 11 ]
+  ! MUL             [ shift and go to state 12 ]
+  ! DIV             [ shift and go to state 13 ]
+
+
+state 23
+
+    (11) exp -> exp POW exp .
+    (7) exp -> exp . SUM exp
+    (8) exp -> exp . SUB exp
+    (9) exp -> exp . MUL exp
+    (10) exp -> exp . DIV exp
+    (11) exp -> exp . POW exp
+
+    NEWLINE         reduce using rule 11 (exp -> exp POW exp .)
+    SUM             reduce using rule 11 (exp -> exp POW exp .)
+    SUB             reduce using rule 11 (exp -> exp POW exp .)
+    MUL             reduce using rule 11 (exp -> exp POW exp .)
+    DIV             reduce using rule 11 (exp -> exp POW exp .)
+    POW             reduce using rule 11 (exp -> exp POW exp .)
+    RPAREN          reduce using rule 11 (exp -> exp POW exp .)
+
+  ! SUM             [ shift and go to state 10 ]
+  ! SUB             [ shift and go to state 11 ]
+  ! MUL             [ shift and go to state 12 ]
+  ! DIV             [ shift and go to state 13 ]
+  ! POW             [ shift and go to state 14 ]
+
+
+state 24
+
+    (13) exp -> SUB LPAREN exp . RPAREN
+    (7) exp -> exp . SUM exp
+    (8) exp -> exp . SUB exp
+    (9) exp -> exp . MUL exp
+    (10) exp -> exp . DIV exp
+    (11) exp -> exp . POW exp
+
+    RPAREN          shift and go to state 26
+    SUM             shift and go to state 10
+    SUB             shift and go to state 11
+    MUL             shift and go to state 12
+    DIV             shift and go to state 13
+    POW             shift and go to state 14
+
+
+state 25
+
+    (14) exp -> LPAREN exp RPAREN .
+
+    NEWLINE         reduce using rule 14 (exp -> LPAREN exp RPAREN .)
+    SUM             reduce using rule 14 (exp -> LPAREN exp RPAREN .)
+    SUB             reduce using rule 14 (exp -> LPAREN exp RPAREN .)
+    MUL             reduce using rule 14 (exp -> LPAREN exp RPAREN .)
+    DIV             reduce using rule 14 (exp -> LPAREN exp RPAREN .)
+    POW             reduce using rule 14 (exp -> LPAREN exp RPAREN .)
+    RPAREN          reduce using rule 14 (exp -> LPAREN exp RPAREN .)
+
+
+state 26
+
+    (13) exp -> SUB LPAREN exp RPAREN .
+
+    NEWLINE         reduce using rule 13 (exp -> SUB LPAREN exp RPAREN .)
+    SUM             reduce using rule 13 (exp -> SUB LPAREN exp RPAREN .)
+    SUB             reduce using rule 13 (exp -> SUB LPAREN exp RPAREN .)
+    MUL             reduce using rule 13 (exp -> SUB LPAREN exp RPAREN .)
+    DIV             reduce using rule 13 (exp -> SUB LPAREN exp RPAREN .)
+    POW             reduce using rule 13 (exp -> SUB LPAREN exp RPAREN .)
+    RPAREN          reduce using rule 13 (exp -> SUB LPAREN exp RPAREN .)
+
