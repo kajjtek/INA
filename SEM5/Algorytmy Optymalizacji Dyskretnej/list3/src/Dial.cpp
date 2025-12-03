@@ -15,14 +15,17 @@ std::pair<int, long long> Dial::findPath(Graph &g, int start, int target, int c)
 std::vector<long long> Dial::dial(Graph &g, int start, int c) {
     int bucket_count = c+1;
     Container container(bucket_count);
-    std::vector<long long> d(g.v_size-1, __LONG_LONG_MAX__);
-    std::vector<int> parent(g.v_size-1, 0);
-    std::vector<std::list<int>::iterator> node_iterator(g.v_size-1);
+    int n = (g.v_size > 0) ? g.v_size-1 : 0;
+    const long long INF = LLONG_MAX;
+    std::vector<long long> d(n, INF);
+    std::vector<int> parent(n, -1);
+    std::vector<std::list<int>::iterator> node_iterator(n);
+    if(start < 0 || start >= n) return d;
     d[start] = 0;
     int current_bucket_index = -1;
     node_iterator[start] = container.at(0).insert(container.at(0).end(), start);
     int count = 0;
-    while(count<g.v_size-1) {
+    while(count < n) {
         current_bucket_index = getNextBucket(current_bucket_index, container, bucket_count);
         Bucket &current_bucket = container.at(current_bucket_index);
         while(!current_bucket.empty()) {
@@ -37,8 +40,8 @@ std::vector<long long> Dial::dial(Graph &g, int start, int c) {
 
 int Dial::getNextBucket(int k, Container &container, int c) {
     int k_count = k;
-    k_count = ++k_count%c;
-    Bucket current_bucket = container.at(k_count);
+    k_count = ++k_count % c;
+    Bucket &current_bucket = container.at(k_count);
     while(current_bucket.empty()) {
         k_count = ++k_count%c;
         current_bucket = container.at(k_count);
@@ -53,14 +56,14 @@ void Dial::updateProcedure(int current_node, Container &container, Graph &g, std
         int weight = neighbour_pair.first;
         long long current_distance = d[neighbour];
         long long new_distance = d[current_node] + weight;
-        int new_bucket = new_distance % c;
-        if(new_distance<current_distance) {
-            if(current_distance!=__LONG_LONG_MAX__)  {
-                container.at(current_distance%c).erase(node_iterator[neighbour]);  
+        int new_bucket = (int)(new_distance % c);
+        if(new_distance < current_distance) {
+            if(current_distance != LLONG_MAX)  {
+                container.at((int)(current_distance % c)).erase(node_iterator[neighbour]);  
             }
             node_iterator[neighbour] = container.at(new_bucket).insert(container.at(new_bucket).end(), neighbour);
             d[neighbour] = new_distance;
-            parent[neighbour]=current_node;
+            parent[neighbour] = current_node;
         }
     }
 }

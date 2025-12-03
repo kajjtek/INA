@@ -68,12 +68,10 @@ Graph::Graph(int numberOfVertices, char t, std::vector<std::pair<int ,std::pair<
 }
 
 void Graph::setType(char t){
-    if(t=='D') this->type=Type::Directed;
-    else if (t=='U') this->type=Type::Undirected;
-    else throw std::invalid_argument("The type input must be either U or D");
+    this->type=Type::Directed;
 }
 
-std::vector<std::pair<int, int>> Graph::getNeighbours(int current) {
+std::vector<std::pair<int, int>> Graph::getNeighbours(int current) const {
     int start = this->vertices[current];
     int end = this->vertices[current+1];
     std::vector<std::pair<int, int>> temp;
@@ -88,6 +86,7 @@ void Graph::setArrays(int n, std::vector<std::pair<int ,std::pair<int,int>>> edg
     int* position = new int[n]{};
     this->vertices=new int[n+1];
     this->edges=new int[edgesImported.size()];
+    this->weights=new int[edgesImported.size()];
     for(int i=0; i<edgesImported.size();i++){
         std::pair<int,int> Pair = edgesImported.at(i).second;
         int u = Pair.first-1;
@@ -146,7 +145,7 @@ Graph& Graph::operator=(const Graph& other){
 
     this->vertices=new int[v_size];
     this->edges=new int[e_size];
-    this->weights=new int[v_size];
+    this->weights=new int[w_size];
 
     std::copy(other.vertices, other.vertices+other.v_size, this->vertices);
     std::copy(other.edges, other.edges+other.e_size, this->edges);

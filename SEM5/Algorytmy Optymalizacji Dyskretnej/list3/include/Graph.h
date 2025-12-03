@@ -23,7 +23,7 @@ class Graph {
     Graph(Graph&& other) noexcept;
     Graph& operator=(Graph&& other) noexcept;
     Graph reverseGraph();
-    std::vector<std::pair<int, int>> getNeighbours(int current);
+    std::vector<std::pair<int, int>> getNeighbours(int current) const;
     private:
     void setType(char t);
     void setArrays(int n, std::vector<std::pair<int ,std::pair<int,int>>> edges);
