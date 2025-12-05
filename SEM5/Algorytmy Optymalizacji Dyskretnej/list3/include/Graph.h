@@ -10,6 +10,8 @@ class Graph {
     int* vertices;
     int* edges;
     int* weights;
+    int max_weight;
+    int min_weight;
     int v_size;
     int e_size;
     int w_size;

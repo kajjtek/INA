@@ -140,7 +140,7 @@ std::vector<int> Parser::parseSSSP(const std::string& filename) {
             // Źródło: s V (V - indeks wierzchołka)
             int sourceNode;
             ss >> sourceNode;
-            sources.push_back(sourceNode);
+            sources.push_back(sourceNode-1);
         } else {
             // Ignorujemy inne, jeśli istnieją, ale w tym formacie nie powinny.
         }

@@ -95,21 +95,11 @@ void saveP2PResult(
 int main(int argc, char* argv[]) {
     // 1. Parsowanie argumentów linii poleceń
     std::string graphFile, ssFile, p2pFile, ssOutFile, p2pOutFile;
-    int maxCost = -1; // Maksymalna waga krawędzi C
     std::cout<<"JESTEM"<<std::endl;
     
     for (int i = 1; i < argc; ++i) {
         if (std::string(argv[i]) == "-d" && i + 1 < argc) {
             graphFile = argv[++i];
-        } else if (std::string(argv[i]) == "-c" && i + 1 < argc) {
-            try {
-                maxCost = std::stoi(argv[++i]);
-                if (maxCost <= 0) throw std::runtime_error("Waga musi byc dodatnia.");
-            } catch (const std::exception& e) {
-                std::cerr << "Blad: Nieprawidlowa wartosc dla -c: " << e.what() << "\n";
-                printUsage(argv[0]);
-                return 1;
-            }
         } else if (std::string(argv[i]) == "-ss" && i + 1 < argc) {
             ssFile = argv[++i];
         } else if (std::string(argv[i]) == "-oss" && i + 1 < argc) {
@@ -128,11 +118,6 @@ int main(int argc, char* argv[]) {
     // 2. Walidacja argumentów
     if (graphFile.empty()) {
         std::cerr << "Blad: Wymagany plik grafu (-d).\n";
-        printUsage(argv[0]);
-        return 1;
-    }
-    if (maxCost == -1) {
-        std::cerr << "Blad: Wymagana maksymalna waga krawedzi (-c) dla algorytmu Diala.\n";
         printUsage(argv[0]);
         return 1;
     }
@@ -162,6 +147,7 @@ int main(int argc, char* argv[]) {
 
         // Parsowanie grafu: niezbędne, aby uzyskać obiekt Graph
         Graph graph = parser.parseGraph(graphFile);
+        int maxCost = graph.max_weight;
 
 
         if (isSSSP) {

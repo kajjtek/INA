@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
+#include <climits>
 
 Graph Graph::reverseGraph(){
     int* nCounts = new int[v_size]{};
@@ -56,6 +57,7 @@ Graph::Graph(int numberOfVertices, char t, std::vector<std::pair<int ,std::pair<
         setArrays(numberOfVertices, edges);
         this->v_size=numberOfVertices+1;
         this->e_size=edges.size();
+        this->w_size=edges.size();
     } catch (const std::invalid_argument& e){
         std::cerr <<"Type class Error !" <<std::endl;
         std::cerr<<"Error:"<<e.what()<<std::endl;
@@ -84,6 +86,9 @@ std::vector<std::pair<int, int>> Graph::getNeighbours(int current) const {
 void Graph::setArrays(int n, std::vector<std::pair<int ,std::pair<int,int>>> edgesImported){//to dziala dla posortowanych edgesImproted TODO dodac to w pliku ktory przerabia stdina
     int* counts = new int[n]{};//to inicjalizuje na zero zapameitaj sobie
     int* position = new int[n]{};
+    int max = INT_MIN;
+    int min = INT_MAX;
+
     this->vertices=new int[n+1];
     this->edges=new int[edgesImported.size()];
     this->weights=new int[edgesImported.size()];
@@ -99,6 +104,9 @@ void Graph::setArrays(int n, std::vector<std::pair<int ,std::pair<int,int>>> edg
     for(int i=0; i<edgesImported.size(); i++){
         std::pair<int,int> Pair = edgesImported.at(i).second;
         int weight = edgesImported.at(i).first;
+        if(weight>max) max = weight;
+        if(weight<min) min = weight;
+
         int u = Pair.first-1;
         int v = Pair.second-1;
         int left = vertices[u];
@@ -109,6 +117,8 @@ void Graph::setArrays(int n, std::vector<std::pair<int ,std::pair<int,int>>> edg
     }
     delete[] counts;
     delete[] position;
+    this->max_weight=max;
+    this->min_weight=min;
 }
 
 Graph::~Graph(){

@@ -1,8 +1,8 @@
-#include "RadixDijkstra.h"
+#include "../include/RadixDijkstra.h"
 #include <queue>
 #include <functional>
-#include "Graph.h"
-#include "RadixHeap.hpp"
+#include "../include/Graph.h"
+#include "../include/RadixHeap.hpp"
 #include <vector>
 #include <climits>
 
