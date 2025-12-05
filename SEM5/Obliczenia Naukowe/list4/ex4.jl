@@ -31,7 +31,7 @@ end
 
 function plotNewtonInterp(f, a::Float64, b::Float64, n::Int; nodes_type::Symbol = :equidistant)
     
-    x_nodes = select_nodes(a, b, n, nodes_type)
+    x_nodes = select_nodes(a, b, n; nodes_type = nodes_type)
     y_nodes = f.(x_nodes) 
 
     c_coeffs = ilorazyRoznicowe(x_nodes, y_nodes) 

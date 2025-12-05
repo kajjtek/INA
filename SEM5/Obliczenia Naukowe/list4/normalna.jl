@@ -9,6 +9,7 @@ function naturalna(x, fx)
         for j = n + 1 : -1 : 2 
             a[j-1] = a[j-1] - a[j] * w;
         end
+        println(a[n])
     end
     
     return a;

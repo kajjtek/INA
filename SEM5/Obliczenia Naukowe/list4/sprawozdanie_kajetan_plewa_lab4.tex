@@ -1,0 +1,183 @@
+\documentclass[11pt, a4paper]{article}
+
+% --- PREAMBUŁA (Uproszczona) ---
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel} % Ustawienie języka polskiego
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
+
+% Pakiety matematyczne i graficzne
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{hyperref}
+
+\hypersetup{colorlinks=true, urlcolor=blue, linkcolor=black, citecolor=black}
+
+\title{\vspace{-2cm}\textbf{Obliczenia Naukowe Laboratoria - Lista 4: Interpolacja Wielomianowa Newtona}}
+\author{Kajetan Plewa}
+\date{\today}
+
+\begin{document}
+	\maketitle
+	\thispagestyle{empty}
+	
+	\section{Implementacja: Ilorazy Różnicowe (Zad. 1)}
+	
+	\subsection{Krótki opis problemu}
+	Celem zadania było obliczenie współczynników $c_i$ wielomianu interpolacyjnego w postaci Newtona (ilorazów różnicowych) dla zadanych węzłów $x_i$ i wartości funkcji $f(x_i)$.  Wymogiem była implementacja algorytmu bez użycia tablicy dwuwymiarowej.
+	
+	\subsection{Rozwiązanie zaimplementowane w \texttt{ilorazyRoznicowe.jl}}
+	Algorytm został zaimplementowany z użyciem rekurencji. \newline
+	Dla każdego współczynnika $c_i$ korzystamy z przedstawionego na wykładzie wzoru: \newline
+	\begin{equation}
+		f[x_0, x_1, \dots, x_n] = \frac{f[x_1, x_2, \dots, x_n]-f[x_0, x_1, \dots, x_{n-1}]}{x_n-x_0}
+	\end{equation}
+	
+	\newpage
+	\section{Implementacja: Wartość Wielomianu w Postaci Newtona (Zad. 2)}
+	
+	\subsection{Krótki opis problemu}
+	Zadanie polegało na obliczeniu wartości wielomianu $N_n(x)$ w zadanym punkcie $x=t$. Wymagano implementacji w czasie $O(n)$.
+	
+	\subsection{Rozwiązanie zaimplementowane w \texttt{newton.jl}}
+	W celu osiągnięcia złożoności $O(n)$, skorzystano z postaci Newtona i \textbf{uogólnionego algorytmu Hornera}. Implementacja przetwarza współczynniki $c_i$ i węzły $x_i$ od najwyższego stopnia $n$ do $0$, iteracyjnie stosując wzór rekurencyjny
+	\begin{equation}
+		P_n(t) = c_i + (t - x_i) \cdot P_{n-1}(t)
+	\end{equation}
+	
+	\section{Implementacja: Konwersja do Postaci Naturalnej (Zad. 3)}
+	
+	\subsection{Krótki opis problemu}
+	Zadanie polegało na przekształceniu współczynników wielomianu z postaci Newtona ($c_i$) do postaci naturalnej ($a_i$), czyli $P_n(x) = a_n x^n + \dots + a_0$. Wymagana złożoność czasowa to $O(n^2)$.
+	
+	\subsection{Rozwiązanie zaimplementowane w \texttt{normalna.jl}}
+	Zaimplementowany algorytm, podobnie jak poprzedni korzysta z własności postaci Newtona. Zastosowano podejście iteracyjne które \textit{rozwija} składniki postaci Newtona.
+	\begin{equation}
+		P_n(t) = c_i + (t - x_i) \cdot P_(n-1)(t)
+	\end{equation}
+	Poniżej znajduje się wytłumaczenie oznaczeń i działania kodu:
+	\begin{itemize}
+		\item Początkowo tablica $a$ kopiuje zawartość przekazanej tablicy z ilorazami różnicy.
+		\item W każdej iteracji znajdujemy współczynniki postaci normalnych dla $P_(n-i)$ czyli dla wielomianu o stopniu $i$ - idziemy od tyłu czyli zaczynamy od:
+		\begin{equation}
+			Q_{n-1} = c_{n-1} + (x-x_{n-1})*a[n]
+			\equiv Q_{n-1} = c_{n-1} + x*a[n] - x[n-1]*a[n]
+		\end{equation} 
+		\item Widać więc że wartość $a[n-1]$ spełnia równanie $a[n-1] = a[n-1] + x[n-1]*a[n]$. Będziemy z niego korzystać w uogólnionej formie:
+		\begin{equation}
+			a[i-1] = a[i-1] + x[i-1] * a[i]
+		\end{equation}
+		\item Dla $k$-tej iteracji ciąg $a[k] \dots a[n]$ będzie przechowywać poprawne współczynniki dla $Q_{n-k}$ w postaci normalnej.
+	\end{itemize}
+	Ostatecznie program zwraca $a$, które według powyższego załozenia przechowuje współczynniki opisujące postać normalną:
+	\begin{equation}
+		P(x) = a_nx^n + a_{n-1}x^{n-1} + \dots + a_0
+	\end{equation}
+	
+	\newpage
+	\section{Wybór Węzłów Interpolacyjnych (Zad. 4)}
+	
+	\subsection{Krótki opis problemu}
+	Zadanie to wymagało implementacji funkcji wyboru węzłów do interpolacji na przedziale $[a, b]$, umożliwiając wybór między węzłami równoodległymi a węzłami Czebyszewa.
+	
+	\subsection{Rozwiązanie: Konfiguracja Węzłów}
+	W pliku \texttt{ex4.jl} zaimplementowano funkcję \texttt{select\_nodes} obsługującą dwa typy węzłów, które są następnie wykorzystywane w głównej funkcji wizualizacyjnej \texttt{plotNewtonInterp}.
+	
+	\subsubsection{Węzły Równoodległe}
+	Generowane są w równych odstępach $h = (b-a)/n$: $x_k = a + k \cdot h$.
+	
+	\subsubsection{Węzły Czebyszewa}
+	Obliczenia oparto na pierwiastkach wielomianu Czebyszewa $T_{n+1}(x)$ - funkcja była podana na wykładzie nr 7:
+	$$
+	x_k = \frac{a+b}{2} + \frac{b-a}{2} \cdot \cos\left(\frac{2k+1}{2(n+1)}\pi\right)
+	$$
+	
+	\newpage
+	\section{Analiza Interpolacji dla Węzłów Równoodległych (Zad. 5)}
+	
+	Testy przeprowadzono dla funkcji $f(x) = e^x$ na $[0, 1]$ oraz $f(x) = x^2 \sin(x)$ na $[-1, 1]$, dla stopni $n=5, 10, 15$. 
+	
+	\subsection{Wyniki i ich interpretacja dla $f(x) = e^x$ na $[0, 1]$}
+	% TUTAJ WPISZESZ ANALIZĘ I WYKRES
+\begin{figure}[H]
+	\centering
+	\caption{Interpolacja $f(x) = |x|$ na $[-1, 1]$ (węzły równoodległe)}
+	% Ustawienie szerokości na 0.3\textwidth, aby zmieścić 3 obrazy w jednym wierszu
+	\subcaptionbox{$n=5$}{\centering \includegraphics[width=0.3\textwidth]{./graphs/fa_exp_n05_eq.png}} \quad
+	\subcaptionbox{$n=10$}{\centering \includegraphics[width=0.3\textwidth]{./graphs/fa_exp_n10_eq.png}} \quad
+	\subcaptionbox{$n=15$}{\centering 			\includegraphics[width=0.3\textwidth]{./graphs/fa_exp_n15_eq.png}}
+	\caption{Interpolacja funkcji $f(x)=|x|$ z punktem nierozróżnialności $x=0$.}
+	\label{fig:expX}
+\end{figure}	
+	\textbf{Interpretacja:} 
+	
+	\subsection{Wyniki i ich interpretacja dla $f(x) = x^2 \sin(x)$ na $[-1, 1]$}
+	% TUTAJ WPISZESZ ANALIZĘ I WYKRES
+	\begin{figure}[H]
+		\centering
+		\caption{Interpolacja $f(x) = |x|$ na $[-1, 1]$ (węzły równoodległe)}
+		% Ustawienie szerokości na 0.3\textwidth, aby zmieścić 3 obrazy w jednym wierszu
+		\subcaptionbox{$n=5$}{\centering \includegraphics[width=0.3\textwidth]{./graphs/fb_x2sinx_n05_eq.png}} \quad
+		\subcaptionbox{$n=10$}{\centering \includegraphics[width=0.3\textwidth]{./graphs/fb_x2sinx_n10_eq.png}} \quad
+		\subcaptionbox{$n=15$}{\centering 			\includegraphics[width=0.3\textwidth]{./graphs/fb_x2sinx_n15_eq.png}}
+		\caption{Interpolacja funkcji $f(x)=x^2*\sin(x)$.}
+		\label{fig:sinX}
+	\end{figure}	
+	
+	\subsection{Interpretacja:} 
+	
+	\subsection{Wnioski:}
+	
+	\newpage
+	\section{Analiza Zbieżności i Zjawisk Rozbieżności (Zad. 6)}
+	
+	Zadanie polegało na porównaniu węzłów równoodległych i Czebyszewa na przykładach prowadzących do niestabilności lub wolnej zbieżności.
+	
+	\subsection{Wyniki i ich interpretacja dla $f(x) = \frac{1}{1+x^2}$ na $[-5, 5]$ (Zjawisko Runge'go)}
+	% TUTAJ WPISZESZ ANALIZĘ I WYKRESY
+	
+	\begin{figure}[H]
+	\centering
+	\caption{Interpolacja $f(x) = |x|$ na $[-1, 1]$ (węzły równoodległe)}
+	% Ustawienie szerokości na 0.3\textwidth, aby zmieścić 3 obrazy w jednym wierszu
+	\subcaptionbox{$n=5$}{\centering \includegraphics[width=0.3\textwidth]{./graphs/fb_runge_n05_eq.png}} \quad
+	\subcaptionbox{$n=10$}{\centering \includegraphics[width=0.3\textwidth]{./graphs/fb_runge_n10_eq.png}} \quad
+	\subcaptionbox{$n=15$}{\centering 			\includegraphics[width=0.3\textwidth]{./graphs/fb_runge_n15_eq.png}}
+	\subcaptionbox{$n=5$}{\centering \includegraphics[width=0.3\textwidth]{./graphs/fb_runge_n05_czeb.png}} \quad
+	\subcaptionbox{$n=10$}{\centering \includegraphics[width=0.3\textwidth]{./graphs/fb_runge_n10_czeb.png}} \quad
+	\subcaptionbox{$n=15$}{\centering 			\includegraphics[width=0.3\textwidth]{./graphs/fb_runge_n15_czeb.png}}
+	\caption{Interpolacja funkcji $f(x) = \frac{1}{1+x^2}$ .}
+	\label{fig:aX}
+\end{figure}	
+	
+	\textbf{Interpretacja (Węzły Równoodległe):} Dla tej funkcji, zwanej funkcją Runge'go, zwiększanie stopnia $n$ prowadzi do gwałtownego wzrostu oscylacji i błędu w pobliżu krańców przedziału. Jest to klasyczny przypadek **Zjawiska Runge'go**, gdzie interpolacja dla węzłów równoodległych jest niestabilna.
+	
+	\textbf{Interpretacja (Węzły Czebyszewa):} Zastosowanie węzłów Czebyszewa, charakteryzujących się zagęszczeniem przy brzegach, skutecznie eliminuje problem oscylacji. Błąd jest utrzymany na niskim poziomie w całym przedziale, potwierdzając optymalne własności tych węzłów.
+	
+	\subsection{Wyniki i ich interpretacja dla $f(x) = |x|$ na $[-1, 1]$}
+	% TUTAJ WPISZESZ ANALIZĘ I WYKRESY
+	
+
+\begin{figure}[H]
+	\centering
+	\caption{Interpolacja $f(x) = |x|$ na $[-1, 1]$ (węzły równoodległe)}
+	% Ustawienie szerokości na 0.3\textwidth, aby zmieścić 3 obrazy w jednym wierszu
+	\subcaptionbox{$n=5$}{\centering \includegraphics[width=0.3\textwidth]{./graphs/fa_absX_n05_eq.png}} \quad
+	\subcaptionbox{$n=10$}{\centering \includegraphics[width=0.3\textwidth]{./graphs/fa_absX_n10_eq.png}} \quad
+	\subcaptionbox{$n=15$}{\centering 			\includegraphics[width=0.3\textwidth]{./graphs/fa_absX_n15_eq.png}}
+	\subcaptionbox{$n=5$}{\centering \includegraphics[width=0.3\textwidth]{./graphs/fa_absX_n05_czeb.png}} \quad
+	\subcaptionbox{$n=10$}{\centering \includegraphics[width=0.3\textwidth]{./graphs/fa_absX_n10_czeb.png}} \quad
+	\subcaptionbox{$n=15$}{\centering 			\includegraphics[width=0.3\textwidth]{./graphs/fa_absX_n15_czeb.png}}
+	\caption{Interpolacja funkcji $f(x) =  |x|$ .}
+	\label{fig:abX}
+\end{figure}	
+	
+	\textbf{Interpretacja:} Funkcja $f(x)=|x|$ nie jest różniczkowalna w punkcie $x=0$. Wielomian interpolacyjny próbuje wygładzić ten "narożnik". Mimo zwiększania $n$, błąd w otoczeniu $x=0$ pozostaje znaczący, co pokazuje, że brak gładkości funkcji limituje efektywność interpolacji wielomianowej, nawet przy zwiększaniu stopnia.
+	
+\subsection{Wnioski:}
+	
+\end{document}
