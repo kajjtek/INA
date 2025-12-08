@@ -1,8 +1,9 @@
+#KAJETAN PLEWA
 function ilorazyRekurencja(a::Int,b::Int,f::Vector{Float64},x::Vector{Float64})
     if a==b
         return f[a]
     end
-    return ilorazyRekurencja(a+1,b,f,x)-ilorazyRekurencja(a,b-1,f,x)/(x[b]-x[a])
+    return (ilorazyRekurencja(a+1,b,f,x)-ilorazyRekurencja(a,b-1,f,x))/(x[b]-x[a])
 end
 
 function ilorazyRoznicowe(x::Vector{Float64}, f::Vector{Float64})

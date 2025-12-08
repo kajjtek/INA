@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.11.8)  5 DEC 2025 01:32
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.11.8)  7 DEC 2025 20:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -519,61 +519,61 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 104.
 
-<./graphs/fa_exp_n05_eq.png, id=124, 602.25pt x 401.5pt>
+<./graphs/fa_exp_n05_eq.png, id=132, 602.25pt x 401.5pt>
 File: ./graphs/fa_exp_n05_eq.png Graphic file (type png)
 <use ./graphs/fa_exp_n05_eq.png>
 Package pdftex.def Info: ./graphs/fa_exp_n05_eq.png  used on input line 110.
 (pdftex.def)             Requested size: 145.11053pt x 96.74179pt.
-<./graphs/fa_exp_n10_eq.png, id=125, 602.25pt x 401.5pt>
+<./graphs/fa_exp_n10_eq.png, id=133, 602.25pt x 401.5pt>
 File: ./graphs/fa_exp_n10_eq.png Graphic file (type png)
 <use ./graphs/fa_exp_n10_eq.png>
 Package pdftex.def Info: ./graphs/fa_exp_n10_eq.png  used on input line 111.
 (pdftex.def)             Requested size: 145.11053pt x 96.74179pt.
-<./graphs/fa_exp_n15_eq.png, id=126, 602.25pt x 401.5pt>
+<./graphs/fa_exp_n15_eq.png, id=134, 602.25pt x 401.5pt>
 File: ./graphs/fa_exp_n15_eq.png Graphic file (type png)
 <use ./graphs/fa_exp_n15_eq.png>
 Package pdftex.def Info: ./graphs/fa_exp_n15_eq.png  used on input line 112.
 (pdftex.def)             Requested size: 145.11053pt x 96.74179pt.
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 118.
+(hyperref)                removing `math shift' on input line 115.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `superscript' on input line 118.
+(hyperref)                removing `superscript' on input line 115.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\sin' on input line 118.
+(hyperref)                removing `\sin' on input line 115.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 118.
+(hyperref)                removing `math shift' on input line 115.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 118.
+(hyperref)                removing `math shift' on input line 115.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 118.
+(hyperref)                removing `math shift' on input line 115.
 
-<./graphs/fb_x2sinx_n05_eq.png, id=127, 602.25pt x 401.5pt>
+<./graphs/fb_x2sinx_n05_eq.png, id=135, 602.25pt x 401.5pt>
 File: ./graphs/fb_x2sinx_n05_eq.png Graphic file (type png)
 <use ./graphs/fb_x2sinx_n05_eq.png>
-Package pdftex.def Info: ./graphs/fb_x2sinx_n05_eq.png  used on input line 124.
+Package pdftex.def Info: ./graphs/fb_x2sinx_n05_eq.png  used on input line 121.
 
 (pdftex.def)             Requested size: 145.11053pt x 96.74179pt.
-<./graphs/fb_x2sinx_n10_eq.png, id=128, 602.25pt x 401.5pt>
+<./graphs/fb_x2sinx_n10_eq.png, id=136, 602.25pt x 401.5pt>
 File: ./graphs/fb_x2sinx_n10_eq.png Graphic file (type png)
 <use ./graphs/fb_x2sinx_n10_eq.png>
-Package pdftex.def Info: ./graphs/fb_x2sinx_n10_eq.png  used on input line 125.
+Package pdftex.def Info: ./graphs/fb_x2sinx_n10_eq.png  used on input line 122.
 
 (pdftex.def)             Requested size: 145.11053pt x 96.74179pt.
-<./graphs/fb_x2sinx_n15_eq.png, id=129, 602.25pt x 401.5pt>
+<./graphs/fb_x2sinx_n15_eq.png, id=137, 602.25pt x 401.5pt>
 File: ./graphs/fb_x2sinx_n15_eq.png Graphic file (type png)
 <use ./graphs/fb_x2sinx_n15_eq.png>
-Package pdftex.def Info: ./graphs/fb_x2sinx_n15_eq.png  used on input line 126.
+Package pdftex.def Info: ./graphs/fb_x2sinx_n15_eq.png  used on input line 123.
 
 (pdftex.def)             Requested size: 145.11053pt x 96.74179pt.
 
@@ -583,116 +583,116 @@ Package pdftex.def Info: ./graphs/fb_x2sinx_n15_eq.png  used on input line 126.
 raphs/fb_x2sinx_n15_eq.png>]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 140.
+(hyperref)                removing `math shift' on input line 136.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\begingroup' on input line 140.
+(hyperref)                removing `\begingroup' on input line 136.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\endgroup' on input line 140.
+(hyperref)                removing `\endgroup' on input line 136.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\@@over' on input line 140.
+(hyperref)                removing `\@@over' on input line 136.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `superscript' on input line 140.
+(hyperref)                removing `superscript' on input line 136.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 140.
+(hyperref)                removing `math shift' on input line 136.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 140.
+(hyperref)                removing `math shift' on input line 136.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 140.
+(hyperref)                removing `math shift' on input line 136.
 
-<./graphs/fb_runge_n05_eq.png, id=141, 602.25pt x 401.5pt>
+<./graphs/fb_runge_n05_eq.png, id=147, 602.25pt x 401.5pt>
 File: ./graphs/fb_runge_n05_eq.png Graphic file (type png)
 <use ./graphs/fb_runge_n05_eq.png>
-Package pdftex.def Info: ./graphs/fb_runge_n05_eq.png  used on input line 147.
+Package pdftex.def Info: ./graphs/fb_runge_n05_eq.png  used on input line 143.
 (pdftex.def)             Requested size: 145.11053pt x 96.74179pt.
-<./graphs/fb_runge_n10_eq.png, id=142, 602.25pt x 401.5pt>
+<./graphs/fb_runge_n10_eq.png, id=148, 602.25pt x 401.5pt>
 File: ./graphs/fb_runge_n10_eq.png Graphic file (type png)
 <use ./graphs/fb_runge_n10_eq.png>
-Package pdftex.def Info: ./graphs/fb_runge_n10_eq.png  used on input line 148.
+Package pdftex.def Info: ./graphs/fb_runge_n10_eq.png  used on input line 144.
 (pdftex.def)             Requested size: 145.11053pt x 96.74179pt.
-<./graphs/fb_runge_n15_eq.png, id=143, 602.25pt x 401.5pt>
+<./graphs/fb_runge_n15_eq.png, id=149, 602.25pt x 401.5pt>
 File: ./graphs/fb_runge_n15_eq.png Graphic file (type png)
 <use ./graphs/fb_runge_n15_eq.png>
-Package pdftex.def Info: ./graphs/fb_runge_n15_eq.png  used on input line 149.
+Package pdftex.def Info: ./graphs/fb_runge_n15_eq.png  used on input line 145.
 (pdftex.def)             Requested size: 145.11053pt x 96.74179pt.
-<./graphs/fb_runge_n05_czeb.png, id=144, 602.25pt x 401.5pt>
+<./graphs/fb_runge_n05_czeb.png, id=150, 602.25pt x 401.5pt>
 File: ./graphs/fb_runge_n05_czeb.png Graphic file (type png)
 <use ./graphs/fb_runge_n05_czeb.png>
-Package pdftex.def Info: ./graphs/fb_runge_n05_czeb.png  used on input line 150
+Package pdftex.def Info: ./graphs/fb_runge_n05_czeb.png  used on input line 146
 .
 (pdftex.def)             Requested size: 145.11053pt x 96.74179pt.
-<./graphs/fb_runge_n10_czeb.png, id=145, 602.25pt x 401.5pt>
+<./graphs/fb_runge_n10_czeb.png, id=151, 602.25pt x 401.5pt>
 File: ./graphs/fb_runge_n10_czeb.png Graphic file (type png)
 <use ./graphs/fb_runge_n10_czeb.png>
-Package pdftex.def Info: ./graphs/fb_runge_n10_czeb.png  used on input line 151
+Package pdftex.def Info: ./graphs/fb_runge_n10_czeb.png  used on input line 147
 .
 (pdftex.def)             Requested size: 145.11053pt x 96.74179pt.
-<./graphs/fb_runge_n15_czeb.png, id=146, 602.25pt x 401.5pt>
+<./graphs/fb_runge_n15_czeb.png, id=152, 602.25pt x 401.5pt>
 File: ./graphs/fb_runge_n15_czeb.png Graphic file (type png)
 <use ./graphs/fb_runge_n15_czeb.png>
-Package pdftex.def Info: ./graphs/fb_runge_n15_czeb.png  used on input line 152
+Package pdftex.def Info: ./graphs/fb_runge_n15_czeb.png  used on input line 148
 .
 (pdftex.def)             Requested size: 145.11053pt x 96.74179pt.
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 161.
+(hyperref)                removing `math shift' on input line 153.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 161.
+(hyperref)                removing `math shift' on input line 153.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 161.
+(hyperref)                removing `math shift' on input line 153.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 161.
+(hyperref)                removing `math shift' on input line 153.
 
-<./graphs/fa_absX_n05_eq.png, id=147, 602.25pt x 401.5pt>
+<./graphs/fa_absX_n05_eq.png, id=153, 602.25pt x 401.5pt>
 File: ./graphs/fa_absX_n05_eq.png Graphic file (type png)
 <use ./graphs/fa_absX_n05_eq.png>
-Package pdftex.def Info: ./graphs/fa_absX_n05_eq.png  used on input line 169.
+Package pdftex.def Info: ./graphs/fa_absX_n05_eq.png  used on input line 161.
 (pdftex.def)             Requested size: 145.11053pt x 96.74179pt.
-<./graphs/fa_absX_n10_eq.png, id=148, 602.25pt x 401.5pt>
+<./graphs/fa_absX_n10_eq.png, id=154, 602.25pt x 401.5pt>
 File: ./graphs/fa_absX_n10_eq.png Graphic file (type png)
 <use ./graphs/fa_absX_n10_eq.png>
-Package pdftex.def Info: ./graphs/fa_absX_n10_eq.png  used on input line 170.
+Package pdftex.def Info: ./graphs/fa_absX_n10_eq.png  used on input line 162.
 (pdftex.def)             Requested size: 145.11053pt x 96.74179pt.
-<./graphs/fa_absX_n15_eq.png, id=149, 602.25pt x 401.5pt>
+<./graphs/fa_absX_n15_eq.png, id=155, 602.25pt x 401.5pt>
 File: ./graphs/fa_absX_n15_eq.png Graphic file (type png)
 <use ./graphs/fa_absX_n15_eq.png>
-Package pdftex.def Info: ./graphs/fa_absX_n15_eq.png  used on input line 171.
+Package pdftex.def Info: ./graphs/fa_absX_n15_eq.png  used on input line 163.
 (pdftex.def)             Requested size: 145.11053pt x 96.74179pt.
-<./graphs/fa_absX_n05_czeb.png, id=150, 602.25pt x 401.5pt>
+<./graphs/fa_absX_n05_czeb.png, id=156, 602.25pt x 401.5pt>
 File: ./graphs/fa_absX_n05_czeb.png Graphic file (type png)
 <use ./graphs/fa_absX_n05_czeb.png>
-Package pdftex.def Info: ./graphs/fa_absX_n05_czeb.png  used on input line 172.
+Package pdftex.def Info: ./graphs/fa_absX_n05_czeb.png  used on input line 164.
 
 (pdftex.def)             Requested size: 145.11053pt x 96.74179pt.
-<./graphs/fa_absX_n10_czeb.png, id=151, 602.25pt x 401.5pt>
+<./graphs/fa_absX_n10_czeb.png, id=157, 602.25pt x 401.5pt>
 File: ./graphs/fa_absX_n10_czeb.png Graphic file (type png)
 <use ./graphs/fa_absX_n10_czeb.png>
-Package pdftex.def Info: ./graphs/fa_absX_n10_czeb.png  used on input line 173.
+Package pdftex.def Info: ./graphs/fa_absX_n10_czeb.png  used on input line 165.
 
 (pdftex.def)             Requested size: 145.11053pt x 96.74179pt.
-<./graphs/fa_absX_n15_czeb.png, id=152, 602.25pt x 401.5pt>
+<./graphs/fa_absX_n15_czeb.png, id=158, 602.25pt x 401.5pt>
 File: ./graphs/fa_absX_n15_czeb.png Graphic file (type png)
 <use ./graphs/fa_absX_n15_czeb.png>
-Package pdftex.def Info: ./graphs/fa_absX_n15_czeb.png  used on input line 174.
+Package pdftex.def Info: ./graphs/fa_absX_n15_czeb.png  used on input line 166.
 
 (pdftex.def)             Requested size: 145.11053pt x 96.74179pt.
 
@@ -708,54 +708,42 @@ X_n15_eq.png> <./graphs/fa_absX_n05_czeb.png> <./graphs/fa_absX_n10_czeb.png> <
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
-
-
-Package rerunfilecheck Warning: File `sprawozdanie_kajetan_plewa_lab4.out' has 
-changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `sprawozdanie_kajetan_plewa_lab4.out
-':
-(rerunfilecheck)             Before: EF9657417B5C6B04314944BDA27400AA;5717
-(rerunfilecheck)             After:  C0F7650EA6F8F3FFA4EEA62637F74B65;5916.
+Package rerunfilecheck Info: File `sprawozdanie_kajetan_plewa_lab4.out' has not
+ changed.
+(rerunfilecheck)             Checksum: C0F7650EA6F8F3FFA4EEA62637F74B65;5916.
  ) 
 Here is how much of TeX's memory you used:
- 13340 strings out of 473190
- 214154 string characters out of 5715800
- 619892 words of memory out of 5000000
- 36385 multiletter control sequences out of 15000+600000
+ 13335 strings out of 473190
+ 214102 string characters out of 5715800
+ 617876 words of memory out of 5000000
+ 36380 multiletter control sequences out of 15000+600000
  575329 words of font info for 81 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,8n,79p,547b,586s stack positions out of 10000i,1000n,20000p,200000b,200000s
-
-pdfTeX warning (dest): name{section.7} has been referenced but does not exist, 
-replaced by a fixed one
-
-</usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><
-/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></
-usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></u
-sr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr
-/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/l
-ocal/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/loc
-al/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/
-texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/tex
-live/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texl
-ive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texliv
-e/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></usr/local/texlive/
-2025/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/20
-25/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2025
-/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/local/texlive/2025/t
-exmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2025/tex
-mf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2025/texmf
--dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive/2025/texmf-d
-ist/fonts/type1/public/cm-super/sfti1095.pfb></usr/local/texlive/2025/texmf-dis
-t/fonts/type1/public/cm-super/sftt1095.pfb></usr/local/texlive/2025/texmf-dist/
-fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on sprawozdanie_kajetan_plewa_lab4.pdf (6 pages, 795985 bytes).
+</usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
+></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
+</usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><
+/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></u
+sr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr
+/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/l
+ocal/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/loca
+l/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/t
+exlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/te
+xlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texl
+ive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></usr/local/texliv
+e/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/
+2025/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/20
+25/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/local/texlive/2025
+/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2025/t
+exmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2025/tex
+mf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive/2025/texmf
+-dist/fonts/type1/public/cm-super/sfti1095.pfb></usr/local/texlive/2025/texmf-d
+ist/fonts/type1/public/cm-super/sftt1095.pfb></usr/local/texlive/2025/texmf-dis
+t/fonts/type1/public/cm-super/sftt1200.pfb>
+Output written on sprawozdanie_kajetan_plewa_lab4.pdf (6 pages, 816951 bytes).
 PDF statistics:
- 264 PDF objects out of 1000 (max. 8388607)
- 195 compressed objects within 2 object streams
+ 271 PDF objects out of 1000 (max. 8388607)
+ 201 compressed objects within 3 object streams
  41 named destinations out of 1000 (max. 500000)
- 259 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 275 words of extra memory for PDF output out of 10000 (max. 10000000)
 

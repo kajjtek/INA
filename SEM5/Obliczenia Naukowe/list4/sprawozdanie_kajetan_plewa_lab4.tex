@@ -55,7 +55,7 @@
 	Zadanie polegało na przekształceniu współczynników wielomianu z postaci Newtona ($c_i$) do postaci naturalnej ($a_i$), czyli $P_n(x) = a_n x^n + \dots + a_0$. Wymagana złożoność czasowa to $O(n^2)$.
 	
 	\subsection{Rozwiązanie zaimplementowane w \texttt{normalna.jl}}
-	Zaimplementowany algorytm, podobnie jak poprzedni korzysta z własności postaci Newtona. Zastosowano podejście iteracyjne które \textit{rozwija} składniki postaci Newtona.
+	Zaimplementowany algorytm, podobnie jak poprzedni korzysta z własności postaci Newtona. Zastosowano podejście iteracyjne które \textit{odwija} składniki postaci Newtona.
 	\begin{equation}
 		P_n(t) = c_i + (t - x_i) \cdot P_(n-1)(t)
 	\end{equation}
@@ -82,7 +82,7 @@
 	\section{Wybór Węzłów Interpolacyjnych (Zad. 4)}
 	
 	\subsection{Krótki opis problemu}
-	Zadanie to wymagało implementacji funkcji wyboru węzłów do interpolacji na przedziale $[a, b]$, umożliwiając wybór między węzłami równoodległymi a węzłami Czebyszewa.
+	Zadanie to wymagało implementacji funkcji wyboru węzłów do interpolacji na przedziale $[a, b]$, umożliwiając wybór między węzłami równoodległymi a węzłami Czebyszewa. Zadaniem opierało się na wykorzystaniu napisanych przez nas funkcji z zadania 1 oraz 2.
 	
 	\subsection{Rozwiązanie: Konfiguracja Węzłów}
 	W pliku \texttt{ex4.jl} zaimplementowano funkcję \texttt{select\_nodes} obsługującą dwa typy węzłów, które są następnie wykorzystywane w głównej funkcji wizualizacyjnej \texttt{plotNewtonInterp}.
@@ -105,37 +105,33 @@
 	% TUTAJ WPISZESZ ANALIZĘ I WYKRES
 \begin{figure}[H]
 	\centering
-	\caption{Interpolacja $f(x) = |x|$ na $[-1, 1]$ (węzły równoodległe)}
+	\caption{Interpolacja funkcji $f(x)=e^x$ na $[0,1]$}
 	% Ustawienie szerokości na 0.3\textwidth, aby zmieścić 3 obrazy w jednym wierszu
 	\subcaptionbox{$n=5$}{\centering \includegraphics[width=0.3\textwidth]{./graphs/fa_exp_n05_eq.png}} \quad
 	\subcaptionbox{$n=10$}{\centering \includegraphics[width=0.3\textwidth]{./graphs/fa_exp_n10_eq.png}} \quad
 	\subcaptionbox{$n=15$}{\centering 			\includegraphics[width=0.3\textwidth]{./graphs/fa_exp_n15_eq.png}}
-	\caption{Interpolacja funkcji $f(x)=|x|$ z punktem nierozróżnialności $x=0$.}
 	\label{fig:expX}
 \end{figure}	
-	\textbf{Interpretacja:} 
-	
 	\subsection{Wyniki i ich interpretacja dla $f(x) = x^2 \sin(x)$ na $[-1, 1]$}
 	% TUTAJ WPISZESZ ANALIZĘ I WYKRES
 	\begin{figure}[H]
 		\centering
-		\caption{Interpolacja $f(x) = |x|$ na $[-1, 1]$ (węzły równoodległe)}
+		\caption{Interpolacja funkcji $f(x)=x^2\sin(x)$ na $[-1,1]$}
 		% Ustawienie szerokości na 0.3\textwidth, aby zmieścić 3 obrazy w jednym wierszu
 		\subcaptionbox{$n=5$}{\centering \includegraphics[width=0.3\textwidth]{./graphs/fb_x2sinx_n05_eq.png}} \quad
 		\subcaptionbox{$n=10$}{\centering \includegraphics[width=0.3\textwidth]{./graphs/fb_x2sinx_n10_eq.png}} \quad
 		\subcaptionbox{$n=15$}{\centering 			\includegraphics[width=0.3\textwidth]{./graphs/fb_x2sinx_n15_eq.png}}
-		\caption{Interpolacja funkcji $f(x)=x^2*\sin(x)$.}
 		\label{fig:sinX}
 	\end{figure}	
 	
-	\subsection{Interpretacja:} 
+	\subsection{Interpretacja:}  Niezależnie od wyboru funkcji i stopnia $n$ wykresy dowodzą iż interpolacja prawidłowo dopasowała wielomian do wierzchołków. Jest to dowód na poprawne zaimplementowanie owej metody.
 	
-	\subsection{Wnioski:}
+	\subsection{Wnioski:} Pozwala wysunąć tezę, że, metoda ta jest skutecznym sposobem dopasowania wielomianów. Jej efektywność w ogólności zostanie natomiast zweryfikowana w kolejnym zadaniu.
 	
 	\newpage
 	\section{Analiza Zbieżności i Zjawisk Rozbieżności (Zad. 6)}
 	
-	Zadanie polegało na porównaniu węzłów równoodległych i Czebyszewa na przykładach prowadzących do niestabilności lub wolnej zbieżności.
+	Zadanie polegało na porównaniu węzłów równoodległych i Czebyszewa, a dokładnie ich wpływu na skuteczność dopasowania wielomianu do wierzchołków.
 	
 	\subsection{Wyniki i ich interpretacja dla $f(x) = \frac{1}{1+x^2}$ na $[-5, 5]$ (Zjawisko Runge'go)}
 	% TUTAJ WPISZESZ ANALIZĘ I WYKRESY
@@ -153,10 +149,6 @@
 	\caption{Interpolacja funkcji $f(x) = \frac{1}{1+x^2}$ .}
 	\label{fig:aX}
 \end{figure}	
-	
-	\textbf{Interpretacja (Węzły Równoodległe):} Dla tej funkcji, zwanej funkcją Runge'go, zwiększanie stopnia $n$ prowadzi do gwałtownego wzrostu oscylacji i błędu w pobliżu krańców przedziału. Jest to klasyczny przypadek **Zjawiska Runge'go**, gdzie interpolacja dla węzłów równoodległych jest niestabilna.
-	
-	\textbf{Interpretacja (Węzły Czebyszewa):} Zastosowanie węzłów Czebyszewa, charakteryzujących się zagęszczeniem przy brzegach, skutecznie eliminuje problem oscylacji. Błąd jest utrzymany na niskim poziomie w całym przedziale, potwierdzając optymalne własności tych węzłów.
 	
 	\subsection{Wyniki i ich interpretacja dla $f(x) = |x|$ na $[-1, 1]$}
 	% TUTAJ WPISZESZ ANALIZĘ I WYKRESY
@@ -176,8 +168,21 @@
 	\label{fig:abX}
 \end{figure}	
 	
-	\textbf{Interpretacja:} Funkcja $f(x)=|x|$ nie jest różniczkowalna w punkcie $x=0$. Wielomian interpolacyjny próbuje wygładzić ten "narożnik". Mimo zwiększania $n$, błąd w otoczeniu $x=0$ pozostaje znaczący, co pokazuje, że brak gładkości funkcji limituje efektywność interpolacji wielomianowej, nawet przy zwiększaniu stopnia.
-	
+	\textbf{Interpretacja:} Dla tych dwóch funkcji widać różnicę między funkcją a dopasowanym wielomianem, nawet pomimo zwiększania stopnia wielomianu.
+	\newline
+	Dla obu tych funkcji widać otoczenie dla których szczególnie pojawiają się problemy.
+	W przypadku $|x|$ takim miejscem jest punkt $x=0$ - który nie jest różniczkowalny. Dlatego przedstawienie go za pomocą wielomianu jest trudne - widać więc taki łuk/wygładzenie.
+	\newline
+	Na wykresach funkcji $f_2(x) = \frac{1}{1+x^2}$ jest natomiast widoczny błąd na krańcach interesującego nas przedziału. Co ciekawe psuje się to jeszcze bardziej dla wyższych stopni.
+	Można to wytlumaczyć korzystając z funkcji wprowadzonej przez prof. Zielińskiego
+	\begin{equation}
+		f(x)-p(x) = \frac{f^{n+1}(\zeta_x)}{(n+1)!}
+	\end{equation}
+	Pochodna rośnie szybko w drugiej funkcji powodując wzrost niedokładności. (Zjawisko Runge'go)
+	Aby to ograniczyć korzystamy z węzłów Czebyszewa.
 \subsection{Wnioski:}
+Wracając do tezy z poprzedniego zadania, widzimy że użyta w funkcji zadania 4 metodyka nie jest efektywna w ogólności.
+By zapewnić skuteczność dla danej funkcji należy przeanalizować funkcję różnic wprowadzoną pare linijek wyżej oraz w zależności od potrzeby stosować sposoby obniżające wartość tej funkcji - na przykład węzły Czebyszewa.
+
 	
 \end{document}

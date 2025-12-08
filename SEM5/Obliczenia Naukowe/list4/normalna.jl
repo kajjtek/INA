@@ -1,3 +1,4 @@
+#KAJETAN PLEWA
 function naturalna(x, fx)
     n = length(fx) - 1;
     

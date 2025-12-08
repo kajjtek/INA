@@ -1,3 +1,4 @@
+#KAJETAN PLEWA
 function warNewton(x::Vector{Float64}, fx::Vector{Float64}, t::Float64)
     n = length(fx) - 1
     nt = fx[n+1]
