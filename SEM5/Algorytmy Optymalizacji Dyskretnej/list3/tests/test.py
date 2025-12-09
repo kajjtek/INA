@@ -136,7 +136,6 @@ def run_single_test(algo_name, binary_path, graph_file, mode, config_file, res_f
 def main():
     # Ustawienie seed'a, aby losowania źródeł były powtarzalne dla różnych uruchomień testów
     # Jeśli chcesz za każdym razem inne źródła, usuń tę linię
-    random.seed(42) 
     
     ensure_dirs()
     
@@ -148,34 +147,21 @@ def main():
 
     tasks = []
     
-    print("Generowanie plików konfiguracyjnych (.ss, .p2p)...")
-    graph_metadata = {}
-
-    for graph_path in graph_files:
-        # Generowanie unikalnej nazwy pliku na podstawie ścieżki
-        base_name = os.path.relpath(graph_path, INPUT_DIR).replace(os.sep, '_').replace('.gr', '')
-        node_count, max_cost = get_graph_metadata(graph_path)
-        graph_metadata[base_name] = {'N': node_count, 'C': max_cost, 'original_path': graph_path}
-        
-        ss_file = os.path.join(OUTPUT_DIR, base_name + ".ss")
-        p2p_file = os.path.join(OUTPUT_DIR, base_name + ".p2p")
-
-        # Wygenerowanie unikalnych źródeł dla tego grafu (stałych dla Dijsktra/Dial)
-        # Generujemy tylko, jeśli plik nie istnieje (aby nie nadpisywać ręcznie przygotowanych plików)
-        if not os.path.exists(ss_file):
-            created = create_ss_file(ss_file, node_count, NUM_SOURCES)
-            print(f"  Graf {graph_path}: Wierzchołków={node_count}. Plik .ss utworzony ({created} źródeł).")
-        else:
-            print(f"  Graf {graph_path}: Wierzchołków={node_count}. Plik .ss już istnieje, pomijam generowanie.")
-
-        if not os.path.exists(p2p_file):
-            created = create_p2p_file(p2p_file, node_count)
-            print(f"  Graf {graph_path}: Plik .p2p utworzony ({created} zapytań).")
-        else:
-            print(f"  Graf {graph_path}: Plik .p2p już istnieje, pomijam generowanie.")
-
+    print("Uwaga: test.py już nie generuje plików .ss/.p2p. Uruchom tests/createssp2p.py aby je wygenerować, jeśli potrzeba.")
     print(f"Rozpoczynam testy na {MAX_WORKERS} wątkach dla {len(EXECUTABLES)} algorytmów...")
     results_data = []
+
+    # Zbuduj listę grafów do testów tylko wtedy, gdy istnieją odpowiadające pliki .ss i .p2p
+    graph_metadata = {}
+    for graph_path in graph_files:
+        base_name = os.path.relpath(graph_path, INPUT_DIR).replace(os.sep, '_').replace('.gr', '')
+        ss_file = os.path.join(OUTPUT_DIR, base_name + ".ss")
+        p2p_file = os.path.join(OUTPUT_DIR, base_name + ".p2p")
+        if not os.path.exists(ss_file) or not os.path.exists(p2p_file):
+            print(f"  Pomijam graf {graph_path}: brak {'.ss' if not os.path.exists(ss_file) else ''}{' i ' if (not os.path.exists(ss_file) and not os.path.exists(p2p_file)) else ''}{'.p2p' if not os.path.exists(p2p_file) else ''}")
+            continue
+        node_count, max_cost = get_graph_metadata(graph_path)
+        graph_metadata[base_name] = {'N': node_count, 'C': max_cost, 'original_path': graph_path}
 
     try:
         with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:

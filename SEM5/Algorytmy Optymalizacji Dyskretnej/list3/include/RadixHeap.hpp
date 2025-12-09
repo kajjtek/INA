@@ -32,18 +32,18 @@ class RadixHeap {
     }
 
     int extractMin() {
-        int first_index = findFirstEmptyBucket();
+        int first_index = findFirstNonEmptyBucket();
         if (first_index == -1) {
             throw std::runtime_error("All buckets are empty. Cannot extract minimum.");
         }
 
-        if (first_index > 1) {
+        if (first_index > 0) {
             Bucket& firstBucket = container.at(first_index);
             auto comparator = [this](const int &a, const int &b) {
                 return this->d.at(a) < this->d.at(b);
             };
             int min_node = *std::min_element(firstBucket.begin(), firstBucket.end(), comparator);
-            distribute(firstBucket, min_node);
+            redistribute(firstBucket, min_node);
             return extractMin();
         } else { // 0 lub 1
             Bucket& firstBucket = container.at(first_index);
@@ -62,14 +62,14 @@ class RadixHeap {
         store_place[node] = {k ,container[k].insert(container[k].end(), node)};
     }
     void deletion(int node) {
-        std::pair<int, std::list<int>::iterator> pair = store_place[node];
+            if (node < 0 || node >= static_cast<int>(d.size())) return; // Safety check
+        
+        std::pair<int, std::list<int>::iterator>& pair = store_place[node];
         int index = pair.first;
-        if (index < 0 || index >= static_cast<int>(container.size())) {
-            return; // Invalid index, nothing to delete
-        }
+        
+        if (index >= 0 && index < static_cast<int>(container.size())) { 
+            std::list<int>::iterator iter = pair.second;
 
-        std::list<int>::iterator iter = pair.second;
-        if (iter != container[index].end()) {
             container[index].erase(iter);
         }
         store_place[node] = {-1, container[index].end()};
@@ -85,22 +85,22 @@ class RadixHeap {
         insert(node, new_distance);
     }
     private:
-    void distribute(Bucket &currentBucket, int min_node) {
+    void redistribute(Bucket &currentBucket, int min_node) {
         this->d_min = this->d.at(min_node);
 
-        std::vector<int> nodes_to_move(currentBucket.begin(), currentBucket.end());
-        currentBucket.clear(); 
+        Bucket nodes_to_move;
+        nodes_to_move.splice(nodes_to_move.begin(), currentBucket);
 
-        for(int node : nodes_to_move) {
-            insert(node, this->d.at(node)); 
+        for(int node: nodes_to_move) {
+            int k = calculateBucketIndex(this->d.at(node));
+            std::list<int>::iterator new_it = container[k].insert(container[k].end(), node);
+            store_place[node] = {k, new_it};
         }
     }
 
     int calculateBucketIndex(long long distance) {
-        unsigned long long difference;
-        if (this->d_min > distance) difference = static_cast<unsigned long long>(this->d_min - distance);
-        else difference = static_cast<unsigned long long>(distance - this->d_min);
-
+        if (distance < this->d_min) return 0; 
+        unsigned long long difference = static_cast<unsigned long long>(distance-this->d_min);
         if (difference == 0ULL) return 0;
 
         int idx = static_cast<int>(std::bit_width(difference)) - 1;
@@ -109,7 +109,7 @@ class RadixHeap {
         return idx;
     }
 
-    int findFirstEmptyBucket() {
+    int findFirstNonEmptyBucket() {
         for (int cur_index = 0; cur_index < this->sizeOfContainer; ++cur_index) {
             if (!container.at(cur_index).empty()) {
                 return cur_index;
