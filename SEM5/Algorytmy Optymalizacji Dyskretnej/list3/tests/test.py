@@ -10,22 +10,23 @@ from math import log2, ceil
 # --- KONFIGURACJA (DOSTOSOWANA DO NOWEJ STRUKTURY) ---
 
 # Ścieżki do Twoich skompilowanych programów w katalogu /bin
+# !!! RADIX HEAP WYKOMENTOWANY ZGODNIE Z PROŚBĄ !!!
 EXECUTABLES = {
-    "dijkstra": "./bin/dijkstra",
-    "dial": "./bin/dial",
-    "radix": "./bin/radixheap"
+    "dijkstra": "../bin/dijkstra",
+    "dial": "../bin/dial",
+    # "radix": "./bin/radixheap" 
 }
 
-# Folder wejściowy - używamy '**/', aby szukać rekurencyjnie w podkatalogach np. /inputs/nazwarodzaju/
-INPUT_DIR = "./inputs"
+# Folder wejściowy - szukamy rekurencyjnie w podkatalogach
+INPUT_DIR = "../inputs"
 # Folder na wyniki
-OUTPUT_DIR = "./results"
+OUTPUT_DIR = "../results"
 
 # Wymagania testów SSSP
 NUM_SOURCES = 5 # Liczba losowych źródeł
 
 # Maksymalna liczba równoległych procesów 
-MAX_WORKERS = 8 
+MAX_WORKERS = 8
 
 # --- FUNKCJE POMOCNICZE ---
 
@@ -100,8 +101,7 @@ def run_single_test(algo_name, binary_path, graph_file, mode, config_file, res_f
     """
     cmd = [binary_path, "-d", graph_file]
     
-    if algo_name in ["dial", "radix"]:
-        cmd.extend(["-c", str(max_cost)]) 
+    # Przekazujemy -c tylko dla Diala (Radix Heap jest wyłączony, ale w razie potrzeby dodać: or algo_name == "radix")
     
     if mode == "SSSP":
         cmd.extend(["-ss", config_file, "-oss", res_file])
@@ -110,7 +110,7 @@ def run_single_test(algo_name, binary_path, graph_file, mode, config_file, res_f
     
     try:
         start_t = time.time()
-        # Timeout 10 minut (600s)
+        # Uruchomienie procesu (Timeout 10 minut (600s))
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=600) 
         
         if result.returncode != 0:
@@ -134,10 +134,13 @@ def run_single_test(algo_name, binary_path, graph_file, mode, config_file, res_f
 # --- GŁÓWNA PĘTLA ---
 
 def main():
+    # Ustawienie seed'a, aby losowania źródeł były powtarzalne dla różnych uruchomień testów
+    # Jeśli chcesz za każdym razem inne źródła, usuń tę linię
+    random.seed(42) 
+    
     ensure_dirs()
     
-    # Zmiana dla rekurencyjnego wyszukiwania
-    # glob.glob szuka w ./inputs, a '/**/*.gr' rekurencyjnie znajduje pliki w podkatalogach
+    # Rekurencyjne wyszukiwanie plików .gr
     graph_files = glob.glob(os.path.join(INPUT_DIR, '**', '*.gr'), recursive=True)
     if not graph_files:
         print(f"Nie znaleziono plików .gr w folderze {INPUT_DIR} lub jego podkatalogach!")
@@ -149,55 +152,75 @@ def main():
     graph_metadata = {}
 
     for graph_path in graph_files:
-        # Używamy ścieżki względnej do nazwy pliku, aby uniknąć problemów z długimi nazwami
+        # Generowanie unikalnej nazwy pliku na podstawie ścieżki
         base_name = os.path.relpath(graph_path, INPUT_DIR).replace(os.sep, '_').replace('.gr', '')
         node_count, max_cost = get_graph_metadata(graph_path)
         graph_metadata[base_name] = {'N': node_count, 'C': max_cost, 'original_path': graph_path}
         
         ss_file = os.path.join(OUTPUT_DIR, base_name + ".ss")
         p2p_file = os.path.join(OUTPUT_DIR, base_name + ".p2p")
-        
-        # Wygenerowanie unikalnych źródeł dla tego grafu
-        create_ss_file(ss_file, node_count, NUM_SOURCES) 
-        create_p2p_file(p2p_file, node_count)
-        print(f"  Graf {graph_path}: Wierzchołków={node_count}, MaxCost={max_cost}. Pliki .ss/.p2p gotowe.")
 
-    print(f"Rozpoczynam testy na {MAX_WORKERS} wątkach...")
+        # Wygenerowanie unikalnych źródeł dla tego grafu (stałych dla Dijsktra/Dial)
+        # Generujemy tylko, jeśli plik nie istnieje (aby nie nadpisywać ręcznie przygotowanych plików)
+        if not os.path.exists(ss_file):
+            created = create_ss_file(ss_file, node_count, NUM_SOURCES)
+            print(f"  Graf {graph_path}: Wierzchołków={node_count}. Plik .ss utworzony ({created} źródeł).")
+        else:
+            print(f"  Graf {graph_path}: Wierzchołków={node_count}. Plik .ss już istnieje, pomijam generowanie.")
+
+        if not os.path.exists(p2p_file):
+            created = create_p2p_file(p2p_file, node_count)
+            print(f"  Graf {graph_path}: Plik .p2p utworzony ({created} zapytań).")
+        else:
+            print(f"  Graf {graph_path}: Plik .p2p już istnieje, pomijam generowanie.")
+
+    print(f"Rozpoczynam testy na {MAX_WORKERS} wątkach dla {len(EXECUTABLES)} algorytmów...")
     results_data = []
 
-    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-        for base_name, metadata in graph_metadata.items():
-            graph_path = metadata['original_path']
-            ss_file = os.path.join(OUTPUT_DIR, base_name + ".ss")
-            p2p_file = os.path.join(OUTPUT_DIR, base_name + ".p2p")
-            
-            # Dla każdego algorytmu
-            for algo, binary in EXECUTABLES.items():
-                if not os.path.exists(binary):
-                    print(f"Ostrzeżenie: Nie znaleziono pliku wykonywalnego {binary}, pomijam.")
-                    continue
-                
-                # Zleć zadanie SSSP
-                res_ss = os.path.join(OUTPUT_DIR, f"{base_name}_{algo}_ss.res")
-                tasks.append(executor.submit(run_single_test, algo, binary, graph_path, "SSSP", ss_file, res_ss, metadata['C']))
-                
-                # Zleć zadanie P2P
-                res_p2p = os.path.join(OUTPUT_DIR, f"{base_name}_{algo}_p2p.res")
-                tasks.append(executor.submit(run_single_test, algo, binary, graph_path, "P2P", p2p_file, res_p2p, metadata['C']))
+    try:
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            for base_name, metadata in graph_metadata.items():
+                graph_path = metadata['original_path']
+                ss_file = os.path.join(OUTPUT_DIR, base_name + ".ss")
+                p2p_file = os.path.join(OUTPUT_DIR, base_name + ".p2p")
 
-        # Zbieranie wyników w czasie rzeczywistym
-        total_tasks = len(tasks)
-        completed = 0
-        
-        for future in as_completed(tasks):
-            res = future.result()
-            results_data.append(res)
-            completed += 1
-            status_text = f"Czas: {res[3]}s" if isinstance(res[3], float) else f"STATUS: {res[3]} ({res[4]})"
-            print(f"[{completed}/{total_tasks}] Zakończono: {res[0]} na {res[1]} ({res[2]}) -> {status_text}")
+                # Dla każdego z WŁĄCZONYCH algorytmów
+                for algo, binary in EXECUTABLES.items():
+                    if not os.path.exists(binary):
+                        print(f"Ostrzeżenie: Nie znaleziono pliku wykonywalnego {binary}, pomijam.")
+                        continue
 
+                    # Zleć zadanie SSSP
+                    res_ss = os.path.join(OUTPUT_DIR, f"{base_name}_{algo}_ss.res")
+                    tasks.append(executor.submit(run_single_test, algo, binary, graph_path, "SSSP", ss_file, res_ss, metadata['C']))
+
+                    # Zleć zadanie P2P
+                    res_p2p = os.path.join(OUTPUT_DIR, f"{base_name}_{algo}_p2p.res")
+                    tasks.append(executor.submit(run_single_test, algo, binary, graph_path, "P2P", p2p_file, res_p2p, metadata['C']))
+
+            # Zbieranie wyników w czasie rzeczywistym
+            total_tasks = len(tasks)
+            completed = 0
+
+            for future in as_completed(tasks):
+                try:
+                    res = future.result()
+                except Exception as e:
+                    # Log exception and continue collecting other tasks
+                    res = ("UNKNOWN", "", "", "EXC", f"Task raised exception: {e}")
+                results_data.append(res)
+                completed += 1
+                status_text = f"Czas: {res[3]}s" if isinstance(res[3], float) else f"STATUS: {res[3]} ({res[4]})"
+                print(f"[{completed}/{total_tasks}] Zakończono: {res[0]} na {res[1]} ({res[2]}) -> {status_text}")
+    except KeyboardInterrupt:
+        print("\nTest runner interrupted by user (KeyboardInterrupt). Attempting to flush results...")
+    except Exception as e:
+        print(f"\nUnexpected error in test runner: {e}")
+        import traceback
+        traceback.print_exc()
+    
     # Zapisz wszystko do CSV
-    csv_file = "wyniki_testow.csv"
+    csv_file = os.path.join(OUTPUT_DIR, "wyniki_testow_Dijkstra_Dial.csv")
     with open(csv_file, 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(["Algorytm", "Graf", "Tryb", "Czas [s]", "Status/Błąd"])
