@@ -8,15 +8,26 @@
 #include <bit>
 #include <algorithm>
 #include <climits>
+#include <stdexcept>
 
 class RadixHeap {
     using Bucket = std::list<int>;
     public:
     RadixHeap(int c, int n, std::vector<long long> &distar): d(distar) {
-        int size_i = static_cast<int>(std::ceil(std::log(c*n)));
-        this->sizeOfContainer=size_i+1;
+        unsigned long long prod = 0;
+        if (c > 0 && n > 0) prod = static_cast<unsigned long long>(c) * static_cast<unsigned long long>(n);
+        int size_i = 0;
+        if (prod > 0) {
+            size_i = static_cast<int>(std::bit_width(prod));
+        }
+        this->sizeOfContainer = size_i + 1;
         this->container.resize(this->sizeOfContainer);
-        this->store_place.resize(n, {-1, {}});
+        this->store_place.resize(n);
+        // initialize store_place entries to a safe invalid state
+        for (int i = 0; i < n; ++i) {
+            this->store_place[i].first = -1;
+            this->store_place[i].second = this->container[0].end();
+        }
         this->d_min = 0;
     }
 
@@ -43,14 +54,8 @@ class RadixHeap {
     }
 
     void insert(int node, long long distance) {
-        
-        if (node < 0 || node >= static_cast<int>(container.size())) {
-            return; // Invalid index, nothing to delete
-        }
-
-        const long long INF = LLONG_MAX;
-        if(d.at(node)!=INF) { 
-            deletion(node);
+        if (node < 0 || node >= static_cast<int>(d.size())) {
+            return; // Invalid node index, ignore
         }
         d.at(node) = distance;
         int k = calculateBucketIndex(distance);
@@ -69,18 +74,16 @@ class RadixHeap {
         }
         store_place[node] = {-1, container[index].end()};
     }
-
-    void decreaseKey(int node, int new_distance) {
-        deletion(node);
-        insert(node, new_distance);
-    }
     bool empty(){
         for(const Bucket &bucket:container) {
             if(!bucket.empty()) return false;
         }
         return true;
     }
-
+    void decreaseKey(int node, int new_distance) {
+        deletion(node);
+        insert(node, new_distance);
+    }
     private:
     void distribute(Bucket &currentBucket, int min_node) {
         this->d_min = this->d.at(min_node);
@@ -93,9 +96,17 @@ class RadixHeap {
         }
     }
 
-    int calculateBucketIndex(int distance) {
-        long long difference = std::abs(this->d_min-distance);
-        return std::bit_width(static_cast<unsigned long long>(difference))-1;
+    int calculateBucketIndex(long long distance) {
+        unsigned long long difference;
+        if (this->d_min > distance) difference = static_cast<unsigned long long>(this->d_min - distance);
+        else difference = static_cast<unsigned long long>(distance - this->d_min);
+
+        if (difference == 0ULL) return 0;
+
+        int idx = static_cast<int>(std::bit_width(difference)) - 1;
+        if (idx < 0) idx = 0;
+        if (idx >= this->sizeOfContainer) idx = this->sizeOfContainer - 1;
+        return idx;
     }
 
     int findFirstEmptyBucket() {

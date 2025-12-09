@@ -35,7 +35,6 @@ std::vector<long long> Dijkstra::dijkstra(Graph &g, int start) {
     d[start] = 0;
     parent[start] = -1;
     frontier.push({0LL, start});
-    const int LOG_INTERVAL = 100000; 
 
     while(!frontier.empty()) {
         std::pair<long long, int> current_pair = frontier.top();

@@ -186,7 +186,8 @@ std::vector<std::pair<int, int>> Parser::parseP2P(const std::string& filename) {
             // Para: q U V (U - źródło, V - ujście)
             int source, target;
             ss >> source >> target;
-            pairs.push_back({source, target});
+            // store as 0-based indices
+            pairs.push_back({source - 1, target - 1});
         } else {
             // Ignorujemy
         }
