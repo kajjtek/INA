@@ -49,7 +49,11 @@ void RadixDijkstra::updateProcedure(int current_node, RadixHeap &heap, Graph &g,
         long long new_distance = d[current_node];
         // avoid overflow
         if (new_distance != LLONG_MAX) new_distance += weight;
-        if (new_distance < current_distance) {
+        if(current_distance==LLONG_MAX) {
+            heap.insert(neighbour, new_distance);
+            continue;
+        }
+        else if (new_distance < current_distance) {
             heap.decreaseKey(neighbour, new_distance);
         }
     }

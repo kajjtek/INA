@@ -158,12 +158,20 @@ int main(int argc, char* argv[]) {
             // Czyszczenie pliku weryfikacyjnego (dla dystansów)
             std::ofstream(ssOutFile + ".dist", std::ios::trunc).close();
 
-            auto start_time = std::chrono::high_resolution_clock::now();
+            double suma_czasu = 0.0;
             
             // 3. Glowna petla SSSP
             for (int sourceNode : sources) {
+                // Licznik przed odpaleniem funkcji
+                auto start_time = std::chrono::high_resolution_clock::now();
+                
                 // Uruchomienie algorytmu Dijkstry
                 std::vector<long long> distances = dijkstraSolver.findAllPaths(graph, sourceNode);
+                
+                // Licznik po funkcji
+                auto end_time = std::chrono::high_resolution_clock::now();
+                DoubleSeconds elapsed_time = end_time - start_time;
+                suma_czasu += elapsed_time.count();
                 
                 // Zapis szczegółowych dystansów (dla weryfikacji poprawności), tylko jeśli jest plik wyjściowy SSSP
                 if (!ssOutFile.empty()) {
@@ -171,33 +179,41 @@ int main(int argc, char* argv[]) {
                 }
             }
 
-            auto end_time = std::chrono::high_resolution_clock::now();
-            DoubleSeconds total_time = end_time - start_time;
+            // Obliczenie średniej czasu
+            double average_time = suma_czasu / sources.size();
             
-            // 4. Zapis sumarycznego czasu
+            // 4. Zapis średniego czasu
             // Plik .res zawiera TYLKO czas, aby ułatwić parsowanie przez skrypt testujący
             std::ofstream finalOutFile(ssOutFile); 
-            finalOutFile << std::fixed << std::setprecision(6) << "t " << total_time.count() << "\n";
+            finalOutFile << std::fixed << std::setprecision(6) << "t " << average_time << "\n";
             
         } else if (isP2P) {
             // --- Tryb P2P (Point-to-Point) ---
             std::vector<std::pair<int, int>> queries = parser.parseP2P(p2pFile);
             std::vector<std::pair<int, long long>> results;
             
-            auto start_time = std::chrono::high_resolution_clock::now();
+            double suma_czasu = 0.0;
             
             // 3. Glowna petla P2P
             for (const auto& pair : queries) {
+                // Licznik przed odpaleniem funkcji
+                auto start_time = std::chrono::high_resolution_clock::now();
+                
                 // Uruchomienie algorytmu Dijkstry P2P
                 std::pair<int, long long> result = dijkstraSolver.findPath(graph, pair.first, pair.second);
                 results.push_back(result);
+                
+                // Licznik po funkcji
+                auto end_time = std::chrono::high_resolution_clock::now();
+                DoubleSeconds elapsed_time = end_time - start_time;
+                suma_czasu += elapsed_time.count();
             }
 
-            auto end_time = std::chrono::high_resolution_clock::now();
-            DoubleSeconds total_time = end_time - start_time;
+            // Obliczenie średniej czasu
+            double average_time = suma_czasu / queries.size();
 
             // 4. Zapis czasu i dystansów P2P
-            saveP2PResult(p2pOutFile, queries, results, total_time.count());
+            saveP2PResult(p2pOutFile, queries, results, average_time);
         }
 
     } catch (const std::exception& e) {
