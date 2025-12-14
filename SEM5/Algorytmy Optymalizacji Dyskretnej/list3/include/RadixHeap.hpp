@@ -49,6 +49,7 @@ class RadixHeap {
             Bucket& firstBucket = container.at(first_index);
             int x = firstBucket.front();
             firstBucket.pop_front();
+            store_place[x] = {-1, container[0].end()};
             return x;
         }
     }
@@ -62,7 +63,12 @@ class RadixHeap {
         store_place[node] = {k ,container[k].insert(container[k].end(), node)};
     }
     void deletion(int node) {
-            if (node < 0 || node >= static_cast<int>(d.size())) return; // Safety check
+        if (store_place[node].first == -1) {
+            // Node is not in the heap, do nothing or throw an error.
+            std::cout<<"Zgerypala"<<std::endl;
+            return; 
+        }
+        if (node < 0 || node >= static_cast<int>(d.size())) return; // Safety check
         
         std::pair<int, std::list<int>::iterator>& pair = store_place[node];
         int index = pair.first;
@@ -71,8 +77,8 @@ class RadixHeap {
             std::list<int>::iterator iter = pair.second;
 
             container[index].erase(iter);
+            store_place[node] = {-1, container[0].end()};
         }
-        store_place[node] = {-1, container[index].end()};
     }
     bool empty(){
         for(const Bucket &bucket:container) {
@@ -103,7 +109,7 @@ class RadixHeap {
         unsigned long long difference = static_cast<unsigned long long>(distance-this->d_min);
         if (difference == 0ULL) return 0;
 
-        int idx = static_cast<int>(std::bit_width(difference)) - 1;
+        int idx = static_cast<int>(std::bit_width(difference));
         if (idx < 0) idx = 0;
         if (idx >= this->sizeOfContainer) idx = this->sizeOfContainer - 1;
         return idx;

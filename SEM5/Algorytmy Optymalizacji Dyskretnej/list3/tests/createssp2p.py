@@ -5,7 +5,7 @@ import argparse
 
 # --- KONFIGURACJA ---
 INPUT_DIR = os.path.join('..', 'inputs')
-OUTPUT_DIR = os.path.join('..', 'results')
+OUTPUT_DIR = os.path.join('..', 'generated')
 NUM_SOURCES_SS1 = 1  # Liczba źródeł dla SSSP-1
 NUM_SOURCES_SS5 = 5  # Liczba źródeł dla SSSP-5
 NUM_P2P_PAIRS = 5    # Liczba par wierzchołków dla P2P

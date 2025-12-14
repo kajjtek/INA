@@ -44,10 +44,10 @@ std::vector<long long> Dijkstra::dijkstra(Graph &g, int start) {
         if (current_distance > d[current]) {
             continue;
         }
-        const std::vector<std::pair<int, int>>& neighbours = g.getNeighbours(current);
-        for(const std::pair<int, int> &pair_neighbour: neighbours) {
+        const std::vector<std::pair<long long, int>>& neighbours = g.getNeighbours(current);
+        for(const std::pair<long long, int> &pair_neighbour: neighbours) {
             int neighbour = pair_neighbour.second;
-            int weight = pair_neighbour.first;
+            long long weight = pair_neighbour.first;
             long long new_distance = d[current] + weight;
             if(new_distance < d[neighbour]) {
                 d[neighbour] = new_distance;

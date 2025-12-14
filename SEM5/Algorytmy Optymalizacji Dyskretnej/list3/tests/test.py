@@ -21,6 +21,8 @@ EXECUTABLES = {
 INPUT_DIR = "../inputs"
 # Folder na wyniki
 OUTPUT_DIR = "../results"
+# Folder na generowane pliki zapytań
+GENERATED_DIR = "../generated"
 
 # Wymagania testów SSSP
 NUM_SOURCES = 5 # Liczba losowych źródeł
@@ -33,6 +35,22 @@ MAX_WORKERS = 8
 def ensure_dirs():
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
+    if not os.path.exists(GENERATED_DIR):
+        os.makedirs(GENERATED_DIR)
+
+def generate_random_graph(n, m, max_weight, filename):
+    """Generuje losowy graf skierowany w formacie DIMACS."""
+    edges = set()
+    while len(edges) < m:
+        u = random.randint(1, n)
+        v = random.randint(1, n)
+        if u != v:
+            edges.add((u, v))
+    with open(filename, 'w') as f:
+        f.write(f"p sp {n} {len(edges)}\n")
+        for u, v in sorted(edges):
+            weight = random.randint(1, max_weight)
+            f.write(f"a {u} {v} {weight}\n")
 
 def get_graph_metadata(graph_file):
     """
@@ -139,10 +157,29 @@ def main():
     
     ensure_dirs()
     
+    # Generate test graphs
+    test_graphs = [
+        ("test_small.gr", 10, 15, 10),
+        ("test_medium.gr", 100, 300, 50),
+    ]
+    for name, n, m, mw in test_graphs:
+        path = os.path.join(GENERATED_DIR, name)
+        if not os.path.exists(path):
+            generate_random_graph(n, m, mw, path)
+            print(f"Wygenerowano graf: {name}")
+        # Generate queries for generated graphs
+        base_name = name.replace('.gr', '')
+        ss_file = os.path.join(GENERATED_DIR, base_name + ".ss")
+        if not os.path.exists(ss_file):
+            create_ss_file(ss_file, n, NUM_SOURCES)
+        p2p_file = os.path.join(GENERATED_DIR, base_name + ".p2p")
+        if not os.path.exists(p2p_file):
+            create_p2p_file(p2p_file, n)
+    
     # Rekurencyjne wyszukiwanie plików .gr
-    graph_files = glob.glob(os.path.join(INPUT_DIR, '**', '*.gr'), recursive=True)
+    graph_files = glob.glob(os.path.join(INPUT_DIR, '**', '*.gr'), recursive=True) + glob.glob(os.path.join(GENERATED_DIR, '*.gr'))
     if not graph_files:
-        print(f"Nie znaleziono plików .gr w folderze {INPUT_DIR} lub jego podkatalogach!")
+        print(f"Nie znaleziono plików .gr w folderze {INPUT_DIR} lub {GENERATED_DIR}!")
         return
 
     tasks = []
@@ -154,9 +191,9 @@ def main():
     # Zbuduj listę grafów do testów tylko wtedy, gdy istnieją odpowiadające pliki .ss i .p2p
     graph_metadata = {}
     for graph_path in graph_files:
-        base_name = os.path.relpath(graph_path, INPUT_DIR).replace(os.sep, '_').replace('.gr', '')
-        ss_file = os.path.join(OUTPUT_DIR, base_name + ".ss")
-        p2p_file = os.path.join(OUTPUT_DIR, base_name + ".p2p")
+        base_name = os.path.basename(graph_path).replace('.gr', '')
+        ss_file = os.path.join(GENERATED_DIR, base_name + ".ss")
+        p2p_file = os.path.join(GENERATED_DIR, base_name + ".p2p")
         if not os.path.exists(ss_file) or not os.path.exists(p2p_file):
             print(f"  Pomijam graf {graph_path}: brak {'.ss' if not os.path.exists(ss_file) else ''}{' i ' if (not os.path.exists(ss_file) and not os.path.exists(p2p_file)) else ''}{'.p2p' if not os.path.exists(p2p_file) else ''}")
             continue
@@ -167,8 +204,8 @@ def main():
         with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
             for base_name, metadata in graph_metadata.items():
                 graph_path = metadata['original_path']
-                ss_file = os.path.join(OUTPUT_DIR, base_name + ".ss")
-                p2p_file = os.path.join(OUTPUT_DIR, base_name + ".p2p")
+                ss_file = os.path.join(GENERATED_DIR, base_name + ".ss")
+                p2p_file = os.path.join(GENERATED_DIR, base_name + ".p2p")
 
                 # Dla każdego z WŁĄCZONYCH algorytmów
                 for algo, binary in EXECUTABLES.items():

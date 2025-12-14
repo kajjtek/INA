@@ -29,12 +29,12 @@ Graph Parser::parseGraph(const std::string& filename) {
     // Zakładam, że konstruktor Graph(int n, char t, std::vector<std::pair<int, std::pair<int, int>>> edges)
     // oczekuje listy w formacie: (waga, (źródło, ujście)).
     // UWAGA: Trzeba dostosować do faktycznej implementacji konstruktora w Graph.h
-    std::vector<std::pair<int, std::pair<int, int>>> graphEdges;
+    std::vector<std::pair<long long, std::pair<int, int>>> graphEdges;
     
     for (const auto& edge : data.edgeList) {
         int u = std::get<0>(edge);
         int v = std::get<1>(edge);
-        int w = std::get<2>(edge);
+        long long w = std::get<2>(edge);
         
         // W formacie DIMACS: a u v w
         graphEdges.push_back({w, {u, v}});
@@ -78,7 +78,8 @@ Parser::GraphData Parser::loadGraphData(const std::string& filename) {
             }
         } else if (type == 'a') {
             // Łuk: a u v w (u - źródło, v - ujście, w - waga/koszt)
-            int u, v, w;
+            int u, v;
+            long long w;
             ss >> u >> v >> w;
             
             // Wymóg zadania: koszty są nieujemne (dla Dijkstry).

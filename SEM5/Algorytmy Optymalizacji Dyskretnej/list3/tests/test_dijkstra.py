@@ -16,6 +16,8 @@ BINARY_PATH = "../bin/dijkstra"
 # --- KONFIGURACJA OGÓLNA ---
 INPUT_DIR = "../inputs"
 OUTPUT_DIR = "../results"
+GENERATED_DIR = "../generated"
+
 NUM_SOURCES_SS5 = 5 
 NUM_P2P_PAIRS = 5
 TIMEOUT_SECONDS = 3600 # 1 godzina na test
@@ -114,7 +116,7 @@ def run_single_test(alg_name, binary, graph_path, test_type, query_file, res_fil
                 
                 if test_type == "SSSP-5":
                     # ŚREDNIA CZASÓW
-                    result_value = total_time / NUM_SOURCES_SS5
+                    result_value = total_time
                 else:
                     result_value = total_time
                 
@@ -202,9 +204,9 @@ def main():
             for base_name, meta in graph_metadata.items():
                 
                 # --- Weryfikacja plików zapytań ---
-                ss1_file = os.path.join(OUTPUT_DIR, base_name + ".ss1")
-                ss5_file = os.path.join(OUTPUT_DIR, base_name + ".ss5")
-                p2p5_file = os.path.join(OUTPUT_DIR, base_name + ".p2p5")
+                ss1_file = os.path.join(GENERATED_DIR, base_name + ".ss1")
+                ss5_file = os.path.join(GENERATED_DIR, base_name + ".ss5")
+                p2p5_file = os.path.join(GENERATED_DIR, base_name + ".p2p5")
 
                 if not os.path.exists(ss1_file) or not os.path.exists(ss5_file):
                     print(f"OSTRZEŻENIE: Pomijam SSSP dla {base_name} - brakuje plików .ss1/.ss5.")

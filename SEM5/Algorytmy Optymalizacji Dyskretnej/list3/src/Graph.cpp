@@ -10,7 +10,7 @@
 Graph Graph::reverseGraph(){
     int* nCounts = new int[v_size]{};
     int* nEdges = new int[e_size];
-    int* nWeights = new int[w_size];
+    long long* nWeights = new long long[w_size];
     int* position = new int[v_size-1]{};
 
     for(int i=0; i<v_size-1; i++){
@@ -51,7 +51,7 @@ Graph Graph::reverseGraph(){
     return nGraph;
 }
 
-Graph::Graph(int numberOfVertices, char t, std::vector<std::pair<int ,std::pair<int,int>>> edges){
+Graph::Graph(int numberOfVertices, char t, std::vector<std::pair<long long ,std::pair<int,int>>> edges){
     try {
         setType(t);
         setArrays(numberOfVertices, edges);
@@ -73,25 +73,25 @@ void Graph::setType(char t){
     this->type=Type::Directed;
 }
 
-std::vector<std::pair<int, int>> Graph::getNeighbours(int current) const {
+std::vector<std::pair<long long, int>> Graph::getNeighbours(int current) const {
     int start = this->vertices[current];
     int end = this->vertices[current+1];
-    std::vector<std::pair<int, int>> temp;
+    std::vector<std::pair<long long, int>> temp;
     for(int i=start; i<end; i++) {
-        temp.push_back({this->weights[i], this->edges[i]});
+        temp.push_back({weights[i], edges[i]});
     }
     return temp;
 }
 
-void Graph::setArrays(int n, std::vector<std::pair<int ,std::pair<int,int>>> edgesImported){//to dziala dla posortowanych edgesImproted TODO dodac to w pliku ktory przerabia stdina
+void Graph::setArrays(int n, std::vector<std::pair<long long ,std::pair<int,int>>> edgesImported){//to dziala dla posortowanych edgesImproted TODO dodac to w pliku ktory przerabia stdina
     int* counts = new int[n]{};//to inicjalizuje na zero zapameitaj sobie
     int* position = new int[n]{};
-    int max = INT_MIN;
-    int min = INT_MAX;
+    long long max = LLONG_MIN;
+    long long min = LLONG_MAX;
 
     this->vertices=new int[n+1];
     this->edges=new int[edgesImported.size()];
-    this->weights=new int[edgesImported.size()];
+    this->weights=new long long[edgesImported.size()];
     for(int i=0; i<edgesImported.size();i++){
         std::pair<int,int> Pair = edgesImported.at(i).second;
         int u = Pair.first-1;
@@ -103,7 +103,7 @@ void Graph::setArrays(int n, std::vector<std::pair<int ,std::pair<int,int>>> edg
     }
     for(int i=0; i<edgesImported.size(); i++){
         std::pair<int,int> Pair = edgesImported.at(i).second;
-        int weight = edgesImported.at(i).first;
+        long long weight = edgesImported.at(i).first;
         if(weight>max) max = weight;
         if(weight<min) min = weight;
 
@@ -133,7 +133,7 @@ Graph::~Graph(){
 Graph::Graph(const Graph& other) : v_size(other.v_size), e_size(other.e_size), w_size(other.w_size) {
     this->vertices=new int[v_size];
     this->edges=new int[e_size];
-    this->weights=new int[w_size];
+    this->weights=new long long[w_size];
 
     std::copy(other.vertices, other.vertices+other.v_size, this->vertices);
     std::copy(other.edges, other.edges+other.e_size, this->edges);
@@ -155,7 +155,7 @@ Graph& Graph::operator=(const Graph& other){
 
     this->vertices=new int[v_size];
     this->edges=new int[e_size];
-    this->weights=new int[w_size];
+    this->weights=new long long[w_size];
 
     std::copy(other.vertices, other.vertices+other.v_size, this->vertices);
     std::copy(other.edges, other.edges+other.e_size, this->edges);

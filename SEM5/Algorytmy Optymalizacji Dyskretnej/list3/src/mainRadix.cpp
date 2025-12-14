@@ -49,9 +49,9 @@ void saveSSSPDistances(
     
     // Zapis dystansów (DIMACS format: d WIERZCHOLEK DYSTANS)
     // Wierzchołki są 1-bazowe (indeks 1 do N)
-    for (size_t i = 1; i < distances.size(); ++i) {
+    for (size_t i = 0; i < distances.size(); ++i) {
         if (distances[i] != std::numeric_limits<long long>::max()) {
-            outFile << "d " << i << " " << distances[i] << "\n";
+            outFile << "d " << i+1 << " " << distances[i] << "\n";
         }
     }
 }
@@ -86,7 +86,7 @@ void saveP2PResult(
 
         // Zgodnie z formatem, zapisujemy tylko osiągalne ścieżki
         if (distance != std::numeric_limits<long long>::max()) {
-            outFile << "d " << source << " " << target << " " << distance << "\n";
+            outFile << "d " << source+1 << " " << target+1 << " " << distance << "\n";
         }
     }
 }
@@ -148,7 +148,7 @@ int main(int argc, char* argv[]) {
         // Parsowanie grafu: niezbędne, aby uzyskać obiekt Graph
         // UWAGA: metody findAllPaths i findPath w RadixDijkstra.h przyjmuja const Graph&
         Graph graph = parser.parseGraph(graphFile); 
-        int maxCost = graph.max_weight;
+        long long maxCost = graph.max_weight;
 
 
         if (isSSSP) {

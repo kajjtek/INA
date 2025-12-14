@@ -13,6 +13,7 @@ import argparse
 
 INPUT_DIR = "../inputs"
 OUTPUT_DIR = "../results"
+GENERATED_DIR = "../generated"
 BINARY = "../bin/radixheap.exe"
 MAX_WORKERS = 8
 
@@ -112,7 +113,7 @@ def main(input_dir, output_dir, workers):
     
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as ex:
         for base_name, meta in graph_metadata.items():
-            ss1_file = os.path.join(OUTPUT_DIR, base_name + ".ss1")
+            ss1_file = os.path.join(GENERATED_DIR, base_name + ".ss1")
             if not os.path.exists(ss1_file):
                 continue
             
@@ -138,7 +139,7 @@ def main(input_dir, output_dir, workers):
     
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as ex:
         for base_name, meta in graph_metadata.items():
-            ss5_file = os.path.join(OUTPUT_DIR, base_name + ".ss5")
+            ss5_file = os.path.join(GENERATED_DIR, base_name + ".ss5")
             if not os.path.exists(ss5_file):
                 continue
             
@@ -166,7 +167,7 @@ def main(input_dir, output_dir, workers):
         for family, largest in largest_per_family.items():
             base_name = largest['base_name']
             meta = graph_metadata[base_name]
-            p2p5_file = os.path.join(OUTPUT_DIR, base_name + ".p2p5")
+            p2p5_file = os.path.join(GENERATED_DIR, base_name + ".p2p5")
             
             if not os.path.exists(p2p5_file):
                 print(f"Skipping P2P-5 for {base_name}: missing {p2p5_file}")
