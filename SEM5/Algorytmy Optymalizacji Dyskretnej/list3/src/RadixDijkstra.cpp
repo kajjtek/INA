@@ -40,6 +40,7 @@ void RadixDijkstra::updateProcedure(int current_node, RadixHeap &heap, Graph &g,
     if (current_node < 0 || current_node >= static_cast<int>(d.size())) return;
     if (d[current_node] == LLONG_MAX) return; // unreachable
 
+    long long dist_to_current = d[current_node];
     std::vector<std::pair<long long,int>> neighbours = g.getNeighbours(current_node);
     for (const std::pair<long long, int>& neighbour_pair: neighbours) {
         int neighbour = neighbour_pair.second;
@@ -47,11 +48,16 @@ void RadixDijkstra::updateProcedure(int current_node, RadixHeap &heap, Graph &g,
         if (neighbour < 0 || neighbour >= static_cast<int>(d.size())) continue;
         long long current_distance = d[neighbour];
         long long new_distance = d[current_node];
-        // avoid overflow
-        if (new_distance != LLONG_MAX) new_distance += weight;
-        if(current_distance==LLONG_MAX) {
+        if (dist_to_current == LLONG_MAX) {
+            new_distance = LLONG_MAX;
+        } else if (weight > 0 && LLONG_MAX - dist_to_current < weight) {
+            new_distance = LLONG_MAX;
+        } else {
+            new_distance = dist_to_current + weight;
+        }
+        
+        if(current_distance == LLONG_MAX) {
             heap.insert(neighbour, new_distance);
-            continue;
         }
         else if (new_distance < current_distance) {
             heap.decreaseKey(neighbour, new_distance);

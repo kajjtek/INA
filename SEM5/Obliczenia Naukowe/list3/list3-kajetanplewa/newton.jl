@@ -63,7 +63,7 @@ end
     delta = 1e-5
     epsilon = 1e-5
     maxit = 100
-    (r, v, it, err) = newton(x -> x*exp(-x), x -> -(x-1)*exp(-x), 2.0, delta, epsilon, maxit)
+    (r, v, it, err) = newton(x -> exp(1-x)-1, x -> -exp(1-x), 7.0, delta, epsilon, maxit)
 
     @info "Newton: r=$r, it=$it, v=$v, error=$err"
 

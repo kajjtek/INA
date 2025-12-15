@@ -19,9 +19,9 @@ public:
     struct GraphData {
         int numberOfVertices = 0;
         long long numberOfEdges = 0;
-        int maxCost = 0; // Maksymalny koszt łuku (wymagany dla DIALA i RADIX HEAP jako C)
+        long long maxCost = 0; // Maksymalny koszt łuku (wymagany dla DIALA i RADIX HEAP jako C)
         Type type = Directed; // Domyślnie Directed, zgodnie z formatem DIMACS
-        std::vector<std::tuple<int, int, int>> edgeList; // (źródło, ujście, waga)
+        std::vector<std::tuple<int, int, long long>> edgeList; // (źródło, ujście, waga)
     };
 
     /**

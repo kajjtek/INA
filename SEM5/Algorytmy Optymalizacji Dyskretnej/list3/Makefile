@@ -10,8 +10,6 @@ SRC_DIR = src
 INC_DIR = include
 
 # ----------------- Pliki Implementacyjne Algorytmów -----------------
-# Pliki CPP, które muszą być skompilowane, aby stworzyć implementacje klas.
-# W Twoim przypadku są to: Dijkstra.cpp, Dial.cpp, RadixDijkstra.cpp, Graph.cpp, Parser.cpp
 ALGO_SRC = $(SRC_DIR)/Dijkstra.cpp $(SRC_DIR)/Dial.cpp $(SRC_DIR)/RadixDijkstra.cpp
 COMMON_SRC = $(SRC_DIR)/Graph.cpp $(SRC_DIR)/Parser.cpp 
 
@@ -19,6 +17,7 @@ COMMON_SRC = $(SRC_DIR)/Graph.cpp $(SRC_DIR)/Parser.cpp
 OBJS = $(ALGO_SRC:$(SRC_DIR)/%.cpp=$(BIN_DIR)/%.o) $(COMMON_SRC:$(SRC_DIR)/%.cpp=$(BIN_DIR)/%.o)
 
 # Lista programów do zbudowania (nazwy plików binarnych)
+# WAŻNE: W Windows rozszerzenie .exe jest dodawane automatycznie przez kompilator.
 TARGETS = dijkstra dial radixheap comparison
 
 # Pliki z funkcją 'main'
@@ -27,20 +26,21 @@ DIAL_MAIN_SRC = $(SRC_DIR)/mainDial.cpp
 RADIX_MAIN_SRC = $(SRC_DIR)/mainRadix.cpp
 COMPARISON_MAIN_SRC = $(SRC_DIR)/mainComparison.cpp
 
-DIJKSTRA_BIN = $(BIN_DIR)/dijkstra
-DIAL_BIN = $(BIN_DIR)/dial
-RADIX_BIN = $(BIN_DIR)/radixheap
-COMPARISON_BIN = $(BIN_DIR)/comparison
+# Dodajemy rozszerzenie .exe do ścieżek plików binarnych
+DIJKSTRA_BIN = $(BIN_DIR)/dijkstra.exe
+DIAL_BIN = $(BIN_DIR)/dial.exe
+RADIX_BIN = $(BIN_DIR)/radixheap.exe
+COMPARISON_BIN = $(BIN_DIR)/comparison.exe
 
 # Domyślny cel - buduje wszystko
 all: directories $(TARGETS)
 
 # Cel: Tworzenie wymaganego katalogu wyjściowego
+# Zmiana: Użycie standardowego 'mkdir' dla Windows i dodanie sprawdzenia warunkowego.
 directories:
-	@mkdir -p $(BIN_DIR)
+	@if not exist $(BIN_DIR) mkdir $(BIN_DIR)
 
 # Reguła kompilacji wspólnych plików obiektowych (.o)
-# Kompiluje każdy plik .cpp (implementację) do pliku .o
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@echo "Kompilowanie obiektu: $<"
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -I$(INC_DIR)
@@ -52,7 +52,6 @@ dijkstra: $(DIJKSTRA_BIN)
 
 $(DIJKSTRA_BIN): $(DIJKSTRA_MAIN_SRC) $(OBJS)
 	@echo "Linkowanie: dijkstra"
-	# Polecenie linkuje plik z funkcją main oraz wszystkie pliki obiektowe .o (zawierające definicje)
 	$(CXX) $(CXXFLAGS) -o $@ $(DIJKSTRA_MAIN_SRC) $(OBJS) -I$(INC_DIR) $(LDFLAGS)
 
 # 2. Budowanie dial
@@ -67,7 +66,7 @@ radixheap: $(RADIX_BIN)
 
 $(RADIX_BIN): $(RADIX_MAIN_SRC) $(OBJS)
 	@echo "Linkowanie: radixheap"
-	$(CXX) $(CXXFLAGS) -o $@ $(RADIX_MAIN_SRC) $(OBJS) -I$(INC_DIR) $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o $@ $(RADIX_MAIN_SRC) $(OBJS) -I$(INC_DIR) $(LDFLAGS) -pg -g
 
 # 4. Budowanie comparison (porównanie wszystkich algorytmów)
 comparison: $(COMPARISON_BIN)
@@ -80,8 +79,8 @@ $(COMPARISON_BIN): $(COMPARISON_MAIN_SRC) $(OBJS)
 
 clean:
 	@echo "Usuwanie celow i katalogu $(BIN_DIR)..."
-	rm -f $(DIJKSTRA_BIN) $(DIAL_BIN) $(RADIX_BIN) $(COMPARISON_BIN)
-	rm -f $(BIN_DIR)/*.o
-	rm -rf $(BIN_DIR)
+	-del /Q $(BIN_DIR)\*.exe
+	-del /Q $(BIN_DIR)\*.o
+	-rmdir /S /Q $(BIN_DIR)
 
 .PHONY: all directories clean $(TARGETS)

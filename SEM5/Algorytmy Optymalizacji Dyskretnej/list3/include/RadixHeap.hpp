@@ -9,9 +9,10 @@
 #include <algorithm>
 #include <climits>
 #include <stdexcept>
+#include <iostream>
 
 class RadixHeap {
-    using Bucket = std::list<int>;
+    using Bucket = std::list<long long>;
     public:
     RadixHeap(int c, int n, std::vector<long long> &distar): d(distar) {
         unsigned long long prod = 0;
@@ -39,7 +40,7 @@ class RadixHeap {
 
         if (first_index > 0) {
             Bucket& firstBucket = container.at(first_index);
-            auto comparator = [this](const int &a, const int &b) {
+            auto comparator = [this](const long long &a, const long long &b) {
                 return this->d.at(a) < this->d.at(b);
             };
             int min_node = *std::min_element(firstBucket.begin(), firstBucket.end(), comparator);
@@ -65,16 +66,15 @@ class RadixHeap {
     void deletion(int node) {
         if (store_place[node].first == -1) {
             // Node is not in the heap, do nothing or throw an error.
-            std::cout<<"Zgerypala"<<std::endl;
             return; 
         }
         if (node < 0 || node >= static_cast<int>(d.size())) return; // Safety check
         
-        std::pair<int, std::list<int>::iterator>& pair = store_place[node];
+        std::pair<int, std::list<long long>::iterator>& pair = store_place[node];
         int index = pair.first;
         
         if (index >= 0 && index < static_cast<int>(container.size())) { 
-            std::list<int>::iterator iter = pair.second;
+            std::list<long long>::iterator iter = pair.second;
 
             container[index].erase(iter);
             store_place[node] = {-1, container[0].end()};
@@ -86,7 +86,7 @@ class RadixHeap {
         }
         return true;
     }
-    void decreaseKey(int node, int new_distance) {
+    void decreaseKey(int node, long long new_distance) {
         deletion(node);
         insert(node, new_distance);
     }
@@ -99,7 +99,7 @@ class RadixHeap {
 
         for(int node: nodes_to_move) {
             int k = calculateBucketIndex(this->d.at(node));
-            std::list<int>::iterator new_it = container[k].insert(container[k].end(), node);
+            std::list<long long>::iterator new_it = container[k].insert(container[k].end(), node);
             store_place[node] = {k, new_it};
         }
     }
@@ -125,7 +125,7 @@ class RadixHeap {
     }
 
     std::vector<long long> &d;
-    std::vector<std::pair<int ,std::list<int>::iterator>> store_place;
+    std::vector<std::pair<int ,std::list<long long>::iterator>> store_place;
     long long d_min;
     std::vector<Bucket> container;
     int sizeOfContainer;
