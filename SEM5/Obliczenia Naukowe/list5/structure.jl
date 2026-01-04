@@ -16,6 +16,10 @@ function createBlockMatrix(nn, ll)
     return BlockMatrix(nn, ll, vv, Block[], Block[], Block[])
 end
 
+function swap_rows!(B::Block, i::Int, j::Int)
+    B.fields[i, :], B.fields[j, :] = B.fields[j, :], B.fields[i, :]
+end
+
 function getPivot(block_matrix::BlockMatrix, pivotOn::Bool, block_n::Int, k::Int)
     if pivotOn #do poprawy
         return minInCol(block_matrix, block_n, k)
@@ -90,10 +94,8 @@ function back_substitution(M::BlockMatrix, b::Vector{Float64})
         block_n = ceil(Int, i / l)
         diag_n = ((i - 1) % l) + 1
         
-        # Globalny start aktualnego bloku (dla zmiennych x)
         offset_block = (block_n - 1) * l
         
-        # 1. Elementy z bloku A (na prawo od przekątnej)
         A = M.AList[block_n]
         for j_local in (diag_n + 1):l
             global_j = offset_block + j_local
@@ -116,4 +118,81 @@ function back_substitution(M::BlockMatrix, b::Vector{Float64})
         x[i] = (b[i] - s) / A.fields[diag_n, diag_n]
     end
     return x
+end
+
+function LU!(block_matrix::BlockMatrix, pivotOn::Bool)
+    for k in 1:block_matrix.v
+        c = block_matrix.CList[k]
+        a = block_matrix.AList[k]
+        b = nothing
+        nexta = nothing
+        if k<block_matrix.v
+            b = block_matrix.BList[k+1]
+            nexta = block_matrix.AList[k+1]
+        end
+        eliminateLU!(c, a, b, block_matrix.l, nexta,pivotOn, k)
+    end 
+end
+
+function eliminateLU!(C, A, B, l::Int, nextA, pivotOn::Bool, n::Int)
+    for k in 1:l-1
+        #USTAWIANIE W BLOKU A - najpierw zmieniam sobie A i potem C
+        for i in k+1:l
+            I = A.fields[i,k] / A.fields[k,k] #TODO tu funkcja getPivot ale zmodyfikowana
+            A.fields[i,k] = I
+            for j in k+1:l #to ustawia prawidlowe w bloku a
+                A.fields[i,j] -= I * A.fields[k,j] 
+            end #podczas gdy usuwamy w a musimy tez usuwac w c i usunac jeden z b co wplynie na kolejne A
+            for j in 1:k
+                C.fields[i,j] -= I * C.fields[k,j]
+            end
+        end
+        if B!==nothing
+            Ib = B.fields[1,k] / A.fields[k,k]
+            B.fields[1,k] = Ib
+            for j in k+1:l
+                B.fields[1,j] -= Ib * A.fields[k,j]
+            end 
+            for j in 1:k
+                nextA.fields[1,j] -= Ib * C.fields[k,j]
+            end
+        end
+    end
+    #teraz l ty na przekatnej glownej - musimy pousuwac b ktore pod tym stoja
+    if(nextA!==nothing)
+        for i in 1:l 
+            I = B.fields[i,l] / A.fields[l,l]
+            B.fields[i,l] = I
+            for j in 1:l
+                nextA.fields[i,j] -= I * C.fields[l,j]
+            end 
+        end
+    end 
+end
+
+function forward_substitution(M::BlockMatrix, b::Vector{Float64})
+    n = M.n
+    l = M.l
+    y = copy(b) # Pracujemy na kopii b
+    
+    for i in 1:n
+        block_n = ceil(Int, i / l)
+        diag_n = ((i - 1) % l) + 1
+        offset = (block_n - 1) * l
+        
+        # 1. Używamy mnożników z bloku A (poniżej przekątnej w tym bloku)
+        A = M.AList[block_n]
+        for j in 1:(diag_n - 1)
+            y[i] -= A.fields[diag_n, j] * y[offset + j]
+        end
+        
+        if block_n > 1
+            B = M.BList[block_n]
+            prev_offset = (block_n - 2) * l
+            for j in 1:l
+                y[i] -= B.fields[diag_n, j] * y[prev_offset + j]
+            end
+        end
+    end
+    return y
 end

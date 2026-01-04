@@ -56,4 +56,46 @@ function run_test()
     println("Pierwsze 5 obliczonych x: ", x_calc[1:min(5, n)])
 end
 
+function run_lu_test()
+    # 1. Parametry
+    n = 16  # mała macierz, żeby łatwo było debugować
+    l = 4
+    ck = 1.0
+    filename = "A_lu_test.txt"
+
+    println("--- KROK 1: Generowanie i wczytywanie ---")
+    matrixgen.blockmat(n, l, ck, filename)
+    BM = read_matrix(filename)
+
+    println("--- KROK 2: Generowanie wektora b (sumy wierszy) ---")
+    # b tworzymy na podstawie ORYGINALNEJ macierzy, zanim ją zniszczymy faktoryzacją
+    b_original = compute_b_ones(BM) 
+    
+    println("--- KROK 3: Faktoryzacja LU (In-place) ---")
+    # Wywołujemy Twoją funkcję gaussianElimination, ale przerobioną na LU
+    # Upewnij się, że w środku wywołuje eliminateLU!
+    @time LU!(BM, false) 
+
+    println("--- KROK 4: Forward Substitution (Ly = b) ---")
+    @time y = forward_substitution(BM, b_original)
+
+    println("--- KROK 5: Backward Substitution (Ux = y) ---")
+    @time x_calc = back_substitution(BM, y)
+
+    println("--- KROK 6: Weryfikacja ---")
+    x_true = ones(n)
+    rel_error = norm(x_true - x_calc) / norm(x_true)
+    
+    println("Błąd względny LU: $rel_error")
+    
+    if rel_error < 1e-12
+        println("✅ TEST LU ZALICZONY!")
+    else
+        println("❌ TEST LU NIEUDANY. Sprawdź indeksy w forward_substitution lub pętlę w C.")
+        # Opcjonalnie wyświetl wyniki, żeby zobaczyć gdzie puchnie błąd
+        # println("Obliczone x: ", x_calc)
+    end
+end
+
 run_test()
+run_lu_test()
