@@ -16,23 +16,37 @@ function createBlockMatrix(nn, ll)
     return BlockMatrix(nn, ll, vv, Block[], Block[], Block[])
 end
 
-function swap_rows!(B::Block, i::Int, j::Int)
-    B.fields[i, :], B.fields[j, :] = B.fields[j, :], B.fields[i, :]
+function swap_rows!(A::Block, C::Block,i::Int, j::Int)
+    A.fields[i, :], A.fields[j, :] = A.fields[j, :], A.fields[i, :]
+    C.fields[i, :], C.fields[j, :] = C.fields[j, :], C.fields[i, :]
 end
 
-function getPivot(block_matrix::BlockMatrix, pivotOn::Bool, block_n::Int, k::Int)
-    if pivotOn #do poprawy
-        return minInCol(block_matrix, block_n, k)
+function getPivot(A::Block, C::Block, pivotOn::Bool, k::Int, l::Int, p::Vector{Int}, offset::Int)
+    if pivotOn
+        return minInCol(A, C, k, l, p, offset)
     else
         return block_matrix.AList[block_n].fields[k]
     end
 end
 
-function minInCol(block_matrix::BlockMatrix, block_n::Int, k::Int)
-    #TODO
+function minInCol!(block::Block, blockC::Block, k::Int, l::Int, p::Vector{Int}, offset::Int)
+    max = abs(block.fields[k, k])
+    idx = k
+    for i in k+1:l
+        potVal = abs(block.fields[i, k])
+        if(potVal>max)
+            max = potVal
+            idx = i
+        end 
+    end
+    if(idx!=k)
+        swap_rows!(block, blockC, k, idx)
+        p[offset+k], p[offset+idx] = p[offset+idx], p[offset+k]
+    end 
+    return block.fields[k, k]
 end 
 
-function gaussianElimination(block_matrix::BlockMatrix, b_matrix::Vector{Float64}, pivotOn::Bool)
+function gaussianElimination(block_matrix::BlockMatrix, b_matrix::Vector{Float64}, pivotOn::Bool, p::Vector{Int})
     for k in 1:block_matrix.v
         c = block_matrix.CList[k]
         a = block_matrix.AList[k]
@@ -42,26 +56,34 @@ function gaussianElimination(block_matrix::BlockMatrix, b_matrix::Vector{Float64
             b = block_matrix.BList[k+1]
             nexta = block_matrix.AList[k+1]
         end
-        eliminate!(c, a, b, block_matrix.l, b_matrix, nexta,pivotOn, k)
+        eliminate!(c, a, b, block_matrix.l, b_matrix, nexta,pivotOn, k, p)
     end 
 end
 
 
-function eliminate!(C, A, B, l::Int, b_matrix::Vector{Float64}, nextA, pivotOn::Bool, n::Int)
+function eliminate!(C, A, B, l::Int, b_matrix::Vector{Float64}, nextA, pivotOn::Bool, n::Int, p::Vector{Int})
     for k in 1:l-1
+        pivot = A.fields[k, k]
+        if pivotOn && k < l
+            pivot = minInCol!(A, C, k, l, p, (n-1)*l)
+        end
         #USTAWIANIE W BLOKU A - najpierw zmieniam sobie A i potem C
         for i in k+1:l
-            I = A.fields[i,k] / A.fields[k,k] #TODO tu funkcja getPivot ale zmodyfikowana
+            I = A.fields[i,k] / pivot #TODO tu funkcja getPivot ale zmodyfikowana
             for j in k:l #to ustawia prawidlowe w bloku a
                 A.fields[i,j] -= I * A.fields[k,j] 
-            end #podczas gdy usuwamy w a musimy tez usuwac w c i usunac jeden z b co wplynie na kolejne A
-            for j in 1:k
+            end
+            c_kol = k
+            if pivotOn 
+                c_kol = l
+            end  #podczas gdy usuwamy w a musimy tez usuwac w c i usunac jeden z b co wplynie na kolejne A
+            for j in 1:c_kol
                 C.fields[i,j] -= I * C.fields[k,j]
             end
             b_matrix[(n-1)*l+i] -= I * b_matrix[(n-1)*l+k]
         end
         if B!==nothing
-            Ib = B.fields[1,k] / A.fields[k,k]
+            Ib = B.fields[1,k] / pivot
             for j in k:l
                 B.fields[1,j] -= Ib * A.fields[k,j]
             end 
@@ -120,7 +142,7 @@ function back_substitution(M::BlockMatrix, b::Vector{Float64})
     return x
 end
 
-function LU!(block_matrix::BlockMatrix, pivotOn::Bool)
+function LU!(block_matrix::BlockMatrix, pivotOn::Bool, p::Vector{Int})
     for k in 1:block_matrix.v
         c = block_matrix.CList[k]
         a = block_matrix.AList[k]
@@ -130,25 +152,33 @@ function LU!(block_matrix::BlockMatrix, pivotOn::Bool)
             b = block_matrix.BList[k+1]
             nexta = block_matrix.AList[k+1]
         end
-        eliminateLU!(c, a, b, block_matrix.l, nexta,pivotOn, k)
+        eliminateLU!(c, a, b, block_matrix.l, nexta,pivotOn, k, p)
     end 
 end
 
-function eliminateLU!(C, A, B, l::Int, nextA, pivotOn::Bool, n::Int)
+function eliminateLU!(C, A, B, l::Int, nextA, pivotOn::Bool, n::Int, p::Vector{Int})
     for k in 1:l-1
+        pivot = A.fields[k, k]
+        if pivotOn && k < l
+            pivot = minInCol!(A, C, k, l, p, (n-1)*l)
+        end
         #USTAWIANIE W BLOKU A - najpierw zmieniam sobie A i potem C
         for i in k+1:l
-            I = A.fields[i,k] / A.fields[k,k] #TODO tu funkcja getPivot ale zmodyfikowana
+            I = A.fields[i,k] / pivot
             A.fields[i,k] = I
             for j in k+1:l #to ustawia prawidlowe w bloku a
                 A.fields[i,j] -= I * A.fields[k,j] 
+            end
+            c_kol = k
+            if pivotOn 
+                c_kol = l
             end #podczas gdy usuwamy w a musimy tez usuwac w c i usunac jeden z b co wplynie na kolejne A
-            for j in 1:k
+            for j in 1:c_kol
                 C.fields[i,j] -= I * C.fields[k,j]
             end
         end
         if B!==nothing
-            Ib = B.fields[1,k] / A.fields[k,k]
+            Ib = B.fields[1,k] / pivot
             B.fields[1,k] = Ib
             for j in k+1:l
                 B.fields[1,j] -= Ib * A.fields[k,j]
@@ -196,3 +226,12 @@ function forward_substitution(M::BlockMatrix, b::Vector{Float64})
     end
     return y
 end
+
+function solve_LU(blockMatrix::BlockMatrix, b, p::Vector{Int})
+    b_p = b[p]
+
+    y = forward_substitution(blockMatrix, b_p)
+    x = back_substitution(blockMatrix, y)
+
+    return x
+end 

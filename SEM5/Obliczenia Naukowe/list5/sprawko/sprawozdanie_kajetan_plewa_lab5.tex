@@ -1,0 +1,203 @@
+\documentclass[11pt, a4paper]{article}
+
+% --- PREAMBUŁA DLA PDFLATEX (Stabilna) ---
+\usepackage{float}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel} % Ustawienie języka polskiego
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
+
+% Pakiety matematyczne i tabelaryczne
+\usepackage{amsmath}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, urlcolor=blue, linkcolor=black, citecolor=black}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{juliabase}{RGB}{37, 37, 37}
+\definecolor{juliakeyword}{RGB}{146, 31, 151}
+\definecolor{juliastring}{RGB}{125, 39, 39}
+\definecolor{juliacomment}{RGB}{104, 112, 121}
+\definecolor{julianumber}{RGB}{28, 0, 201}
+\definecolor{juliabackground}{RGB}{248, 248, 248}
+
+% Ręczna definicja języka Julia
+\lstdefinelanguage{Julia}{
+	morekeywords={
+		abstract,break,case,catch,const,continue,do,else,elseif,end,export,false,for,
+		function,immutable,import,importall,if,in,macro,module,quote,return,struct,
+		true,try,type,typealias,using,while
+	},
+	sensitive=true,
+	morecomment=[l]{\#},
+	morecomment=[s]{\#=}{=\#},
+	morestring=[b]",
+	morestring=[m]'
+}
+
+\lstset{
+	language=Julia,
+	backgroundcolor=\color{juliabackground},
+	basicstyle=\ttfamily\small\color{juliabase},
+	keywordstyle=\color{juliakeyword}\bfseries,
+	stringstyle=\color{juliastring},
+	commentstyle=\color{juliacomment}\itshape,
+	numberstyle=\tiny\color{gray},
+	numbers=left,
+	stepnumber=1,
+	numbersep=8pt,
+	showstringspaces=false,
+	breaklines=true,
+	frame=single,
+	rulecolor=\color{lightgray}
+}
+
+\sisetup{
+	round-mode = places,
+	round-precision = 1,
+	scientific-notation = true,
+	exponent-product = \cdot, % Używa kropki jako separatora wykładnika
+	group-separator = {} % Wyłącza separator tysięcy
+}
+
+\title{\vspace{-2cm}\textbf{Obliczenia Naukowe Laboratoria - Lista}}
+\author{Kajetan Plewa}
+\date{\today}
+
+\begin{document}
+	\maketitle
+	
+	\section{Opis algorytmów}
+	
+	\subsection{Użyta struktura}
+	Pierwszym i najważniejszym krokiem było przygotowanie odpowiedniej struktury, pozwalającej na optymalne przechowywanie danych, bez utraty znaczących informacji. \newline
+	Poniżej znajdują się dwie wykorzystywane w zadaniu struktury:
+	\begin{lstlisting}[language=Julia, caption=Struktury]
+		mutable struct Block
+			fields::Matrix{Float64}
+		end
+			
+		mutable struct BlockMatrix
+			n::Int
+			l::Int
+			v::Int
+			AList::Vector{Block}
+			BList::Vector{Block}
+			CList::Vector{Block}
+		end
+	\end{lstlisting}
+	Podstawowa struktura \textit{block} składa się z macierzy $l x l$ - początkowo zarówno dla B jak i C miał być używany vektor - jednak dwa poniższe czynniki wymuszają użycie macierzy w obu przypadkach:
+	\begin{itemize}
+		\item implementacja pivota, która wiąże się z zamianą wierszów
+		\item odejmowanie w back\_substitution - dla $C$ powoduje odejmowanie pod przekatną bloku $C$
+	\end{itemize}
+	Główna struktura przetrzymująca wszystkie dane - \textit{BlockMatrix} - składa się z trzech parametrów wprowadzanych do zadania - $n, v, l$ oraz trzech wektorów przechowujących bloki budujące macierz.
+	
+	\subsection{Eliminacja Gaussa}
+	Algorytm ten został zaimplementowany na podstawie algorytmu pokazanego na wykładzie - został jednak on dostosowany do charakterestycznej struktury podanej w zadaniu.\newline
+	Korzystając z oczywistych faktów iż:
+	\begin{equation}
+		\frac{0}{pivot} = 0
+	\end{equation}
+	Oraz 
+	\begin{equation}
+		0 - 0 * a_{kj} = 0
+	\end{equation}
+	Można ograniczyć się do działania w obrębie bloków, gdyż zera po za nimi i tak pozostaną zerami. W funkcji \textit{gaussianElimination} korzystam z tej konkluzji i przekazuje do dalszego działania tylko trzy potrzebne bloki, czyli:
+	\begin{itemize}
+		\item $A_k$
+		\item $B_{k+1}$
+		\item $C_k$
+	\end{itemize}
+	
+	\paragraph{Funkcja eliminate!}
+	Tutaj odbywa się faktyczny proces eliminacji Gaussa - iterujemy po $1:l-1$ - czyli po wartościach na przekątnej bloku A i dla każdego $a_{kk}$ wybieramy pivot. W zależności od wartości parametru $pivotOn$ jest on równy:
+	\begin{itemize}
+		\item $|a_{kk}| = \max_{k \leq i \leq n} |a_{ik}|$
+		\item $|a_{kk}|$
+	\end{itemize}
+	Następnie rozpatrzone zostały dwa przypadki
+	\begin{itemize}
+		\item Zerowanie współczynnikow pod przekątna w bloku $A$. Podczas tego procesu należy pamiętać o tym, że współczynniki w bloku $C$ po prawej stronie również zostaną zmodyfikowane.
+		\item Zerowanie współczynnik pod przekątna znajdujących się w bloku $B$. Z charakterystycznej konstrukcji możemy zrobić to tylko raz gdyż współczynniki znajdują się tylko w pierwszym wierszu i ostatniej kolumnie
+	\end{itemize}
+	Ostatnim krokiem jest dostosowanie współczynników w kolumnie i wierszu l. W klasycznej eliminacji Gaussa, nie należy przejmować się ostatnim współczynnikiem lecz w tym wypadku trzeba pamiętać o ostatniej kolumnie $B$. Ich modyfikacja wpływa też na blok $A_{k+1}$
+	
+	\subsection{Funkcja back\_substitution}
+	Pozwala ona na wyliczenie macierzy po eliminacji gaussa oraz jest potrzebna do rozwiązania $Ux=y$ w solverze LU. \newline
+	Jej działanie jest proste - iteruje ona od końca po przekątnej i oblicza wartość $x[i]$ korzystając z wzoru przedstawionego na wykładzie.
+	\begin{equation}
+		x_k = \frac{b_k - \sum_{ k+1 \leq j \leq n}{u_{kj}x_j}}{u_{kk}}
+	\end{equation}
+	
+	\subsection{Funkcja forward\_substitution}
+	Działa ona analogicznie do funkcji back\_substitution, lecz zamiast iterować od n do 1, iteruje od 1 do n.\newline
+	Warto podkreślić tutaj główną różnice między tymi dwoma funkcjami - obie operują na \textit{macierzy trójkątnej}, lecz podczas gdy pierwsza z nich wirtualnie zakłada, że zera są pod przekątna, druga działa odwrotnie - zera nad przekątną.
+	
+	\subsection{Rozkład LU}
+	Jest on oparty całkowicie na eliminacji Gaussa. Najbardziej istotną różnicą jest to, że w funkcji /textit{eliminateLU!} w przeciwieństwie do funkcji \textit{eliminate!} nie ustawiamy współczynnika $a_{ik}$ na $0$ tylko na obliczony iloraz $\frac{a_{ik}}{pivot}$. W ten sposób pod przekątną znajduje się macierz  $L$. \newline
+	Reszta modyfikacji przeprowadzona jest tak jak w Gaussie - w ten sposób nad przekątną otrzymujemy macierz $U$. Jest to optymalny sposób na przechowywanie macierzy \textbf{LU} (zera w pozostałej części oryginalnej macierzy dalej pozostają zerami).
+	
+	\subsection{Funkcja getPivot}
+	W rozwiązaniu zaimplementowany został częściowy wybór pivota. Jego działanie jest proste i zgodne z logiką z wykładu, z pojedynczą różnicą.
+	\begin{itemize}
+		\item wybierane jest interesujące nas $a_{kk}$
+		\item znalezienie najwiekszego elementu w tej kolumnie (poniżej współczynnika $a_{kk}$), z zastrzeżeniem, że szukamy go lokalnie - czyli w kolumnie, w której się znajdujemy. Jest to niestety konieczne założenie gdyż w przeciwnym razie wiersz z $B_{k+1}$, który rozciąga się na $A_{k+1} i C_{k+1}$ zaburzył by strukturę macierzy. Założenie to ma jednakże niewielki wpływ na jakość wyników - rezygnujemy tylko z jednego pola na $O(l)$.
+		\item Ostatni krok to zamiana wiersza $k$ z wierszem o największym współczynniku $a_{pk}$
+	\end{itemize}
+	
+	\subsection{Funkcja solverLU}
+	Pierwszym krokiem jest stworzenie vectora przechowującego rzeczywistą lokalizację każdego wiersza - początkowo będzie ona wyglądać w ten sposób: $p[i] = i$ lecz wraz z wybieraniem pivota w \textit{eliminateLU!} wiersze będą swapowane. Vektor ten pozwala zachować informacje o strukturze macierzy jednocześnie pozwalając na wielokrotne użycie tego samego rozkładu LU dla różnych b. Gdyby swapowanie vektora $b$ odbywało się w funkcji eliminateLU, rozkład musiałby być wykonywany wielokrotnie dla tej samej macierzy.
+	
+	\section{Złożoność czasowa i pamięciowa}
+	
+	\subsection{Złożonośc pamięciowa}
+	Struktura \textit{BlockMatrix} składa się z 3 vektorów o rozmiarze $O(v)$ gdzie $v = \frac{n}{l}$. Każdy z tych wektorów ma rozmiar $l * l = l^2$ więc ostatecznie zajmowane miejsce jest rzędu:
+	\begin{equation}
+		3 * v * l^2 = 3 * \frac{n}{l} * l^2 = 3*nl \approx O(nl)
+	\end{equation}
+	Porównując do oryginlnego rozmiaru macierzy - $O(n^2)$ - widać zdecydowaną poprawę.
+	
+	\subsection{Złożoność czasowa}
+	Podczas wykonywania zarówno rozdziału LU jak i eliminacji Gaussa przechoidzimy przez każdy punkt na przekątnej - puntków tych jest $n$. Następnie dla każdego punktu wykonujemy $O(l)$ operacji odejmowania współczynników oraz potencjalnie wybieramy pivot - za pomocą funkcji getPivot o złożoności $O(l)$. Spodziewana złożoność czasowa wynosi więc:
+	\begin{equation}
+		O(n) * (O(l)+O(l)) = O(n)
+	\end{equation}
+	Ponieważ l jest stałą.
+	Analiza rozwiązywania za pomocą back i forward substitution jest tożsama. Osiągnieta złożoność również wynosi $O(n)$.
+	
+	\section{Wyniki}
+	Poniżej zostaną zaprezentowane wyniki. Będą to wykresy czasu i błędu pomiaru, a $n$.
+	
+	\begin{figure}[!h]
+		\centering
+		\includegraphics[width=0.8\textwidth]{../testfiles/wykres_czas_z_pliku.png}
+		\caption{Czas działania algorytmu vs n}
+		\label{fig:timefile}
+	\end{figure}
+	
+	\begin{figure}[!h]
+		\centering
+		\includegraphics[width=0.8\textwidth]{../testfiles/wykres_blad_z_pliku.png}
+		\caption{Błąd względny vs n.}
+		\label{fig:errorfile}
+	\end{figure}
+	
+	\paragraph{Interpretacja}
+	\begin{itemize}
+		\item Wyniki pierwszego wykresu zgadzają się z tymi spodziewanymi. Dla LU i Gaussa czas rośnie liniowo. Co więcej włączenie częsciowego wyboru pivota zwiększa minimalnie czas wykonywania programu. Na wykresie widać, iż wzrost ten jest mniej więcej stały co potwierdza złożoność funkcji \textit{getPivot}.
+		\item Drugi wykres przedstawia jak zmieniał się błąd względny wraz z wzrostem wartości $n$. Widać, że jest on stały - niezależnie od $n$. Sugeruje to poprawność zaimplementowanego rozwiązania.
+	\end{itemize}
+	
+	\section{Wnioski}
+	Wykonanie tego zadania pozwala dostrzec ogromny potencjał w teoretycznej analizie otrzymywanych danych. Zebranie informacji o spodziewanych danych otrzymywanych przez program pozwala przygotować infrastrukturę pod charakterystyke danych, przyspieszając działanie programu i zmiejszając zużycie potrzebnych zasobów. W czasach tak szybko rosnącej ceny RAMu umiejętność ta wydaje się kluczowa z perspektywy programisty. 
+	
+	\end{document}
+	
+	
+	
