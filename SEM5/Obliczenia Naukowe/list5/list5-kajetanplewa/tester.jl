@@ -10,68 +10,14 @@ Zapisuje wynik do pliku tekstowego zgodnie ze specyfikacją z PDF (strona 3).
 """
 function save_results(filepath::String, x::Vector{Float64}, err::Float64, is_computed_b::Bool)
     open(filepath, "w") do f
-        # Zapisujemy zawsze błąd jako pierwszą linię (dla obu scenariuszy)
-        println(f, err)
+        if is_computed_b
+            # Jeśli b było obliczane (b=Ax), najpierw drukujemy błąd względny
+            println(f, err)
+        end
         for val in x
             println(f, val)
         end
     end
-end
-
-"""
-Mnoży BlockMatrix przez wektor x, zwraca wektor Ax.
-"""
-function multiply_blockmatrix(BM::BlockMatrix, x::Vector{Float64})
-    n = BM.n
-    l = BM.l
-    v = BM.v
-    y = zeros(Float64, n)
-
-    for k in 1:v
-        offset = (k - 1) * l
-        A = BM.AList[k]
-        # A block (l x l)
-        for i in 1:l
-            gi = offset + i
-            s = 0.0
-            for j in 1:l
-                gj = offset + j
-                if gj <= n
-                    s += A.fields[i, j] * x[gj]
-                end
-            end
-            y[gi] += s
-        end
-        # C block -> contributes to same offset rows (columns in next block)
-        if k < v
-            C = BM.CList[k]
-            next_offset = k * l
-            for i in 1:l
-                gi = offset + i
-                for j in 1:l
-                    gj = next_offset + j
-                    if gj <= n
-                        y[gi] += C.fields[i, j] * x[gj]
-                    end
-                end
-            end
-        end
-        # B block -> contributions from previous block's variables
-        if k > 1
-            B = BM.BList[k]
-            prev_offset = (k - 2) * l
-            for i in 1:l
-                gi = offset + i
-                for j in 1:l
-                    gj = prev_offset + j
-                    if gj >= 1 && gj <= n
-                        y[gi] += B.fields[i, j] * x[gj]
-                    end
-                end
-            end
-        end
-    end
-    return y
 end
 
 """
@@ -111,22 +57,6 @@ function run_comprehensive_tests(name::String, stats_file::IOStream)
 
         for pivot in [false, true]
             p_label = pivot ? "pivot" : "no_pivot"
-
-            # --- WARMUP: wywołania poza pomiarem aby wymusić kompilację metod (elim./back_sub)
-            try
-                BM_w = read_matrix(mat_path)
-                b_w = copy(b_base)
-                p_w = collect(1:BM_w.n)
-                gaussianElimination(BM_w, b_w, pivot, p_w)
-                _ = back_substitution(BM_w, b_w)
-                BM_w2 = read_matrix(mat_path)
-                b_w2 = copy(b_base)
-                p_w2 = collect(1:BM_w2.n)
-                LU!(BM_w2, pivot, p_w2)
-                _ = solve_LU(BM_w2, b_w2, p_w2)
-            catch e
-                # warmup may fail for some reason, but we continue to timed runs
-            end
             
             # --- TEST 1: Eliminacja Gaussa ---
             BM_gauss = read_matrix(mat_path)
@@ -134,21 +64,12 @@ function run_comprehensive_tests(name::String, stats_file::IOStream)
             p_gauss = collect(1:BM_gauss.n)
             
             println("  -> Gauss ($p_label, $scen_suffix)...")
-            # zachowaj oryginalną macierz i oryginalny b (przed modyfikacją) do obliczenia reszty
-            BM_orig = read_matrix(mat_path)
-            b_before = copy(b_gauss)
             t_gauss = @elapsed begin
                 gaussianElimination(BM_gauss, b_gauss, pivot, p_gauss)
                 x_gauss = back_substitution(BM_gauss, b_gauss)
             end
-            if is_computed
-                err_gauss = norm(ones(BM_gauss.n) - x_gauss) / norm(ones(BM_gauss.n))
-            else
-                # obliczamy resztę ||A*x - b|| / ||b|| używając oryginalnej macierzy i oryginalnego b
-                Ax = multiply_blockmatrix(BM_orig, x_gauss)
-                denom = norm(b_before)
-                err_gauss = denom == 0.0 ? norm(Ax - b_before) : norm(Ax - b_before) / denom
-            end
+            
+            err_gauss = is_computed ? norm(ones(BM_gauss.n) - x_gauss) / norm(ones(BM_gauss.n)) : 0.0
             out_gauss = "testfiles/Wynik$(name)_gauss_$(p_label)_$(scen_suffix).txt"
             save_results(out_gauss, x_gauss, err_gauss, is_computed)
             
@@ -161,19 +82,12 @@ function run_comprehensive_tests(name::String, stats_file::IOStream)
             p_lu = collect(1:BM_lu.n)
             
             println("  -> LU ($p_label, $scen_suffix)...")
-            BM_orig_lu = read_matrix(mat_path)
-            b_before_lu = copy(b_lu)
             t_lu = @elapsed begin
                 LU!(BM_lu, pivot, p_lu)
                 x_lu = solve_LU(BM_lu, b_lu, p_lu)
             end
-            if is_computed
-                err_lu = norm(ones(BM_lu.n) - x_lu) / norm(ones(BM_lu.n))
-            else
-                Ax_lu = multiply_blockmatrix(BM_orig_lu, x_lu)
-                denom_lu = norm(b_before_lu)
-                err_lu = denom_lu == 0.0 ? norm(Ax_lu - b_before_lu) : norm(Ax_lu - b_before_lu) / denom_lu
-            end
+            
+            err_lu = is_computed ? norm(ones(BM_lu.n) - x_lu) / norm(ones(BM_lu.n)) : 0.0
             out_lu = "testfiles/Wynik$(name)_lu_$(p_label)_$(scen_suffix).txt"
             save_results(out_lu, x_lu, err_lu, is_computed)
             

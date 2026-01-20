@@ -17,13 +17,9 @@ function createBlockMatrix(nn, ll)
     return BlockMatrix(nn, ll, vv, Block[], Block[], Block[])
 end
 
-function swap_rows!(A::Block, C::Block,i::Int, j::Int, B_left)
+function swap_rows!(A::Block, C::Block,i::Int, j::Int)
     A.fields[i, :], A.fields[j, :] = A.fields[j, :], A.fields[i, :]
     C.fields[i, :], C.fields[j, :] = C.fields[j, :], C.fields[i, :]
-
-    if B_left !== nothing
-        B_left.fields[i, :], B_left.fields[j, :] = B_left.fields[j, :], B_left.fields[i, :]
-    end
 end
 
 function getPivot(A::Block, C::Block, pivotOn::Bool, k::Int, l::Int, p::Vector{Int}, offset::Int)
@@ -34,7 +30,7 @@ function getPivot(A::Block, C::Block, pivotOn::Bool, k::Int, l::Int, p::Vector{I
     end
 end
 
-function minInCol!(block::Block, blockC::Block, k::Int, l::Int, p::Vector{Int}, offset::Int, b_left, b_vector)
+function minInCol!(block::Block, blockC::Block, k::Int, l::Int, p::Vector{Int}, offset::Int)
     max = abs(block.fields[k, k])
     idx = k
     for i in k+1:l
@@ -45,11 +41,8 @@ function minInCol!(block::Block, blockC::Block, k::Int, l::Int, p::Vector{Int}, 
         end 
     end
     if(idx!=k)
-        swap_rows!(block, blockC, k, idx, b_left)
+        swap_rows!(block, blockC, k, idx)
         p[offset+k], p[offset+idx] = p[offset+idx], p[offset+k]
-        if b_vector !== nothing
-            b_vector[offset+k], b_vector[offset+idx] = b_vector[offset+idx], b_vector[offset+k]
-        end
     end 
     return block.fields[k, k]
 end 
@@ -58,23 +51,22 @@ function gaussianElimination(block_matrix::BlockMatrix, b_matrix::Vector{Float64
     for k in 1:block_matrix.v
         c = block_matrix.CList[k]
         a = block_matrix.AList[k]
-        currentB_left = (k > 1) ? block_matrix.BList[k] : nothing
         b = nothing
         nexta = nothing
         if k<block_matrix.v
             b = block_matrix.BList[k+1]
             nexta = block_matrix.AList[k+1]
         end
-        eliminate!(c, a, b, block_matrix.l, b_matrix, nexta,pivotOn, k, p, currentB_left)
+        eliminate!(c, a, b, block_matrix.l, b_matrix, nexta,pivotOn, k, p)
     end 
 end
 
 
-function eliminate!(C, A, B, l::Int, b_matrix::Vector{Float64}, nextA, pivotOn::Bool, n::Int, p::Vector{Int}, b_left)
+function eliminate!(C, A, B, l::Int, b_matrix::Vector{Float64}, nextA, pivotOn::Bool, n::Int, p::Vector{Int})
     for k in 1:l-1
         pivot = A.fields[k, k]
         if pivotOn && k < l
-            pivot = minInCol!(A, C, k, l, p, (n-1)*l, b_left, b_matrix)
+            pivot = minInCol!(A, C, k, l, p, (n-1)*l)
         end
         #USTAWIANIE W BLOKU A - najpierw zmieniam sobie A i potem C
         for i in k+1:l
@@ -96,7 +88,7 @@ function eliminate!(C, A, B, l::Int, b_matrix::Vector{Float64}, nextA, pivotOn::
             for j in k:l
                 B.fields[1,j] -= Ib * A.fields[k,j]
             end 
-            for j in 1:l
+            for j in 1:k
                 nextA.fields[1,j] -= Ib * C.fields[k,j]
             end
             b_matrix[(n-1)*l + l + 1] -= Ib * b_matrix[(n-1)*l + k]
@@ -138,7 +130,7 @@ function back_substitution(M::BlockMatrix, b::Vector{Float64})
             C = M.CList[block_n]
             offset_next_block = block_n * l
             # Wiersz diag_n w bloku C ma elementy tylko do kolumny diag_n
-            for j_local in 1:l
+            for j_local in 1:diag_n
                 global_j = offset_next_block + j_local
                 if global_j <= n
                     s += C.fields[diag_n, j_local] * x[global_j]
@@ -157,20 +149,19 @@ function LU!(block_matrix::BlockMatrix, pivotOn::Bool, p::Vector{Int})
         a = block_matrix.AList[k]
         b = nothing
         nexta = nothing
-        currentB_left = (k > 1) ? block_matrix.BList[k] : nothing
         if k<block_matrix.v
             b = block_matrix.BList[k+1]
             nexta = block_matrix.AList[k+1]
         end
-        eliminateLU!(c, a, b, block_matrix.l, nexta,pivotOn, k, p, currentB_left)
+        eliminateLU!(c, a, b, block_matrix.l, nexta,pivotOn, k, p)
     end 
 end
 
-function eliminateLU!(C, A, B, l::Int, nextA, pivotOn::Bool, n::Int, p::Vector{Int}, b_left)
+function eliminateLU!(C, A, B, l::Int, nextA, pivotOn::Bool, n::Int, p::Vector{Int})
     for k in 1:l-1
         pivot = A.fields[k, k]
         if pivotOn && k < l
-            pivot = minInCol!(A, C, k, l, p, (n-1)*l, b_left, nothing)
+            pivot = minInCol!(A, C, k, l, p, (n-1)*l)
         end
         #USTAWIANIE W BLOKU A - najpierw zmieniam sobie A i potem C
         for i in k+1:l
@@ -193,7 +184,7 @@ function eliminateLU!(C, A, B, l::Int, nextA, pivotOn::Bool, n::Int, p::Vector{I
             for j in k+1:l
                 B.fields[1,j] -= Ib * A.fields[k,j]
             end 
-            for j in 1:l
+            for j in 1:k
                 nextA.fields[1,j] -= Ib * C.fields[k,j]
             end
         end
