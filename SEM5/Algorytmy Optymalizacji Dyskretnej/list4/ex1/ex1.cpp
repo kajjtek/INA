@@ -138,12 +138,13 @@ void generateGLPKModel(const string& filename, int n, int s, int t, const vector
 
     // Zbiory
     ofs << "set V := 0.." << (n - 1) << ";\n";
-    ofs << "set E within {V, V} :=\n";
+    // Definiujemy E jako zbiór par zapisanych w nawiasach klamrowych — składnia akceptowana przez GLPK
+    ofs << "set E := {\n";
     for (size_t i = 0; i < edges.size(); ++i) {
         auto [u, v, cap] = edges[i];
-        ofs << "  (" << u << "," << v << ")" << (i == edges.size() - 1 ? ";" : ",") << "\n";
+        ofs << "  (" << u << "," << v << ")" << (i == edges.size() - 1 ? "\n" : ",\n");
     }
-    ofs << "\n";
+    ofs << "};\n\n";
 
     // Parametry (pojemności)
     ofs << "param cap{ (u,v) in E };\n\n";
@@ -253,7 +254,8 @@ int main(int argc, char* argv[]) {
     long long maxFlowValue = ek.solve(0, numNodes - 1);
     
     auto end = chrono::high_resolution_clock::now();
-    chrono::duration<double> elapsed = end - start;
+    // Mierzymy czas w mikrosekundach, żeby mieć większą rozdzielczość dla szybkich uruchomień
+    long long elapsed_us = chrono::duration_cast<chrono::microseconds>(end - start).count();
 
     // Wynik na stdout
     cout << "Maksymalny przeplyw: " << maxFlowValue << endl;
@@ -262,7 +264,7 @@ int main(int argc, char* argv[]) {
     }
 
     // Statystyki na stderr
-    cerr << "Czas wykonania: " << elapsed.count() << " s" << endl;
+    cerr << "Czas wykonania: " << elapsed_us << " us" << endl;
     cerr << "Liczba sciezek powiekszajacych: " << ek.getAugmentingPathsCount() << endl;
 
     return 0;

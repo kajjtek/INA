@@ -1,0 +1,322 @@
+\documentclass[11pt, a4paper]{article}
+
+% Pakiety podstawowe i językowe
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+
+% POPRAWKA BŁĘDU KOMPILACJI: Zmiana z XeTeX/LuaTeX na standardowy pdfTeX (używający T1 i UTF-8)
+\usepackage[T1]{fontenc} 
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+
+% Pakiety matematyczne i tabelaryczne
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow} % Wymagany do grupowania wierszy w tabelach (jak w wynikach P2P)
+
+% Formatowanie dokumentu
+\title{Sprawozdanie z Laboratorium 4}
+\author{Kajetan Plewa}
+\date{Styczeń 2025}
+
+\begin{document}
+	\maketitle
+	\thispagestyle{empty}
+	\clearpage
+	\section{Zadanie 1: Algorytm Edmondsa-Karpa w hiperkostce}
+	
+	\subsection{Opis implementacji}
+	Celem zadania było wyznaczenie maksymalnego przepływu w $k$-wymiarowej skierowanej hiperkostce $H_k$ przy użyciu algorytmu Edmondsa-Karpa. Implementacja została wykonana w języku C++ i składa się z trzech głównych komponentów:
+	
+	\begin{itemize}
+		\item \textbf{Struktura grafu:} Graf reprezentowany jest przy użyciu listy sąsiedztwa. Każda krawędź (\texttt{Edge}) przechowuje wierzchołek docelowy, pojemność ($c_{uv}$), aktualny przepływ ($f_{uv}$) oraz indeks krawędzi powrotnej (\texttt{rev}) w sieci residualnej, co pozwala na aktualizację przepływu w czasie stałym.
+		\item \textbf{Budowa hiperkostki:} Wierzchołki są identyfikowane przez liczby od $0$ do $2^k-1$. Krawędź $(i, j)$ tworzona jest wtedy i tylko wtedy, gdy reprezentacje binarne $i$ oraz $j$ różnią się na dokładnie jednej pozycji, a waga Hamminga $H(j) = H(i) + 1$[cite: 10, 12].
+		\item \textbf{Pojemności krawędzi:} Zgodnie z treścią zadania, pojemności są losowane z rozkładu jednostajnego ze zbioru $\{1, \dots, 2^l\}$, gdzie $l = \max(H(i), Z(i), H(j), Z(j))$, a $Z(x)$ to liczba zer w zapisie binarnym[cite: 14, 15].
+	\end{itemize}
+	
+\subsection{Opis działania algorytmu}
+ Kluczowe aspekty działania zaimplementowanego algorytmu to:
+
+\begin{enumerate}
+	\item \textbf{Sieć residualna i krawędzie powrotne:} Dla każdej krawędzi $(u, v)$ o pojemności $c(u, v)$, algorytm przechowuje aktualny przepływ $f(u, v)$. W sieci residualnej istnieją dwa rodzaje krawędzi:
+	\begin{itemize}
+		\item Krawędź wprost $(u, v)$ z przepustowością residualną $r(u, v) = c(u, v) - f(u, v)$.
+		\item Krawędź wsteczna $(v, u)$ z przepustowością residualną $r(v, u) = f(u, v)$, która pozwala na "wycofanie" wcześniej przesłanego przepływu.
+	\end{itemize}
+	W kodzie zostało to zrealizowane poprzez pole \texttt{rev}, które wiąże krawędź z jej lustrzanym odbiciem w liście sąsiedztwa drugiego wierzchołka.
+	
+	\item \textbf{Wybór najkrótszej ścieżki (BFS):} W każdej iteracji algorytm wykonuje przeszukiwanie wszerz (BFS), startując z wierzchołka $s=0$. BFS znajduje ścieżkę z $s$ do $t=2^k-1$ o minimalnej liczbie krawędzi w sieci residualnej $G_f$. 
+	
+	\item \textbf{Aktualizacja przepływu:} Po znalezieniu ścieżki powiększającej $p$, wyznaczana jest minimalna przepustowość residualna na tej ścieżce:
+	\begin{equation}
+		c_f(p) = \min \{ r(u, v) : (u, v) \in p \}
+	\end{equation}
+	Następnie przepływ wzdłuż każdej krawędzi ścieżki $p$ jest zwiększany o $c_f(p)$, a przepływ na odpowiadających im krawędziach wstecznych jest zmniejszany o tę samą wartość.
+	
+	\item \textbf{Warunek stopu:} Algorytm kończy działanie, gdy w sieci residualnej nie istnieje już żadna ścieżka z $s$ do $t$ o dodatniej przepustowości residualnej. Zgodnie z twierdzeniem o maksymalnym przepływie i minimalnym przekroju, wyznaczony przepływ jest wtedy maksymalny.
+\end{enumerate}
+	
+	\subsection{Analiza złożoności obliczeniowej}
+	
+	Złożoność algorytmu Edmondsa-Karpa wyraża się wzorem $O(V \cdot E^2)$, gdzie $V$ to liczba wierzchołków, a $E$ to liczba krawędzi. W przypadku $k$-wymiarowej hiperkostki parametry te wynoszą:
+	\begin{itemize}
+		\item $V = 2^k$ 
+		\item $E = k \cdot 2^{k-1}$ 
+	\end{itemize}
+	
+	Podstawiając te wartości do ogólnego wzoru na złożoność:
+	\begin{equation}
+		O(V \cdot E^2) = O(2^k \cdot (k \cdot 2^{k-1})^2)
+	\end{equation}
+	
+	Rozpisując potęgi:
+	\begin{equation}
+		O(2^k \cdot k^2 \cdot 2^{2k-2}) = O(k^2 \cdot 2^{3k-2}) = O(k^2 \cdot 2^{3k})
+	\end{equation}
+	
+	\subsubsection{Złożoność pamięciowa}
+	Pamięć zajmowana przez graf zależy od liczby wierzchołków i krawędzi:
+	\begin{equation}
+		O(V + E) = O(2^k + k \cdot 2^{k-1}) = O(k \cdot 2^k)
+	\end{equation}
+	
+	\section{Zadanie 2: Maksymalne skojarzenie w losowym grafie dwudzielnym}
+	
+	\subsection{Opis implementacji i generowania grafu}
+	Zadanie polegało na wyznaczeniu skojarzenia o największym rozmiarze w nieskierowanym dwudzielnym grafie losowym $G = (V_1 \cup V_2, E)$.
+	\begin{itemize}
+		\item \textbf{Struktura zbiorów:} Oba podzbiory wierzchołków $V_1$ i $V_2$ mają równą liczność $|V_1| = |V_2| = 2^k$].
+		\item \textbf{Generowanie krawędzi:} Dla każdego wierzchołka $u \in V_1$ losowanych jest niezależnie $i$ sąsiadów ze zbioru $V_2$ z rozkładem jednostajnym. 
+		\item \textbf{Transformacja do problemu przepływu:} Aby wyznaczyć maksymalne skojarzenie, graf nieskierowany transformowany jest w sieć przepływową:
+		\begin{enumerate}
+			\item Dodawane jest super-źródło $s$ połączone ze wszystkimi wierzchołkami $u \in V_1$.
+			\item Dodawane jest super-ujście $t$ połączone ze wszystkimi wierzchołkami $v \in V_2$.
+			\item Wszystkie krawędzie (zarówno te od $s$, jak i te między $V_1$ a $V_2$ oraz do $t$) otrzymują jednostkową przepustowość $c(e) = 1$.
+		\end{enumerate}
+	\end{itemize}
+	
+	\subsection{Algorytm wyznaczania skojarzenia}
+	Wartość maksymalnego przepływu w tak skonstruowanej sieci jest równa liczności maksymalnego skojarzenia w grafie dwudzielnym. 
+	\begin{itemize}
+		\item \textbf{Zastosowana metoda:} Wykorzystano ponownie algorytm Edmondsa-Karpa. W przypadku sieci o jednostkowych pojemnościach, każda ścieżka powiększająca zwiększa przepływ o dokładnie 1 jednostkę.
+	\end{itemize}
+	
+	\subsection{Analiza złożoności obliczeniowej}
+	Parametry grafu dla zadania 2 wynoszą:
+	\begin{itemize}
+		\item Liczba wierzchołków w sieci: $V = 2 \cdot 2^k + 2$ (wierzchołki $V_1, V_2$ oraz $s$ i $t$).
+		\item Liczba krawędzi w sieci: $E = 2^k (\text{do } s) + i \cdot 2^k (\text{między } V_1, V_2) + 2^k (\text{do } t) = (i+2)2^k$.
+	\end{itemize}
+	
+	Dla algorytmu Edmondsa-Karpa w ogólnym przypadku złożoność to $O(VE^2)$. 
+	
+	Zatem złożoność w tym konkretnym przypadku wynosi:
+	\begin{equation}
+		O(2^k \cdot (V + E)) = O(2^k \cdot (2 \cdot 2^k + (i+2)2^k)) = O(i \cdot 2^{2k})
+	\end{equation}
+
+	\section{Zadanie 3: Modelowanie problemów za pomocą programowania liniowego (LP)}
+	
+	\subsection{Transformacja problemów do postaci modelu LP}
+	Zgodnie z wymaganiami zadania, zaimplementowano generator modeli w języku GNU MathProg.
+	
+	\subsubsection{Model dla maksymalnego przepływu (Zadanie 1)}
+	Problem maksymalnego przepływu w hiperkostce $H_k$ można sformułować jako zadanie programowania liniowego, gdzie zmiennymi decyzyjnymi są wielkości przepływu $x_{ij}$ na każdym łuku $(i,j) \in A_k$.
+	
+	\textbf{Funkcja celu:} Maksymalizacja całkowitego wypływu ze źródła $s$:
+	\begin{equation}
+		\max \sum_{\{j:(s,j) \in A_k\}} x_{sj} - \sum_{\{j:(j,s) \in A_k\}} x_{js}
+	\end{equation}
+	
+	\textbf{Ograniczenia:}
+	\begin{enumerate}
+		\item \textbf{Ograniczenia przepustowości:} Dla każdego łuku $(i,j) \in A_k$:
+		\begin{equation}
+			0 \le x_{ij} \le c_{ij}
+		\end{equation}
+		\item \textbf{Zachowanie przepływu:} Dla każdego wierzchołka $i \in N_k \setminus \{s, t\}$:
+		\begin{equation}
+			\sum_{\{j:(j,i) \in A_k\}} x_{ji} - \sum_{\{j:(i,j) \in A_k\}} x_{ij} = 0
+		\end{equation}
+	\end{enumerate}
+	
+	\subsubsection{Model dla maksymalnego skojarzenia (Zadanie 2)}
+	Problem maksymalnego skojarzenia w grafie dwudzielnym jest modelowany analogicznie do przepływu o jednostkowych pojemnościach.
+	
+	\textbf{Zmienne decyzyjne:} $x_{ij} \in [0, 1]$ dla każdej krawędzi $(i, j)$ łączącej zbiory $V_1$ i $V_2$. Ponieważ macierz incydencji grafu dwudzielnego jest całkowicie unimodularna, rozwiązanie optymalne dla zmiennych ciągłych będzie naturalnie przyjmować wartości całkowite $\{0, 1\}$.
+	
+	\textbf{Funkcja celu:} Maksymalizacja sumy wybranych krawędzi:
+	\begin{equation}
+		\max \sum_{(i,j) \in E} x_{ij}
+	\end{equation}
+	
+	\textbf{Ograniczenia:} Każdy wierzchołek może być incydentny z co najwyżej jedną krawędzią w skojarzeniu:
+	\begin{itemize}
+		\item Dla każdego $i \in V_1$: $\sum_{\{j:(i,j) \in E\}} x_{ij} \le 1$
+		\item Dla każdego $j \in V_2$: $\sum_{\{i:(i,j) \in E\}} x_{ij} \le 1$
+	\end{itemize}
+	
+	\subsection{Implementacja flagi \texttt{--glpk}}
+	Program po podaniu parametru \texttt{--glpk nazwa\_pliku} wykonuje następujące kroki:
+	\begin{itemize}
+		\item Generuje sekcję \texttt{set V} oraz \texttt{set E} definiującą strukturę grafu.
+		\item Tworzy parametry \texttt{cap} odpowiadające wylosowanym wagom krawędzi.
+		\item Definiuje zmienne \texttt{var x} z odpowiednimi ograniczeniami dolnymi i górnymi.
+		\item Zapisuje równania zachowania przepływu w składni akceptowanej przez solver GLPK.
+	\end{itemize}
+	
+	\section{Zadanie 4: Implementacja algorytmu Dynica}
+	
+	\subsection{Opis algorytmu}
+	W celu optymalizacji wyznaczania maksymalnego przepływu, w zadaniu 4 zaimplementowano algorytm Dynica. .
+	
+	\subsection{Mechanizm działania}
+	Algorytm działa w fazach, a każda faza składa się z dwóch głównych etapów:
+	
+	\begin{enumerate}
+		\item \textbf{Budowa sieci warstwowej (BFS):}
+		Uruchamiany jest algorytm BFS, aby przypisać każdemu wierzchołkowi $v$ poziom $L(v)$, oznaczający najkrótszą odległość od źródła $s$ w sieci residualnej. Krawędź $(u, v)$ należy do sieci warstwowej tylko wtedy, gdy $L(v) = L(u) + 1$ oraz $r(u, v) > 0$. Jeśli ujście $t$ nie jest osiągalne, algorytm kończy działanie.
+		
+		\item \textbf{Znajdowanie przepływu blokującego (DFS):}
+		Wewnątrz sieci warstwowej poszukiwane są ścieżki powiększające przy użyciu algorytmu DFS. Kluczową optymalizacją jest zastosowanie \textbf{wskaźników krawędzi}. Dla każdego wierzchołka zapamiętujemy, którą krawędź ostatnio przetwarzaliśmy. Dzięki temu nie przeszukujemy wielokrotnie krawędzi, które już wcześniej okazały się nie prowadzić do ujścia w danej fazie.
+	\end{enumerate}
+	
+	
+	
+	\subsection{Złożoność obliczeniowa}
+	Złożoność algorytmu Dynica jest znacznie lepsza niż w przypadku Edmondsa-Karpa:
+	
+	\begin{itemize}
+		\item \textbf{Liczba faz:} Udowodniono, że w każdej fazie odległość $L(t)$ rośnie o co najmniej 1. Zatem liczba faz jest ograniczona przez $O(V)$.
+		\item \textbf{Pojedyncza faza:} Dzięki wskaźnikom krawędzi i usuwaniu "ślepych uliczek" w DFS, faza zajmuje czas $O(V \cdot E)$.
+	\end{itemize}
+	
+	Łączna złożoność wynosi zatem:
+	\begin{equation}
+		O(V) \cdot O(V \cdot E) = O(V^2 E)
+	\end{equation}
+	
+	W kontekście hiperkostki $H_k$, gdzie $V = 2^k$ oraz $E = k \cdot 2^{k-1}$:
+	\begin{equation}
+		O((2^k)^2 \cdot k \cdot 2^{k-1}) = O(k \cdot 2^{3k-1}) = O(k \cdot 2^{3k})
+	\end{equation}
+	Choć asymptotycznie dla tego konkretnego grafu złożoność wydaje się zbliżona do Edmondsa-Karpa, w praktyce algorytm Dynica wykonuje drastycznie mniej operacji BFS, co przekłada się na znacznie krótszy czas działania dla dużych $k$.
+	
+	\section{Porownanie wyników algorytmów 1 i 2 z modelem liniowym}
+	Przeprowadziłem szereg testów które miał na celu pokazanie poprawności naszych algorytmów poniżej znajdują się wyniki w formie tabeli dla owych zadań w odpowiadającej im kolejności.
+	Alogrytm który został przeze mnie zaimplementowany działał zdecydowanie szybciej od solvera liniowego.
+	
+	\begin{table}[ht]
+		\centering
+		\caption{Porównanie wyników dla zadania 1 (k = 1..10). "prog" = wynik algorytmu, "model" = wynik z modelu (python/glpsol).}
+		\label{tab:task1-comparison}
+		\begin{tabular}{r r r r c r r}
+			\toprule
+			k & run & prog & model\\
+			\midrule
+			1 & 1 & 2 & 2 \\
+			2 & 1 & 4 & 4\\
+			3 & 1 & 4 & 4\\
+			4 & 1 & 25 & 25  \\
+			5 & 1 & 71 & 71 \\
+			6 & 1 & 97 & 97\\
+			7 & 1 & 432 & 432 \\
+			8 & 1 & 1116 & 1116 \\
+			9 & 1 & 2471 & 2471 \\
+			10 & 1 & 5703 & 5703 \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	% Comparison table for task 2 (generated by verify_models.py)
+	\begin{table}[ht]
+		\centering
+		\caption{Porównanie wartości zwracanej przez program i model (zadanie 2, k=3..10).}
+		\begin{tabular}{r r r r r}
+			\toprule
+			$k$ & program & model (glpsol) \\
+			\midrule
+			3 & 5 & 5 &\\
+			4 & 11 & 11 &\\
+			5 & 20 & 20 &\\
+			6 & 39 & 39 &\\
+			7 & 85 & 85 & \\
+			8 & 168 & 168 & \\
+			9 & 319 & 319 & \\
+			10 & 654 & 654 \\
+			\bottomrule
+		\end{tabular}
+		\label{tab:verify-task2}
+	\end{table}
+	
+	\section{Analiza wyników - Zadania 1 i 4 (Hiperkostka)}
+	
+	W tej sekcji przedstawiono porównanie wydajności algorytmu Edmondsa-Karpa (EK) oraz algorytmu Dynica. Analiza obejmuje zarówno czas wykonania, jak i liczbę znalezionych ścieżek powiększających, co pozwala ocenić teoretyczne różnice w złożoności obu metod.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{../graphs_actual/comp_time_ek_dinic.png}
+		\caption{Porównanie czasu wykonania algorytmów EK i Dynica w funkcji wymiaru hiperkostki $k$. Skala logarytmiczna uwydatnia przewagę algorytmu Dynica dla dużych instancji.}
+		\label{fig:time_comp}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{../graphs_actual/comp_paths_ek_dinic.png}
+		\caption{Liczba ścieżek powiększających (augmenting paths) dla obu algorytmów. W przypadku algorytmu Dynica, jedna faza BFS pozwala na przesłanie wielu przepływów blokujących, co drastycznie redukuje liczbę operacji w porównaniu do EK.}
+		\label{fig:paths_comp}
+	\end{figure}
+	
+	
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{../graphs_actual/trend_max_flow.png}
+		\caption{Wartość maksymalnego przepływu w zależności od wymiaru $k$. Wzrost jest zgodny z charakterystyką generowanych pojemności krawędzi opartych na wadze Hamminga.}
+		\label{fig:flow_trend}
+	\end{figure}
+	
+	\newpage
+	
+	\section{Analiza wyników - Zadanie 2 (Skojarzenia)}
+	
+	Badanie grafów dwudzielnych skupiło się na wpływie stopnia wierzchołka $i$ na rozmiar maksymalnego skojarzenia oraz na ogólnej wydajności algorytmu w funkcji rozmiaru problemu.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{../graphs_actual/ex2_matching_vs_i.png}
+		\caption{Zależność rozmiaru maksymalnego skojarzenia od parametru $i$ (liczba sąsiadów). Widoczny jest próg, po którym prawdopodobieństwo znalezienia skojarzenia doskonałego gwałtownie rośnie.}
+		\label{fig:matching_i}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{../graphs_actual/ex2_time_vs_k.png}
+		\caption{Czas wyznaczania maksymalnego skojarzenia w funkcji wymiaru $k$. Pomimo dużych rozmiarów grafów ($2^k$), algorytm działa wydajnie dzięki jednostkowym pojemnościom krawędzi.}
+		\label{fig:matching_time}
+	\end{figure}
+	
+	\newpage
+	
+	\section{Interpretacja i wnioski}
+	
+	\begin{enumerate}
+		\item \textbf{Dlaczego Dynic wygrywa z Edmondsem-Karpem?} 
+		Moje testy wyraźnie pokazały, że algorytm Dynica jest znacznie szybszy w hiperkostce (rys. \ref{fig:time_comp}). Wynika to z tego, jak te algorytmy szukają ścieżek. Edmonds-Karp robi osobny BFS dla każdej nowej ścieżki, co przy dużym $k$ zajmuje mnóstwo czasu. Dynic natomiast za jednym razem (w jednej fazie) potrafi „przepchnąć” bardzo dużo przepływu, co widać na wykresie liczby ścieżek (rys. \ref{fig:paths_comp}) – wykonuje on po prostu mniej ciężkiej pracy.
+		
+		\item \textbf{Skojarzenia w grafach losowych (Zadanie 2):} 
+		Na wykresie \ref{fig:matching_i} widać ciekawą rzecz: jeśli każdy wierzchołek ma tylko jednego sąsiada ($i=1$), to trudno o duże skojarzenie. Ale wystarczy zwiększyć $i$ do 2 lub 3, a rozmiar skojarzenia od razu skacze prawie do maksimum ($2^k$). To pokazuje, że w takich grafach losowych bardzo szybko pojawia się szansa na znalezienie skojarzenia doskonałego.
+		
+		\item \textbf{Weryfikacja z GLPK:} 
+		Tabela z wynikami pokazuje status TRUE co oznacza, że moje algorytmy i solver GLPK zawsze dawały ten sam wynik. To dla mnie dowód, że kod działa poprawnie. Co ciekawe, dla bardzo dużych grafów ($k=14, 15$), GLPK zaczął działać bardzo wolno i zużywać dużo RAM-u, podczas gdy mój kod w C++ radził sobie bez problemu.
+		
+		\item \textbf{Podsumowanie:} 
+		Dedykowane algorytmy, jak Dynic czy Edmonds-Karp, są dużo lepsze do takich zadań niż ogólne solvery LP. Do mniejszych zadań Edmonds-Karp jest wystarczający, bo łatwiej go napisać, ale przy dużych projektach (jak $k=16$) Dynic jest bezkonkurencyjny.
+	\end{enumerate}
+	
+	\clearpage
+	
+\end{document}

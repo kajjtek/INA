@@ -18,7 +18,7 @@ def parse_output(stdout, stderr):
     # cout << "Maksymalny przeplyw (Dinic): " << maxFlowValue << endl;
     flow_match = re.search(r"Maksymalny przeplyw(?: \(Dinic\))?:\s+(\d+)", stdout)
     
-    time_match = re.search(r"Czas wykonania:\s+([\d\.]+)", stderr)
+    time_match = re.search(r"Czas wykonania(?:[^:]*):\s*([0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?)", stderr)
     
     # cerr << "Liczba sciezek powiekszajacych (DFS hits): " ...
     paths_match = re.search(r"Liczba sciezek powiekszajacych \(DFS hits\):\s+(\d+)", stderr)

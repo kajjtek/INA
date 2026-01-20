@@ -1,0 +1,10 @@
+*.mod
+*.csv
+*.display
+*.out
+*.json
+*.aux
+*.log
+*.gz
+graphs
+*.exe

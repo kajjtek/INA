@@ -17,7 +17,8 @@ def parse_output(stdout, stderr):
     """Wyciąga dane z wyjścia programu C++."""
     # Szukamy wzorców zdefiniowanych w kodzie C++
     flow_match = re.search(r"Maksymalny przeplyw:\s+(\d+)", stdout)
-    time_match = re.search(r"Czas wykonania:\s+([\d\.]+)", stderr)
+    # Wzorzec dopasowuje floaty, także w notacji naukowej, oraz dopuszcza dodatkowy tekst w nawiasach
+    time_match = re.search(r"Czas wykonania(?:[^:]*):\s*([0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?)", stderr)
     paths_match = re.search(r"Liczba sciezek powiekszajacych:\s+(\d+)", stderr)
 
     flow = int(flow_match.group(1)) if flow_match else None

@@ -16,7 +16,8 @@ REPEATS = 5
 def parse_output(stdout, stderr):
     # Szukamy: "Rozmiar maksymalnego skojarzenia: X" oraz "Czas wykonania: Y s"
     match_size_match = re.search(r"Rozmiar maksymalnego skojarzenia:\s+(\d+)", stdout)
-    time_match = re.search(r"Czas wykonania:\s+([\d\.]+)", stderr)
+    # Dopasowujemy "Czas wykonania" z ewentualnym dopiskiem w nawiasie i liczbami w notacji zwykłej lub naukowej
+    time_match = re.search(r"Czas wykonania(?:[^:]*):\s*([0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?)", stderr)
 
     match_size = int(match_size_match.group(1)) if match_size_match else None
     time_sec = float(time_match.group(1)) if time_match else None
