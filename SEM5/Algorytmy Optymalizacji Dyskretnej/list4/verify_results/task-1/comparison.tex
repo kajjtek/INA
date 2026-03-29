@@ -1,0 +1,23 @@
+% LaTeX table generated from verify_results/task-1/comparison.csv
+% Usage: \input{verify_results/task-1/comparison.tex} or copy-paste the tabular into your document
+\begin{table}[ht]
+\centering
+\caption{Porównanie wyników dla zadania 1 (k = 1..10). "prog" = wynik algorytmu, "model" = wynik z modelu (python/glpsol).}
+\label{tab:task1-comparison}
+\begin{tabular}{r r r r c r r}
+\toprule
+k & run & prog & model & match & czas [\(\mu\)s] & \# ścieżek \\
+\midrule
+1 & 1 & 2 & 2 & ✔ & 8 & 1 \\
+2 & 1 & 4 & 4 & ✔ & 2 & 2 \\
+3 & 1 & 4 & 4 & ✔ & 9 & 3 \\
+4 & 1 & 25 & 25 & ✔ & 41 & 12 \\
+5 & 1 & 71 & 71 & ✔ & 26 & 24 \\
+6 & 1 & 97 & 97 & ✔ & 29 & 30 \\
+7 & 1 & 432 & 432 & ✔ & 177 & 107 \\
+8 & 1 & 1116 & 1116 & ✔ & 540 & 191 \\
+9 & 1 & 2471 & 2471 & ✔ & 2211 & 340 \\
+10 & 1 & 5703 & 5703 & ✔ & 7729 & 535 \\
+\bottomrule
+\end{tabular}
+\end{table}

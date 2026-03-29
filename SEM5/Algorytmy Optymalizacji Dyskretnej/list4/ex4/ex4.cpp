@@ -156,12 +156,13 @@ void generateGLPKModel(const string& filename, int n, int s, int t, const vector
     ofs << "/* Model Programowania Liniowego dla problemu maksymalnego przeplywu (Hiperkostka) */\n\n";
 
     ofs << "set V := 0.." << (n - 1) << ";\n";
-    ofs << "set E within {V, V} :=\n";
+    // Definiujemy E jako zbiór par zapisanych w nawiasach klamrowych — składnia akceptowana przez GLPK
+    ofs << "set E := {\n";
     for (size_t i = 0; i < edges.size(); ++i) {
         auto [u, v, cap] = edges[i];
-        ofs << "  (" << u << "," << v << ")" << (i == edges.size() - 1 ? ";" : ",") << "\n";
+        ofs << "  (" << u << "," << v << ")" << (i == edges.size() - 1 ? "\n" : ",\n");
     }
-    ofs << "\n";
+    ofs << "};\n\n";
 
     ofs << "param cap{ (u,v) in E };\n\n";
     
@@ -255,7 +256,8 @@ int main(int argc, char* argv[]) {
     long long maxFlowValue = dinic.solve(0, numNodes - 1);
     
     auto end = chrono::high_resolution_clock::now();
-    chrono::duration<double> elapsed = end - start;
+    // Mierzymy czas w mikrosekundach
+    long long elapsed_us = chrono::duration_cast<chrono::microseconds>(end - start).count();
 
     // Wyjście
     cout << "Maksymalny przeplyw (Dinic): " << maxFlowValue << endl;
@@ -264,7 +266,7 @@ int main(int argc, char* argv[]) {
     }
 
     // Statystyki na stderr
-    cerr << "Czas wykonania: " << elapsed.count() << " s" << endl;
+    cerr << "Czas wykonania: " << elapsed_us << " us" << endl;
     cerr << "Liczba sciezek powiekszajacych (DFS hits): " << dinic.getAugmentingPathsCount() << endl;
 
     return 0;

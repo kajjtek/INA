@@ -91,7 +91,7 @@
 			CList::Vector{Block}
 		end
 	\end{lstlisting}
-	Podstawowa struktura \textit{block} składa się z macierzy $l x l$ - początkowo zarówno dla B jak i C miał być używany vektor - jednak dwa poniższe czynniki wymuszają użycie macierzy w obu przypadkach:
+	Podstawowa struktura \textit{block} składa się z macierzy $l * l$ - początkowo zarówno dla B jak i C miał być użyty vektor - jednak dwa poniższe czynniki wymuszają użycie macierzy w obu przypadkach:
 	\begin{itemize}
 		\item implementacja pivota, która wiąże się z zamianą wierszów
 		\item odejmowanie w back\_substitution - dla $C$ powoduje odejmowanie pod przekatną bloku $C$
@@ -124,7 +124,7 @@
 	Następnie rozpatrzone zostały dwa przypadki
 	\begin{itemize}
 		\item Zerowanie współczynnikow pod przekątna w bloku $A$. Podczas tego procesu należy pamiętać o tym, że współczynniki w bloku $C$ po prawej stronie również zostaną zmodyfikowane.
-		\item Zerowanie współczynnik pod przekątna znajdujących się w bloku $B$. Z charakterystycznej konstrukcji możemy zrobić to tylko raz gdyż współczynniki znajdują się tylko w pierwszym wierszu i ostatniej kolumnie
+		\item Zerowanie współczynników pod przekątna, znajdujących się w bloku $B$. Z charakterystycznej konstrukcji można wykonać to tylko raz gdyż współczynniki znajdują się tylko w pierwszym wierszu i ostatniej kolumnie
 	\end{itemize}
 	Ostatnim krokiem jest dostosowanie współczynników w kolumnie i wierszu l. W klasycznej eliminacji Gaussa, nie należy przejmować się ostatnim współczynnikiem lecz w tym wypadku trzeba pamiętać o ostatniej kolumnie $B$. Ich modyfikacja wpływa też na blok $A_{k+1}$
 	
@@ -140,7 +140,7 @@
 	Warto podkreślić tutaj główną różnice między tymi dwoma funkcjami - obie operują na \textit{macierzy trójkątnej}, lecz podczas gdy pierwsza z nich wirtualnie zakłada, że zera są pod przekątna, druga działa odwrotnie - zera nad przekątną.
 	
 	\subsection{Rozkład LU}
-	Jest on oparty całkowicie na eliminacji Gaussa. Najbardziej istotną różnicą jest to, że w funkcji /textit{eliminateLU!} w przeciwieństwie do funkcji \textit{eliminate!} nie ustawiamy współczynnika $a_{ik}$ na $0$ tylko na obliczony iloraz $\frac{a_{ik}}{pivot}$. W ten sposób pod przekątną znajduje się macierz  $L$. \newline
+	Jest on oparty całkowicie na eliminacji Gaussa. Najbardziej istotną różnicą jest to, że w funkcji \textit{eliminateLU!} w przeciwieństwie do funkcji \textit{eliminate!} nie ustawiamy współczynnika $a_{ik}$ na $0$ tylko na obliczony iloraz $\frac{a_{ik}}{pivot}$. W ten sposób pod przekątną znajduje się macierz  $L$. \newline
 	Reszta modyfikacji przeprowadzona jest tak jak w Gaussie - w ten sposób nad przekątną otrzymujemy macierz $U$. Jest to optymalny sposób na przechowywanie macierzy \textbf{LU} (zera w pozostałej części oryginalnej macierzy dalej pozostają zerami).
 	
 	\subsection{Funkcja getPivot}

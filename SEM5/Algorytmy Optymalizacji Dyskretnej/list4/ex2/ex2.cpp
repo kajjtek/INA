@@ -116,11 +116,11 @@ void generateGLPKModel(const string& filename, int sizeV, const vector<pair<int,
     ofs << "set V2 := 0.." << (sizeV - 1) << ";\n\n";
 
     // Zbiór krawędzi
-    ofs << "set E within {V1, V2} :=\n";
+        ofs << "set E := {\n";
     for (size_t i = 0; i < allEdges.size(); ++i) {
-        ofs << "  (" << allEdges[i].first << ", " << allEdges[i].second << ")" << (i == allEdges.size() - 1 ? ";" : ",") << "\n";
+            ofs << "  (" << allEdges[i].first << ", " << allEdges[i].second << ")" << (i == allEdges.size() - 1 ? "\n" : ",\n");
     }
-    ofs << "\n";
+        ofs << "};\n\n";
 
     // Zmienne decyzyjne - binarna zmienna dla każdej krawędzi
     ofs << "/* x[u,v] = 1 jesli krawedz nalezy do skojarzenia, 0 w p.p. */\n";
@@ -203,7 +203,8 @@ int main(int argc, char* argv[]) {
     auto startTime = chrono::high_resolution_clock::now();
     int maxMatchingSize = ek.solve(source, sink);
     auto endTime = chrono::high_resolution_clock::now();
-    chrono::duration<double> elapsed = endTime - startTime;
+    // Mierzymy czas w mikrosekundach
+    long long elapsed_us = chrono::duration_cast<chrono::microseconds>(endTime - startTime).count();
 
     cout << "Rozmiar maksymalnego skojarzenia: " << maxMatchingSize << endl;
     if (printMatching) {
@@ -214,7 +215,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    cerr << "Czas wykonania (Edmonds-Karp): " << elapsed.count() << " s" << endl;
+    cerr << "Czas wykonania (Edmonds-Karp): " << elapsed_us << " us" << endl;
 
     return 0;
 }
