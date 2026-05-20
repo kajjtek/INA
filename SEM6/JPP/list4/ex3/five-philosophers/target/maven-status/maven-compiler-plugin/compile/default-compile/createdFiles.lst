@@ -1,0 +1,9 @@
+com\philosophers\App.class
+com\philosophers\SimpleObjects\Message_Type.class
+com\philosophers\SimpleObjects\Philosopher$1.class
+com\philosophers\SimpleObjects\Side.class
+com\philosophers\SimpleObjects\SimpleObject.class
+com\philosophers\SimpleObjects\Fork.class
+com\philosophers\SimpleObjects\Message.class
+com\philosophers\SimpleObjects\Philosopher.class
+com\philosophers\SimpleObjects\States.class

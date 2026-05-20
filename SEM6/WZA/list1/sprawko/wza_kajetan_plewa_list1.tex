@@ -1,0 +1,184 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{parskip}
+
+\geometry{margin=2cm}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  breaklines=true,
+  frame=single,
+  language=C++,
+  showstringspaces=false
+}
+
+\title{\textbf{Sprawozdanie 1}\\Wybrane Zagadnienia Algebry 2026}
+\author{Kajetan Plewa \\ Indeks: 282212}
+\date{26 kwietnia 2026}
+
+\begin{document}
+\maketitle
+\noindent
+
+\section*{Zadanie 1 --- Pierścień liczb Gaussa $\mathbb{Z}[i]$}
+
+\subsection*{Reprezentacja i norma}
+Liczba Gaussa $\alpha = p + qi$ jest reprezentowana jako para \texttt{(real, im)} typu \texttt{long long}.
+Norma euklidesowa: $N(\alpha) = p^2 + q^2$.
+
+\subsection*{Dzielenie z resztą}
+Dzielenie $\alpha$ przez $\beta$ wyznacza iloraz $q \in \mathbb{Z}[i]$ taki, że $N(\alpha - q\beta) < N(\beta)$.
+Ponieważ zaokrąglenie liczby zespolonej do punktu kratowego nie jest jednoznaczne (możliwe cztery sąsiednie punkty), wynik jest zwracany jako vector wszystkich możliwości.
+
+\begin{lstlisting}
+GaussNum q_real = (a*c + b*d) / denom; 
+GaussNum remainder = dividend - q * divisor;
+if (remainder.norm() < divisor.norm()) results.push_back({q, remainder});
+\end{lstlisting}
+
+Dzielenie $(c+a) + (d+b)i = 4+10i$ przez $e+fi = 1+2i$ to:
+
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+$q$ & $r$ & Sprawdzenie $q \cdot (1+2i) + r$\\
+\midrule
+$4+0i$ & $0+2i$ & $4+10i$ \\
+$5+0i$ & $-1+0i$ & $4+10i$ \\
+$5+1i$ & $1-1i$ & $4+10i$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Wyniki są dokładnie 3, ponieważ $N(1+2i)=5$ i spośród czterech możliwych zaokrągleń $q$ jedno daje resztę o normie $\geq 5$, pozostałe trzy spełniają warunek.
+
+\subsection*{NWD i NWW}
+Algorytm Euklidesa dla $\mathbb{Z}[i]$: analogicznie do $\mathbb{Z}$, z podziałem z resztą j.w.
+NWW wyznaczane przez $\text{NWW}(\alpha,\beta) = \alpha\beta / \text{NWD}(\alpha,\beta)$.
+
+Trójka: $2+8i,\ 2+2i,\ 1+2i$:
+
+\[
+  \text{NWD}(2+8i,\ 2+2i,\ 1+2i) = -1 \qquad \text{NWW}(2+8i,\ 2+2i,\ 1+2i) = 26+2i
+\]
+
+Wynik NWD jest jednostką $-1 \in \{1,-1,i,-i\}$, co oznacza, że trójka jest wzajemnie pierwsza.
+Wynik jest określony z dokładnością do jednostki; każda z czterech jednostek jest równie poprawna.
+
+\textbf{Przypadki brzegowe:}
+Lista pusta --- NWD i NWW są nieokreślone (brak elementu neutralnego).
+Lista jednoelementowa $\{\alpha\}$ --- $\text{NWD} = \text{NWW} = \alpha$.
+
+% =========================================================
+\section*{Zadanie 2 --- Pierścień wielomianów $\mathbb{R}[x]$}
+
+\subsection*{Reprezentacja}
+Wielomian przechowywany jest jako \texttt{vector<T>} współczynników od $x^0$.
+Typ \texttt{T} jest parametrem szablonu, co umożliwia rozszerzenie do $\kappa[x_1,\ldots,x_n]$ przez podstawienie $T = \kappa[x_1,\ldots,x_{n-1}]$.
+Norma to stopień wielomianu: $\|p\| = \deg p$.
+
+\subsection*{Norma i dzielenie}
+
+\[
+  p(x) = cx^a + b = 2x^2 + 8, \qquad \deg p = 2
+\]
+\[
+  p(x) \div (x+1): \quad q = 2x - 2, \quad r = 10
+  \quad \Bigl(\text{sprawdzenie: } (2x-2)(x+1)+10 = 2x^2+8\ \checkmark\Bigr)
+\]
+
+\subsection*{NWD i NWW --- wyniki dla $v(x),\, w(x)$}
+
+\[
+  v(x) = 2x^3 + 8x^2 + 2x + 2, \qquad w(x) = 2x^3 + x^2 + 2x
+\]
+
+\[
+  \text{NWD}(v,w) = 2{,}28, \qquad \text{NWW}(v,w) \approx 1{,}754\,x^6 + 7{,}895\,x^5 + \cdots
+\]
+
+NWD nie jest moniczny (współczynnik wiodący $\neq 1$), co jest poprawne: w $\mathbb{R}[x]$ NWD jest określony z dokładnością do stałej niezerowej. Wielomian $2{,}28$ jest \emph{stowarzyszony} z $1$, tzn. $2{,}28 = 2{,}28 \cdot 1$, a oba są poprawnymi NWD.
+Gdyby znormalizować do postaci monicznej (podzielić przez współczynnik wiodący), wynik wynosiłby $1$.
+
+\textbf{Rozszerzony algorytm Euklidesa} wyznacza $s, t$ takie, że $s \cdot v + t \cdot w = \gcd(v,w)$:
+\[
+  s \approx 1{,}4\,x^2 + 0{,}98\,x + 1{,}14, \qquad
+  t \approx -1{,}4\,x^2 - 5{,}88\,x - 2{,}12
+\]
+
+\subsection*{Wyznaczanie $g$ metodą Newtona}
+
+Szukamy stałej $g \in \mathbb{R}$ takiej, że $\deg\bigl(\gcd(v,\, w+g)\bigr) > 0$, tzn.\ $v$ i $w+g$ mają wspólny pierwiastek $\alpha$.
+Jeśli $\alpha$ jest pierwiastkiem $v$, to wystarczy dobrać $g = -w(\alpha)$.
+
+Pierwiastek $v(x)$ wyznaczono metodą Newtona ze startem w $x_0 = -2$:
+
+\[
+  x_{n+1} = x_n - \frac{v(x_n)}{v'(x_n)}, \qquad \alpha \approx -3{,}8063
+\]
+\[
+  g = -w(\alpha) \approx 103{,}415
+\]
+\[
+  \gcd\bigl(v(x),\; w(x) + 103{,}415\bigr) \approx 30{,}98\,x + 117{,}90
+\]
+\[
+  \text{NWW}\bigl(v(x),\; w(x)+g\bigr) \approx 0{,}129\,x^5 + 0{,}090\,x^4 + 0{,}176\,x^3 + 6{,}719\,x^2 + 1{,}327\,x + 1{,}754
+\]
+
+% =========================================================
+\section*{Zadanie 3 --- Porządki produktowe na $\mathbb{N}^n$}
+
+\subsection*{Definicja i algorytm}
+Porządek produktowy: $(x_1,\ldots,x_n) \leq (y_1,\ldots,y_n) \iff \forall_i\; x_i \leq y_i$.
+Algorytm wyznaczania elementów minimalnych: posortuj leksykograficznie, następnie zachowaj punkty niezdominowane przez żaden wcześniej dodany element minimalny.
+
+\subsection*{Porównania par i trójek}
+
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+$p$ & $q$ & relacja \\
+\midrule
+$(a,b)=(2,8)$ & $(c,d)=(2,2)$ & $(c,d) \leq (a,b)$ \\
+$(a,b)=(2,8)$ & $(e,f)=(1,2)$ & $(e,f) \leq (a,b)$ \\
+$(c,d)=(2,2)$ & $(e,f)=(1,2)$ & $(e,f) \leq (c,d)$ \\
+\bottomrule
+\end{tabular}
+\qquad
+$(a,c,e)=(2,2,1) \leq (b,d,f)=(8,2,2)$
+\end{center}
+
+\subsection*{Elementy minimalne zbiorów $A$ i $B$}
+
+\[
+  A = \{(x,y)\in\mathbb{N}^2 : (x-2)^2+(y-8)^2 < 5\}
+\]
+
+$A$ zawiera 13 punktów. Elementy minimalne (niezdominowane w porządku produktowym):
+
+\[
+  \min(A) = \{(0,8),\; (1,7),\; (2,6)\}
+\]
+
+\[
+  B = \{(x_1,x_2,x_3,x_4)\in\mathbb{N}^4 : (x_1-2)^2+(x_2-2)^2+(x_3-1)^2+(x_4-2)^2 > 224\}
+\]
+
+$B$ to dopełnienie kuli w $\mathbb{N}^4$ o promieniu $\sqrt{224}\approx 14{,}97$.
+Zbiór $\min(B)$ jest duży (kilkaset punktów); kilka reprezentatywnych przykładów:
+
+\[
+  (0,0,0,17),\quad (0,17,0,0),\quad (17,0,0,0),\quad (7,16,0,0),\quad \ldots
+\]
+
+\end{document}
