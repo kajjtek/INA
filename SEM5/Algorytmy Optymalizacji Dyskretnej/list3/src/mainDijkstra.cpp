@@ -162,21 +162,14 @@ int main(int argc, char* argv[]) {
             
             // 3. Glowna petla SSSP
             for (int sourceNode : sources) {
-                // Licznik przed odpaleniem funkcji
                 auto start_time = std::chrono::high_resolution_clock::now();
                 
                 // Uruchomienie algorytmu Dijkstry
                 std::vector<long long> distances = dijkstraSolver.findAllPaths(graph, sourceNode);
                 
-                // Licznik po funkcji
                 auto end_time = std::chrono::high_resolution_clock::now();
                 DoubleSeconds elapsed_time = end_time - start_time;
                 suma_czasu += elapsed_time.count();
-                
-                // Zapis szczegółowych dystansów (dla weryfikacji poprawności), tylko jeśli jest plik wyjściowy SSSP
-                if (!ssOutFile.empty()) {
-                     saveSSSPDistances(ssOutFile + ".dist", sourceNode, distances);
-                }
             }
 
             // Obliczenie średniej czasu

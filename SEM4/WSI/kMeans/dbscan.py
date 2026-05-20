@@ -169,8 +169,6 @@ if __name__ == '__main__':
     
     evaluate_dbscan_clusters(true_labels_list, dbscan_assignments)
 
-
-
     for eps in range(8,16):
         for min_samples in range(10,20):
             print(f"\n--- Running DBSCAN with chosen parameters: eps={eps}, min_samples={min_samples} ---")

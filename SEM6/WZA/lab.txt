@@ -1,0 +1,16 @@
+LAB 13
+
+w_a = (x-x_a)^2 + (y-y_a)^2 = r
+
+czyli kolko o promieniu r jak r dazy do zera to bedziemy mieli jeden punkt ktory zeruje
+wiec w_a * w_b * w_c da nam ladnie dla trzech punktow 
+
+LAB 14
+troszke definicji
+I9v ta ksiazka co mam rozdzial 34/4
+
+
+najlepiej przyjac ze x jest parametrem i dzielic przez (x-y)
+
+lab16.i to jest twisted cuic 
+zadanie domoe 2 pierwsze paragrafy z roddzialu 2

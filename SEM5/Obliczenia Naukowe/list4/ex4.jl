@@ -1,3 +1,4 @@
+#KAJETAN PLEWA
 using Plots
 include("ilorazyRoznicowe.jl")
 include("normalna.jl")

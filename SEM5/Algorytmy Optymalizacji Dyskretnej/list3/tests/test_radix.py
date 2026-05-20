@@ -11,7 +11,7 @@ import pandas as pd
 
 # --- KONFIGURACJA ALGORYTMU ---
 ALGORITHM_NAME = "radix"
-BINARY_PATH = "../bin/radixheap.exe"
+BINARY_PATH = "../bin/radixheap"
 
 # --- KONFIGURACJA OGÓLNA ---
 INPUT_DIR = "../inputs"
@@ -21,7 +21,7 @@ GENERATED_DIR = "../generated"
 NUM_SOURCES_SS5 = 5 
 NUM_P2P_PAIRS = 5
 TIMEOUT_SECONDS = 3600 # 1 godzina na test
-MAX_WORKERS = 8 # Maksymalna liczba równoległych procesów 
+MAX_WORKERS = 4 # Maksymalna liczba równoległych procesów 
 
 # Pliki wynikowe CSV (unikalne dla Dijkstry)
 CSV_SS1_FILE = os.path.join(OUTPUT_DIR, f"wyniki_{ALGORITHM_NAME}_czasow_sssp1.csv")

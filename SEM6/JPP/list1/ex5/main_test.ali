@@ -1,0 +1,168 @@
+V "GNAT Lib v15"
+M P W=b
+P ZX
+
+RN
+RV NO_DIRECT_BOOLEAN_OPERATORS
+RV NO_EXCEPTION_HANDLERS
+RV NO_EXCEPTIONS
+RV NO_IO
+RV NO_IMPLICIT_CONDITIONALS
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_ASPECT_SPECIFICATIONS
+
+U main_test%b		main_test.adb		754d7ec9 NE OO SU
+W ada%s			ada.ads			ada.ali
+Z ada.exceptions%s	a-except.adb		a-except.ali
+Z ada.strings.text_buffers%s  a-sttebu.adb	a-sttebu.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+Z ada.text_io.generic_aux%s  a-tigeau.adb	a-tigeau.ali
+Z ada.text_io.integer_aux%s
+Z ada.text_io.integer_io%s
+W foreign_libs%s	foreign_libs.ads	foreign_libs.ali
+W math_library%s	math_library.adb	math_library.ali
+W system%s		system.ads		system.ali
+Z system.concat_2%s	s-conca2.adb		s-conca2.ali
+Z system.img_biu%s	s-imgbiu.ads		s-imgbiu.ali
+Z system.img_int%s	s-imgint.ads		s-imgint.ali
+Z system.img_llb%s	s-imgllb.ads		s-imgllb.ali
+Z system.img_lli%s	s-imglli.ads		s-imglli.ali
+Z system.img_lllb%s	s-imglllb.ads		s-imglllb.ali
+Z system.img_llli%s	s-imgllli.ads		s-imgllli.ali
+Z system.img_lllw%s	s-imglllw.ads		s-imglllw.ali
+Z system.img_llw%s	s-imgllw.ads		s-imgllw.ali
+Z system.img_wiu%s	s-imgwiu.ads		s-imgwiu.ali
+Z system.val_int%s	s-valint.ads		s-valint.ali
+Z system.val_lli%s	s-vallli.ads		s-vallli.ali
+Z system.val_llli%s	s-valllli.ads		s-valllli.ali
+
+D ada.ads		20250419085653 76789da1 ada%s
+D a-except.ads		20250419085653 e7970cd9 ada.exceptions%s
+D a-ioexce.ads		20250419085653 40018c65 ada.io_exceptions%s
+D a-stream.ads		20250419085653 17477cbd ada.streams%s
+D a-string.ads		20250419085653 90ac6797 ada.strings%s
+D a-sttebu.ads		20250419085653 f1ad67a2 ada.strings.text_buffers%s
+D a-stuten.ads		20250419085653 c6ced0ae ada.strings.utf_encoding%s
+D a-tags.ads		20250419085653 fbca0ad5 ada.tags%s
+D a-textio.ads		20250419085653 34ef47de ada.text_io%s
+D a-tigeau.ads		20250419085653 e643cdf3 ada.text_io.generic_aux%s
+D a-tiinau.ads		20250419085653 3ca4fcff ada.text_io.integer_aux%s
+D a-tiinau.adb		20250419085653 199a0c7a ada.text_io.integer_aux%b
+D a-tiinio.ads		20250419085653 76699c8f ada.text_io.integer_io%s
+D a-tiinio.adb		20250419085653 b79731f4 ada.text_io.integer_io%b
+D a-unccon.ads		20250419085653 0e9b276f ada.unchecked_conversion%s
+D foreign_libs.ads	20260330003131 bcde3902 foreign_libs%s
+D interfac.ads		20250419085653 9111f9c1 interfaces%s
+D i-cstrea.ads		20250419085653 ffd01b9d interfaces.c_streams%s
+D main_test.adb		20260329233730 d782e29d main_test%b
+D math_library.ads	20260329215931 2afee288 math_library%s
+D system.ads		20250419085653 70765b54 system%s
+D s-conca2.ads		20250419085653 b5fb73f7 system.concat_2%s
+D s-crtl.ads		20250419085653 beb39b9e system.crtl%s
+D s-exctab.ads		20250419085653 91bef6ef system.exception_table%s
+D s-ficobl.ads		20250419085653 dc5161d4 system.file_control_block%s
+D s-imageb.ads		20250419085653 3953e0e6 system.image_b%s
+D s-imagei.ads		20250419085653 5e131ce0 system.image_i%s
+D s-imagew.ads		20250419085653 9d2dd267 system.image_w%s
+D s-imgbiu.ads		20250419085653 0a8e1c41 system.img_biu%s
+D s-imgint.ads		20250419085653 67e4edfb system.img_int%s
+D s-imgllb.ads		20250419085653 47d0db9f system.img_llb%s
+D s-imglli.ads		20250419085653 d88f4f3b system.img_lli%s
+D s-imglllb.ads		20250419085653 30212eed system.img_lllb%s
+D s-imgllli.ads		20250419085653 404e72c5 system.img_llli%s
+D s-imglllw.ads		20250419085653 9e2b0560 system.img_lllw%s
+D s-imgllw.ads		20250419085653 bf9c9c15 system.img_llw%s
+D s-imgwiu.ads		20250419085653 912a95f2 system.img_wiu%s
+D s-parame.ads		20250419085653 3597fc11 system.parameters%s
+D s-putima.ads		20250419085653 17291fe4 system.put_images%s
+D s-secsta.ads		20250419085653 578279f5 system.secondary_stack%s
+D s-soflin.ads		20250419085653 5d88fdea system.soft_links%s
+D s-stache.ads		20250419085653 0b81c1fe system.stack_checking%s
+D s-stalib.ads		20250419085653 1c9580f6 system.standard_library%s
+D s-stoele.ads		20250419085653 ccded4e8 system.storage_elements%s
+D s-traent.ads		20250419085653 c81cbf8c system.traceback_entries%s
+D s-unstyp.ads		20250419085653 fa2a7f59 system.unsigned_types%s
+D s-valint.ads		20250419085653 8bab724f system.val_int%s
+D s-vallli.ads		20250419085653 353103fd system.val_lli%s
+D s-valllli.ads		20250419085653 fb5526e1 system.val_llli%s
+D s-vallllu.ads		20250419085653 34470a29 system.val_lllu%s
+D s-valllu.ads		20250419085653 4134fa35 system.val_llu%s
+D s-valspe.ads		20250419085653 f810d31c system.val_spec%s
+D s-valuns.ads		20250419085653 f7ddb71d system.val_uns%s
+D s-valuei.ads		20250419085653 d9377ca5 system.value_i%s
+D s-vaispe.ads		20250419085653 8280550e system.value_i_spec%s
+D s-valueu.ads		20250419085653 a38d32a6 system.value_u%s
+D s-vauspe.ads		20250419085653 89269ba5 system.value_u_spec%s
+D s-vs_int.ads		20250419085653 06b6b724 system.vs_int%s
+D s-vs_lli.ads		20250419085653 b945cf7d system.vs_lli%s
+D s-vsllli.ads		20250419085653 3a5ba700 system.vs_llli%s
+D s-vslllu.ads		20250419085653 678200a0 system.vs_lllu%s
+D s-vs_llu.ads		20250419085653 8f3536c5 system.vs_llu%s
+D s-vs_uns.ads		20250419085653 e7f47a27 system.vs_uns%s
+D s-wchcon.ads		20250419085653 d9032363 system.wch_con%s
+G a e
+G c Z b b [main_test standard 5 11 none]
+G r c none [main_test standard 5 11 none] [gcd math_library 9 13 none]
+G r c none [main_test standard 5 11 none] [c_gcd foreign_libs 10 13 none]
+G r c none [main_test standard 5 11 none] [rust_gcd foreign_libs 22 13 none]
+G r c none [main_test standard 5 11 none] [lcd math_library 12 13 none]
+G r c none [main_test standard 5 11 none] [c_lcd foreign_libs 13 13 none]
+G r c none [main_test standard 5 11 none] [rust_lcd foreign_libs 25 13 none]
+G r c none [main_test standard 5 11 none] [euler math_library 15 13 none]
+G r c none [main_test standard 5 11 none] [c_euler foreign_libs 16 13 none]
+G r c none [main_test standard 5 11 none] [rust_euler foreign_libs 28 13 none]
+G r c none [main_test standard 5 11 none] [c_diofantic foreign_libs 19 13 none]
+G r c none [main_test standard 5 11 none] [diofantic math_library 18 13 none]
+G r c none [main_test standard 5 11 none] [rust_diofantic foreign_libs 31 13 none]
+X 1 ada.ads
+18K9*Ada 22e8 19|1r6 1r23 6r23
+X 9 a-textio.ads
+58K13*Text_IO 785e16 19|1w10 1r27 6r27
+284U14*New_Line 19|58s4
+515U14*Put 19|19s7 21s7 23s7 55s4 55s49 56s4 56s44 57s4 57s46
+565U14*Put_Line 19|27s10 29s10
+X 13 a-tiinio.ads
+46k21*Integer_IO 116e27 19|6r35
+85U14 Put 19|20s11[6] 22s11[6] 24s11[6] 55s35[6] 55s66[6] 56s28[6] 56s61[6]
+. 57s29[6] 57s63[6]
+X 16 foreign_libs.ads
+1K9*Foreign_Libs 34e17 19|3w6 12r11 14r11 35r15 36r16 42r16 43r16 48r16 49r16
+. 51r13 53r12
+3R9*Diofantic_Result 7e14 19|12r24 14r24
+4i7*X{long_integer} 19|55r42 57r39
+5i7*Y{long_integer} 19|55r73 57r73
+10V13*C_Gcd{long_integer} 19|35s28
+13V13*C_Lcd{long_integer} 19|42s29
+16V13*C_Euler{long_integer} 19|48s29
+19V13*C_Diofantic{3R9} 19|51s26
+22V13*Rust_Gcd{long_integer} 19|36s29
+25V13*Rust_Lcd{long_integer} 19|43s29
+28V13*Rust_Euler{long_integer} 19|49s29
+31V13*Rust_Diofantic{3R9} 19|53s25
+X 19 main_test.adb
+5U11*Main_Test 5b11 60l5 60t14
+6K12 LIO[13|46] 20r7 22r7 24r7 55r31 55r62 56r24 56r57 57r25 57r59
+8i4 A{long_integer} 34r33 35r35 36r39
+9i4 B{long_integer} 34r36 35r38 36r42
+11i4 Res_Ada{long_integer} 34m4 37r30
+11i13 Res_C{long_integer} 35m4 37r39
+11i20 Res_Rust{long_integer} 36m4 37r46
+12r4 DC{16|3R9} 51m5 55r39 55r70
+13r4 DAda{20|3R9} 52m4 56r32 56r65
+14r4 DRust{16|3R9} 53m4 57r33 57r67
+17U14 Print_Test 17b14 17>26 17>42 17>49 17>54 31l8 31t18 37s4 40s4 46s4
+17a26 Label{string} 19r12
+17i42 V_Ada{long_integer} 20r16 26r10
+17i49 V_C{long_integer} 22r16 26r18 26r26
+17i54 V_Rust{long_integer} 24r16 26r32
+X 20 math_library.ads
+1K9*Math_Library 19|2w6 13r11 34r15 41r16 47r16 52r12 20|21e17
+3R9*Diofantic_Result 19|13r24 20|7e14
+4i7*X{long_integer} 19|56r37
+5i7*Y{long_integer} 19|56r70
+9V13*Gcd{long_integer} 19|34s28 20|10i<c,ada_gcd>22
+12V13*Lcd{long_integer} 19|41s29 20|13i<c,ada_lcd>22
+15V13*Euler{long_integer} 19|47s29 20|16i<c,ada_euler>22
+18V13*Diofantic{3R9} 19|52s25 20|19i<c,ada_diofantic>22
+

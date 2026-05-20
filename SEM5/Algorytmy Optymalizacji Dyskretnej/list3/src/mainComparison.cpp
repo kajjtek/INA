@@ -157,7 +157,7 @@ int main(int argc, char* argv[]) {
             // Run Radix Dijkstra
             std::cout << "\n[3/3] Running Radix Heap Dijkstra (maxCost=" << maxCost << ")...\n";
             start = std::chrono::high_resolution_clock::now();
-            auto radix_result = radixSolver.findAllPaths(graph, source, maxCost);
+            auto radix_result = radixSolver.shortestPaths(graph, source);
             end = std::chrono::high_resolution_clock::now();
             DoubleSeconds radix_time = end - start;
             std::cout << "Time: " << std::fixed << std::setprecision(6) << radix_time.count() << " seconds\n";

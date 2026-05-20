@@ -19,7 +19,7 @@ OUTPUT_DIR = "../results"
 GENERATED_DIR = "../generated"
 NUM_SOURCES_SS5 = 5 
 NUM_P2P_PAIRS = 5
-TIMEOUT_SECONDS = 3600 # 1 godzina na test
+TIMEOUT_SECONDS = 180 # 1 godzina na test
 MAX_WORKERS = 2 # Maksymalna liczba równoległych procesów 
 
 # Pliki wynikowe CSV (unikalne dla Diala)

@@ -1,66 +1,33 @@
-#include "../include/RadixDijkstra.h"
-#include <queue>
-#include <functional>
-#include "../include/Graph.h"
 #include "../include/RadixHeap.hpp"
-#include <vector>
-#include <climits>
+#include "../include/Graph.h"
+#include "../include/RadixDijkstra.h"
 
-using Bucket = std::list<int>;
-using Container = std::vector<Bucket>;
+static constexpr long long INF = (1LL << 60);
 
-std::vector<long long> RadixDijkstra::findAllPaths(Graph &g, int start, long long c) {
-    return rDijkstra(g, start, c);
-}
-std::pair<int, long long> RadixDijkstra::findPath(Graph &g, int start, int target, long long c) {
-    auto d = rDijkstra(g, start, c);
-    if (target < 0 || target >= static_cast<int>(d.size())) return {target, LLONG_MAX};
-    return {target, d.at(target)};
-}
+std::vector<RadixDijkstra::Distance>
+RadixDijkstra::shortestPaths(const Graph& g, int source) {
+    int n = static_cast<int>(g.v_size-1);
+    std::vector<Distance> dist(n, INF);
 
-std::vector<long long> RadixDijkstra::rDijkstra(Graph &g, int start, long long c) {
-    int n = (g.v_size > 0) ? g.v_size - 1 : 0;
-    const long long INF = LLONG_MAX;
-    std::vector<long long> d(n, INF);
-    std::vector<int> parent(n, -1);
-    RadixHeap heap(c, n, d); // heap will reference the same d vector
-    if (start < 0 || start >= n) return d;
-    d[start] = 0;
-    parent[start] = -1;
-    heap.insert(start, 0LL);
-    while(!heap.empty()) {
-        int cur_node = heap.extractMin();
-        if(cur_node < 0 || cur_node >= n) continue;
-        updateProcedure(cur_node, heap, g, d, parent);
-    }
-    return d;
-}
+    dist[source] = 0;
 
-void RadixDijkstra::updateProcedure(int current_node, RadixHeap &heap, Graph &g, std::vector<long long> &d, std::vector<int> &parent) {
-    if (current_node < 0 || current_node >= static_cast<int>(d.size())) return;
-    if (d[current_node] == LLONG_MAX) return; // unreachable
+    RadixHeap pq;
+    pq.push(0, source);
 
-    long long dist_to_current = d[current_node];
-    std::vector<std::pair<long long,int>> neighbours = g.getNeighbours(current_node);
-    for (const std::pair<long long, int>& neighbour_pair: neighbours) {
-        int neighbour = neighbour_pair.second;
-        long long weight = neighbour_pair.first;
-        if (neighbour < 0 || neighbour >= static_cast<int>(d.size())) continue;
-        long long current_distance = d[neighbour];
-        long long new_distance = d[current_node];
-        if (dist_to_current == LLONG_MAX) {
-            new_distance = LLONG_MAX;
-        } else if (weight > 0 && LLONG_MAX - dist_to_current < weight) {
-            new_distance = LLONG_MAX;
-        } else {
-            new_distance = dist_to_current + weight;
-        }
-        
-        if(current_distance == LLONG_MAX) {
-            heap.insert(neighbour, new_distance);
-        }
-        else if (new_distance < current_distance) {
-            heap.decreaseKey(neighbour, new_distance);
+    while (!pq.empty()) {
+        auto [d, u] = pq.top();
+        pq.pop();
+
+        if (d > dist[u])
+            continue;
+
+        for (const auto& [v, w] : g.getNeighbours(u)) {
+            if (dist[u] + w < dist[v]) {
+                dist[v] = dist[u] + w;
+                pq.push(dist[v], v);
+            }
         }
     }
+
+    return dist; // NRVO / move → zero copy
 }

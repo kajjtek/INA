@@ -9,11 +9,11 @@ typedef struct {
     bool is_solvable;
 } Diofantic_result;
 
-long gcd(long n, long m);
-long lcd(long n);
-long euler(long n);
-Diofantic_result diofantic(long a, long b, long c);
+long gcd_C(long n, long m);
+long lcd_C(long n);
+long euler_C(long n);
+Diofantic_result diofantic_C(long a, long b, long c);
 bool checkNatural(long x);
 long extendedGCD(long a, long b, long *x, long *y);
 
-#endif LIBC_H
+#endif

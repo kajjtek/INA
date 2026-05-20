@@ -4,7 +4,7 @@ bool checkNatural(long x) {
     return x>0;
 }
 
-long gcd(long n, long m){
+long gcd_C(long n, long m){
     if(!(checkNatural(n) && checkNatural(m))) return -1;
     
       while(m>0) {
@@ -15,7 +15,7 @@ long gcd(long n, long m){
       return n;
 }
 
-long lcd(long n) {
+long lcd_C(long n) {
   if( n< 2 ) return -1;
 
   if (n%2==0) return 2;
@@ -27,7 +27,7 @@ long lcd(long n) {
   return n;
 }
 
-long euler(long n) {
+long euler_C(long n) {
   if (n < 1) return -1;
     long result = n;
 
@@ -48,7 +48,7 @@ long euler(long n) {
     return result;
 }
 
-Diofantic_result diofantic(long a, long b, long c) {
+Diofantic_result diofantic_C(long a, long b, long c) {
     long x = 0, y = 0;
     long g = extendedGCD(a, b, &x, &y);
     

@@ -1,8 +1,10 @@
 /inputs
 /rad.dSYM
-dij.dSYM
+/dij.dSYM
 bin
 /results3
 /results2
 /results
 /generated
+/ch9-1.1
+/actual_results

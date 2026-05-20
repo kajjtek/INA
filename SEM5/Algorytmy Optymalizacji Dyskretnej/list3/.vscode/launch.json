@@ -1,0 +1,74 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "dijkstra",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/dij", 
+            
+            // ARGUMENTY: Należy je uzupełnić! Twój program wymaga 2 argumentów:
+            // 1. ścieżka do pliku grafu (filename)
+            // 2. wzorzec/flaga ('s' lub 't')
+            "args": ["-d", "./inputs/moj.gr", "-ss", "./inputs/moj.ss", "-oss", "./results/wyniki.ss.res"], 
+            
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false, // Zmień na true, jeśli wolisz oddzielne okno konsoli
+            "MIMode": "lldb", // Ustawione na natywny dla macOS debuger
+            
+            // Sekcja setupCommands dla LLDB zazwyczaj nie jest wymagana,
+            // ale jeśli chcesz ją zostawić pustą, możesz ją usunąć lub zostawić tak jak jest.
+            "setupCommands": [], 
+            
+            "preLaunchTask": "" // Wymaga zadania 'build_fa' w tasks.json używającego clang++
+        },
+        {
+            "name": "radix",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/rad", 
+            
+            // ARGUMENTY: Należy je uzupełnić! Twój program wymaga 2 argumentów:
+            // 1. ścieżka do pliku grafu (filename)
+            // 2. wzorzec/flaga ('s' lub 't')
+            "args": ["-d", "./inputs/moj.gr", "-ss", "./inputs/moj.ss", "-oss", "./results/wyniki.ss.res"], 
+            
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false, // Zmień na true, jeśli wolisz oddzielne okno konsoli
+            "MIMode": "lldb", // Ustawione na natywny dla macOS debuger
+            
+            // Sekcja setupCommands dla LLDB zazwyczaj nie jest wymagana,
+            // ale jeśli chcesz ją zostawić pustą, możesz ją usunąć lub zostawić tak jak jest.
+            "setupCommands": [], 
+            
+            "preLaunchTask": "" // Wymaga zadania 'build_fa' w tasks.json używającego clang++
+        },
+        {
+            "name": "comparison",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/comparison", 
+            
+            // ARGUMENTY: Należy je uzupełnić! Twój program wymaga 2 argumentów:
+            // 1. ścieżka do pliku grafu (filename)
+            // 2. wzorzec/flaga ('s' lub 't')
+            "args": ["-d", "./inputs/moj.gr", "-ss", "./inputs/moj.ss"], 
+            
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false, // Zmień na true, jeśli wolisz oddzielne okno konsoli
+            "MIMode": "lldb", // Ustawione na natywny dla macOS debuger
+            
+            // Sekcja setupCommands dla LLDB zazwyczaj nie jest wymagana,
+            // ale jeśli chcesz ją zostawić pustą, możesz ją usunąć lub zostawić tak jak jest.
+            "setupCommands": [], 
+            
+            "preLaunchTask": "" // Wymaga zadania 'build_fa' w tasks.json używającego clang++
+        }
+    ]
+}

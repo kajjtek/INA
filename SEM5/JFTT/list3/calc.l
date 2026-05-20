@@ -17,7 +17,6 @@
 [ \t]+ ;
 [0-9]+ {
     yylval.val = atoll(yytext);
-    yylval.is_number = 1;
     return NUM;
 }
 \+ {

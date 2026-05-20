@@ -10,14 +10,13 @@ SRC_DIR = src
 INC_DIR = include
 
 # ----------------- Pliki Implementacyjne Algorytmów -----------------
-ALGO_SRC = $(SRC_DIR)/Dijkstra.cpp $(SRC_DIR)/Dial.cpp $(SRC_DIR)/RadixDijkstra.cpp
+ALGO_SRC = $(SRC_DIR)/Dijkstra.cpp $(SRC_DIR)/Dial.cpp $(SRC_DIR)/RadixDijkstra.cpp $(SRC_DIR)/RadixHeap.cpp
 COMMON_SRC = $(SRC_DIR)/Graph.cpp $(SRC_DIR)/Parser.cpp 
 
 # Pliki obiektowe (.o) utworzone ze wszystkich implementacji.
 OBJS = $(ALGO_SRC:$(SRC_DIR)/%.cpp=$(BIN_DIR)/%.o) $(COMMON_SRC:$(SRC_DIR)/%.cpp=$(BIN_DIR)/%.o)
 
 # Lista programów do zbudowania (nazwy plików binarnych)
-# WAŻNE: W Windows rozszerzenie .exe jest dodawane automatycznie przez kompilator.
 TARGETS = dijkstra dial radixheap comparison
 
 # Pliki z funkcją 'main'
@@ -26,19 +25,20 @@ DIAL_MAIN_SRC = $(SRC_DIR)/mainDial.cpp
 RADIX_MAIN_SRC = $(SRC_DIR)/mainRadix.cpp
 COMPARISON_MAIN_SRC = $(SRC_DIR)/mainComparison.cpp
 
-# Dodajemy rozszerzenie .exe do ścieżek plików binarnych
-DIJKSTRA_BIN = $(BIN_DIR)/dijkstra.exe
-DIAL_BIN = $(BIN_DIR)/dial.exe
-RADIX_BIN = $(BIN_DIR)/radixheap.exe
-COMPARISON_BIN = $(BIN_DIR)/comparison.exe
+# ZMIANA: Usuwamy rozszerzenie .exe z definicji plików binarnych
+DIJKSTRA_BIN = $(BIN_DIR)/dijkstra
+DIAL_BIN = $(BIN_DIR)/dial
+RADIX_BIN = $(BIN_DIR)/radixheap
+COMPARISON_BIN = $(BIN_DIR)/comparison
 
 # Domyślny cel - buduje wszystko
 all: directories $(TARGETS)
 
-# Cel: Tworzenie wymaganego katalogu wyjściowego
-# Zmiana: Użycie standardowego 'mkdir' dla Windows i dodanie sprawdzenia warunkowego.
+# ZMIANA: Cel: Tworzenie wymaganego katalogu wyjściowego
+# Użycie 'mkdir -p' - działa na Linux/macOS i tworzy katalog, jeśli nie istnieje.
 directories:
-	@if not exist $(BIN_DIR) mkdir $(BIN_DIR)
+	@echo "Tworzenie katalogu $(BIN_DIR)..."
+	@mkdir -p $(BIN_DIR)
 
 # Reguła kompilacji wspólnych plików obiektowych (.o)
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.cpp
@@ -66,7 +66,7 @@ radixheap: $(RADIX_BIN)
 
 $(RADIX_BIN): $(RADIX_MAIN_SRC) $(OBJS)
 	@echo "Linkowanie: radixheap"
-	$(CXX) $(CXXFLAGS) -o $@ $(RADIX_MAIN_SRC) $(OBJS) -I$(INC_DIR) $(LDFLAGS) -pg -g
+	$(CXX) $(CXXFLAGS) -o $@ $(RADIX_MAIN_SRC) $(OBJS) -I$(INC_DIR) $(LDFLAGS)
 
 # 4. Budowanie comparison (porównanie wszystkich algorytmów)
 comparison: $(COMPARISON_BIN)
@@ -79,8 +79,8 @@ $(COMPARISON_BIN): $(COMPARISON_MAIN_SRC) $(OBJS)
 
 clean:
 	@echo "Usuwanie celow i katalogu $(BIN_DIR)..."
-	-del /Q $(BIN_DIR)\*.exe
-	-del /Q $(BIN_DIR)\*.o
-	-rmdir /S /Q $(BIN_DIR)
+    # ZMIANA: Użycie rm -f dla plików i rm -rf dla katalogu
+	-rm -f $(BIN_DIR)/*
+	-rmdir $(BIN_DIR)
 
 .PHONY: all directories clean $(TARGETS)

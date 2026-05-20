@@ -1,0 +1,156 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\geometry{margin=2.5cm}
+
+\definecolor{schemecolor}{RGB}{180, 60, 40}
+\definecolor{boxbg}{RGB}{255, 245, 240}
+\definecolor{correctgreen}{RGB}{0, 140, 60}
+\definecolor{attackred}{RGB}{180, 30, 30}
+
+\newmdenv[
+backgroundcolor=boxbg,
+linecolor=schemecolor,
+linewidth=1.5pt,
+roundcorner=5pt,
+innertopmargin=10pt,
+innerbottommargin=10pt,
+innerleftmargin=15pt,
+innerrightmargin=15pt
+]{schemebox}
+
+\newtheorem*{atak}{Atak}
+\newtheorem*{wniosek}{Wniosek}
+
+\title{
+	\textbf{Lista nr 2 --- Zadanie 6}\\[0.4em]
+}
+\author{Kajetan Plewa}
+\date{}
+
+\begin{document}
+	
+	\maketitle
+	\hrule
+	\vspace{1em}
+	
+	%------------------------------------------------------------------
+	\section*{Schemat podpisu}
+	%------------------------------------------------------------------
+	
+	\begin{schemebox}
+		\textbf{Parametry:} Grupa cykliczna $G = \langle g \rangle$ rzędu $q$,
+		sekret $a$, klucz publiczny $A = g^a$, wiadomość $m$.
+		
+		\medskip
+		\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=2em]
+			\item \textit{Podpisujący} losuje $r$, oblicza $R = g^r$ oraz $X = g^{ar}$.
+			\item Wyznacza $h = H(m, R, X)$.
+			\item Oblicza $s = \bigl[h + ra\bigr] \bmod q$ i zwraca $\sigma = (R, s, X)$.
+			\item \textit{Weryfikator} wyznacza $h = H(m, R, X)$ i akceptuje, gdy
+			$g^s = g^h X$.
+		\end{enumerate}
+	\end{schemebox}
+	
+	%------------------------------------------------------------------
+	\section{Poprawność dla uczciwego Podpisującego}
+	%------------------------------------------------------------------
+	
+	Podstawiamy definicję $s = h + ra \pmod{q}$ do lewej strony równania
+	weryfikacyjnego:
+	
+	\[
+	g^s \;=\; g^{h + ra} \;=\; g^h \cdot g^{ra}.
+	\]
+	
+	Ponieważ $X = g^{ar} = g^{ra}$, otrzymujemy:
+	
+	\[
+	g^s \;=\; g^h \cdot X. \qquad {\color{correctgreen}\checkmark}
+	\]
+	
+	\begin{wniosek}
+		Schemat jest \textbf{algebraicznie poprawny} - uczciwy podpisujący zawsze
+		przejdzie weryfikację.
+	\end{wniosek}
+	
+	%------------------------------------------------------------------
+	\section{Czy dodanie $X$ do hasha naprawia problem z zadania~5?}
+	%------------------------------------------------------------------
+	
+	W zadaniu~5 (gdzie $h = H(m, R)$) atakujący wykonywał:
+	\[
+	\text{wybierz } s, \quad \text{oblicz } h = H(m, R), \quad
+	\text{ustaw } X = g^{s-h}.
+	\]
+	
+	W obecnym schemacie $h$ zależy od $X$, a atakujący chciałby ustawić
+	$X = g^{s-h}$, co tworzy \textbf{zależność kołową}:
+	\[
+	h = H(m, R, X) = H\!\left(m, R,\, g^{s - h}\right),
+	\]
+	czyli $h$ pojawia się po obu stronach - nie można go wyznaczyć
+	tym podejściem.
+	
+	\medskip
+	Zatem dodanie $X$ do wejścia funkcji skrótu \emph{blokuje konkretny atak
+		z zadania~5}. 
+	
+	%------------------------------------------------------------------
+	\section{Atak fałszerstwa bez znajomości $a$}
+	%------------------------------------------------------------------
+	
+	Kluczowa obserwacja: równanie weryfikacyjne $g^s = g^h X$ \textbf{nigdzie
+		nie zawiera klucza publicznego $A = g^a$}. Weryfikator nigdy nie sprawdza,
+	czy $X = A^r$, co pozwala na następujący atak.
+	
+	\begin{atak}
+		Atakujący chce sfałszować podpis pod dowolną wiadomością $m$:
+		\begin{enumerate}[label=\arabic*.]
+			\item Wybierz dowolne $r' \in \mathbb{Z}_q$, ustaw $R = g^{r'}$.
+			\item Wybierz dowolne $k \in \mathbb{Z}_q$, ustaw $X = g^k$.
+			\item Oblicz $h = H(m, R, X)$.
+			\item Ustaw $s = h + k \pmod{q}$.
+			\item Zwróć $\sigma = (R,\, s,\, X)$.
+		\end{enumerate}
+	\end{atak}
+	
+	\noindent\textbf{Weryfikacja:}
+	\[
+	g^s = g^{h+k} = g^h \cdot g^k = g^h \cdot X. \qquad {\color{correctgreen}\checkmark}
+	\]
+	Atak jest więc skuteczny dla każdej wiadomości.
+	
+	%------------------------------------------------------------------
+	\section{Porównanie z zadaniem~5}
+	%------------------------------------------------------------------
+	
+	\begin{center}
+		\renewcommand{\arraystretch}{1.4}
+		\begin{tabular}{lcc}
+			\toprule
+			\textbf{Właściwość} & \textbf{Zadanie 5} & \textbf{Zadanie 6} \\
+			\midrule
+			Hash & $H(m, R)$ & $H(m, R, X)$ \\
+			Atak z zad.\ 5 działa? & {\color{correctgreen}tak} & {\color{attackred}nie --- kołowość} \\
+			Istnieje atak  & {\color{attackred}tak} & {\color{attackred}tak (wybór $k$)} \\
+			$A$ w równaniu weryfikacyjnym & {\color{attackred}nie} & {\color{attackred}nie} \\
+			Poziom bezpieczeństwa & 0 bitów & 0 bitów \\
+			\bottomrule
+		\end{tabular}
+	\end{center}
+	
+	\medskip
+	Zmiana $H(m,R) \to H(m,R,X)$ jest \textbf{pozorna}: uszczelnia jeden
+	konkretny wektor ataku.  Żeby faktycznie rozwiązać problem tego schematu należy dodać weryfikacje $X$. Ponieważ obecnie weryfikator wierzy bezgranicznie inputowi podpisującego, sekret jest niewykorzystywany a schemat niebezpieczny.
+\end{document}

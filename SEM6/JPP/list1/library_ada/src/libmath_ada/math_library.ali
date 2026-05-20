@@ -1,0 +1,63 @@
+V "GNAT Lib v15"
+P ZX
+
+RN
+RV NO_DIRECT_BOOLEAN_OPERATORS
+RV NO_RECURSION
+
+U math_library%b	math_library.adb	c3672c71 NE OO PK
+
+U math_library%s	math_library.ads	2afee288 EE NE OO PK
+
+D math_library.ads	20260329215931 2afee288 math_library%s
+D math_library.adb	20260329220002 e999cef9 math_library%b
+D system.ads		20250419085653 70765b54 system%s
+G a e
+G c Z s b [gcd math_library 9 13 none]
+G c Z s b [lcd math_library 12 13 none]
+G c Z s b [euler math_library 15 13 none]
+G c Z s b [diofantic math_library 18 13 none]
+G c Z s s [diofantic_resultIP math_library 3 9 none]
+X 1 math_library.ads
+1K9*Math_Library 21l5 21e17 2|1b14 108l5 108t17
+3R9*Diofantic_Result 7e14 18r59 2|94r59
+4i7*X{long_integer} 2|101m18 105m15
+5i7*Y{long_integer} 2|101m26 105m31
+6b7*Is_Solvable{boolean} 2|101m34 105m47
+9V13*Gcd{long_integer} 9>18 9>21 10i<c,ada_gcd>22 2|8b13 24l8 24t11
+9i18 N{long_integer} 2|8b18 9r32
+9i21 M{long_integer} 2|8b21 10r32
+12V13*Lcd{long_integer} 12>18 13i<c,ada_lcd>22 2|26b13 45l8 45t11
+12i18 N{long_integer} 2|26b18 29r10 33r10 37r22 38r13 44r14
+15V13*Euler{long_integer} 15>20 16i<c,ada_euler>22 2|47b13 78l8 78t13
+15i20 N{long_integer} 2|47b20 48r32 49r32
+18V13*Diofantic{3R9} 18>24 18>27 18>30 19i<c,ada_diofantic>22 2|94b13 106l8
+. 106t17
+18i24 A{long_integer} 2|94b24 98r21
+18i27 B{long_integer} 2|94b27 98r24
+18i30 C_Val{long_integer} 2|94b30 100r10 104r16
+X 2 math_library.adb
+3V13 Check_Natural{boolean} 3b13 3>28 6l8 6t21 13s15 13s42
+3i28 X{long_integer} 5r14
+9i7 Temp_N{long_integer} 13r30 19r20 20m10 23r14
+10i7 Temp_M{long_integer} 13r57 17r13 18r18 19m10 19r31
+11i7 Temp{long_integer} 18m10 20r20
+27i7 I{long_integer} 37r13 37r17 38r19 39r20 41m10 41r15
+48i7 Result{long_integer} 57m10 57r20 57r29 65m13 65r23 65r32 74m10 74r20
+. 74r29 77r14
+49i7 Temp_N{long_integer} 52r10 56r10 58r16 59m13 59r23 63r22 64r13 66r19
+. 67m16 67r26 73r10 74r38
+50i7 I{long_integer} 63r13 63r17 64r24 65r41 66r30 67r35 70m10 70r15
+80U14 Extended_GCD 80b14 80>28 80>31 80<49 80<52 80<55 88s10 92l8 92t20 98s7
+80i28 A{long_integer} 86r15 88r27 90r21
+80i31 B{long_integer} 83r10 88r24 88r33 90r25
+80i49 X{long_integer} 84m10 89m10
+80i52 Y{long_integer} 85m10 90m10
+80i55 G{long_integer} 86m10 88m44
+81i7 X1{long_integer} 88m36 90r15
+81i11 Y1{long_integer} 88m40 89r15 90r30
+95i7 X{long_integer} 98m27 105r20
+95i10 Y{long_integer} 98m30 105r36
+95i13 G{long_integer} 98m33 100r20 104r24
+96i7 Scale{long_integer} 104m7 105r24 105r40
+

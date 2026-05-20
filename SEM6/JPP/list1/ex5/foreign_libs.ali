@@ -1,0 +1,48 @@
+V "GNAT Lib v15"
+P ZX
+
+RN
+
+U foreign_libs%s	foreign_libs.ads	bcde3902 NE OO PK
+
+D foreign_libs.ads	20260330003131 bcde3902 foreign_libs%s
+D system.ads		20250419085653 70765b54 system%s
+G a e
+G c Z s s [c_gcd foreign_libs 10 13 none]
+G c Z s s [c_lcd foreign_libs 13 13 none]
+G c Z s s [c_euler foreign_libs 16 13 none]
+G c Z s s [c_diofantic foreign_libs 19 13 none]
+G c Z s s [rust_gcd foreign_libs 22 13 none]
+G c Z s s [rust_lcd foreign_libs 25 13 none]
+G c Z s s [rust_euler foreign_libs 28 13 none]
+G c Z s s [rust_diofantic foreign_libs 31 13 none]
+G c Z s s [diofantic_resultIP foreign_libs 3 9 none]
+X 1 foreign_libs.ads
+1K9*Foreign_Libs 34l5 34e17
+3R9*Diofantic_Result 7e14 8r26 19r61 31r64
+4i7*X{long_integer}
+5i7*Y{long_integer}
+6b7*Is_Solvable{boolean}
+10V13*C_Gcd{long_integer} 10>20 10>23 11b<c,gcd_C>22
+10i20 N{long_integer}
+10i23 M{long_integer}
+13V13*C_Lcd{long_integer} 13>20 14b<c,lcd_C>22
+13i20 N{long_integer}
+16V13*C_Euler{long_integer} 16>22 17b<c,euler_C>22
+16i22 N{long_integer}
+19V13*C_Diofantic{3R9} 19>26 19>29 19>32 20b<c,diofantic_C>22
+19i26 A{long_integer}
+19i29 B{long_integer}
+19i32 C_Val{long_integer}
+22V13*Rust_Gcd{long_integer} 22>23 22>26 23b<c,rust_gcd>22
+22i23 N{long_integer}
+22i26 M{long_integer}
+25V13*Rust_Lcd{long_integer} 25>23 26b<c,rust_lcd>22
+25i23 N{long_integer}
+28V13*Rust_Euler{long_integer} 28>25 29b<c,rust_euler>22
+28i25 N{long_integer}
+31V13*Rust_Diofantic{3R9} 31>29 31>32 31>35 32b<c,rust_diofantic>22
+31i29 A{long_integer}
+31i32 B{long_integer}
+31i35 C_Val{long_integer}
+

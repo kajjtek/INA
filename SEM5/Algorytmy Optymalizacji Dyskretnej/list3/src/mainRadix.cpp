@@ -168,17 +168,12 @@ int main(int argc, char* argv[]) {
                 auto start_time = std::chrono::high_resolution_clock::now();
                 
                 // Uruchomienie algorytmu Radix Heap, przekazując maxCost
-                std::vector<long long> distances = radixSolver.findAllPaths(graph, sourceNode, maxCost);
+                std::vector<long long> distances = radixSolver.shortestPaths(graph, sourceNode);
                 
                 // Licznik po funkcji
                 auto end_time = std::chrono::high_resolution_clock::now();
                 DoubleSeconds elapsed_time = end_time - start_time;
                 suma_czasu += elapsed_time.count();
-                
-                // Zapis szczegółowych dystansów (dla weryfikacji poprawności)
-                if (!ssOutFile.empty()) {
-                     saveSSSPDistances(ssOutFile + ".dist", sourceNode, distances);
-                }
             }
 
             // Obliczenie średniej czasu
@@ -201,8 +196,8 @@ int main(int argc, char* argv[]) {
                 auto start_time = std::chrono::high_resolution_clock::now();
                 
                 // Uruchomienie algorytmu Radix Heap P2P, przekazując maxCost
-                std::pair<int, long long> result = radixSolver.findPath(graph, pair.first, pair.second, maxCost);
-                results.push_back(result);
+                std::vector<long long> result = radixSolver.shortestPaths(graph, pair.first);
+                results.push_back({pair.second, result[pair.second]});
                 
                 // Licznik po funkcji
                 auto end_time = std::chrono::high_resolution_clock::now();

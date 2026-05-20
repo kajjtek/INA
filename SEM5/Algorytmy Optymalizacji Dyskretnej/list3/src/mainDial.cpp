@@ -174,11 +174,6 @@ int main(int argc, char* argv[]) {
                 auto end_time = std::chrono::high_resolution_clock::now();
                 DoubleSeconds elapsed_time = end_time - start_time;
                 suma_czasu += elapsed_time.count();
-                
-                // Zapis szczegółowych dystansów (dla weryfikacji poprawności)
-                if (!ssOutFile.empty()) {
-                     saveSSSPDistances(ssOutFile + ".dist", sourceNode, distances);
-                }
             }
 
             // Obliczenie średniej czasu
