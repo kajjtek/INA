@@ -40,7 +40,7 @@ public class Philosopher implements Runnable, Comparable<Philosopher> {
                         left.neighbour.messageQueue.offer(new Message(Message_Type.GIVE_FORK, this, left.fork.get()), 5000, TimeUnit.MILLISECONDS);
                         left.fork = Optional.empty();
                         
-                        // NOWOŚĆ: Jeśli oddaliśmy widelec, a sami chcemy jeść -> prosimy o zwrot!
+                        
                         if(this.state == States.WANTS_TO_EAT) {
                             left.neighbour.messageQueue.offer(new Message(Message_Type.REQUEST_FORK, this, null), 1000, TimeUnit.MILLISECONDS);
                         }
@@ -53,7 +53,7 @@ public class Philosopher implements Runnable, Comparable<Philosopher> {
                         right.neighbour.messageQueue.offer(new Message(Message_Type.GIVE_FORK, this, right.fork.get()), 5000, TimeUnit.MILLISECONDS);
                         right.fork = Optional.empty();
                         
-                        // NOWOŚĆ: Jeśli oddaliśmy widelec, a sami chcemy jeść -> prosimy o zwrot!
+                        
                         if(this.state == States.WANTS_TO_EAT) {
                             right.neighbour.messageQueue.offer(new Message(Message_Type.REQUEST_FORK, this, null), 1000, TimeUnit.MILLISECONDS);
                         }
@@ -122,8 +122,8 @@ public class Philosopher implements Runnable, Comparable<Philosopher> {
                         right.fork.get().isDirty = true;
                         this.count++;
                         
-                        // REALIZACJA ODROCZONYCH ŻĄDAŃ
-                        // POPRAWKA: Przekazujemy .get() oraz oczyszczamy błędną linię 129
+                        
+                        
                         if (left.pendingRequest && left.fork.isPresent()) {
                             left.fork.get().isDirty = false;
                             left.neighbour.messageQueue.offer(new Message(Message_Type.GIVE_FORK, this, left.fork.get()), 5000, TimeUnit.MILLISECONDS);
@@ -134,7 +134,7 @@ public class Philosopher implements Runnable, Comparable<Philosopher> {
                             right.fork.get().isDirty = false;
                             right.neighbour.messageQueue.offer(new Message(Message_Type.GIVE_FORK, this, right.fork.get()), 5000, TimeUnit.MILLISECONDS);
                             right.fork = Optional.empty();
-                            right.pendingRequest = false; // <--- Tutaj był błąd "cannot find symbol"
+                            right.pendingRequest = false; 
                         }
 
                         if(this.count == this.numberOfTries) this.state = States.DONE;
