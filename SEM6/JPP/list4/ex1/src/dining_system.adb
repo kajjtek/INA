@@ -4,9 +4,6 @@ with Ada.Real_Time; use Ada.Real_Time;
 
 package body Dining_System is
 
-   -------------
-   -- Mailbox --
-   -------------
    protected body Mailbox is
       entry Put (Item : Message) when Count < Max_Queue_Size is
       begin
@@ -23,9 +20,6 @@ package body Dining_System is
       end Get;
    end Mailbox;
 
-   ----------------------
-   -- Philosopher_Task --
-   ----------------------
    task body Philosopher_Task is
       Id          : Philosopher_Id;
       Max_Meals   : Integer;

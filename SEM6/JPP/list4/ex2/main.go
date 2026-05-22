@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// Definicje typów stanów i rodzajów wiadomości
+
 type State int
 
 const (
@@ -26,7 +26,7 @@ const (
 	RequestFork
 )
 
-// Struktury danych odpowiadające klasom z Javy
+
 type Fork struct {
 	IsDirty bool
 }
@@ -55,7 +55,7 @@ type Philosopher struct {
 	Mailbox    chan Message
 }
 
-// Funkcja pomocnicza wysyłająca żądania o widelce
+
 func (p *Philosopher) sendRequest() {
 	if p.Left.Fk == nil || p.Right.Fk == nil {
 		p.Fail++
@@ -76,7 +76,7 @@ func (p *Philosopher) sendRequest() {
 	}
 }
 
-// Obsługa przychodzących komunikatów
+
 func (p *Philosopher) handleMessage(msg Message) {
 	switch msg.Kind {
 	case RequestFork:
@@ -127,10 +127,10 @@ func (p *Philosopher) handleMessage(msg Message) {
 	}
 }
 
-// Główna pętla wątku (goroutine) filozofa
+
 func (p *Philosopher) Run(wg *sync.WaitGroup) {
 	defer wg.Done()
-	// Lokalny generator liczb losowych, aby uniknąć blokowania globalnego mutexu
+	
 	r := rand.New(rand.NewSource(time.Now().UnixNano() + int64(p.ID)))
 
 	for p.State != Done {
@@ -140,7 +140,7 @@ func (p *Philosopher) Run(wg *sync.WaitGroup) {
 			thinkMs := 100 + r.Intn(500)
 			endTime := time.Now().Add(time.Duration(thinkMs) * time.Millisecond)
 
-			// Przetwarzanie komunikatów podczas myślenia
+			
 			for time.Now().Before(endTime) {
 				timeLeft := time.Until(endTime)
 				if timeLeft <= 0 {
@@ -158,7 +158,7 @@ func (p *Philosopher) Run(wg *sync.WaitGroup) {
 			fmt.Printf("Filozof %d wszedl w stan WANTS_TO_EAT\n", p.ID)
 			p.sendRequest()
 
-			// Czekanie na oba widelce
+			
 			for p.Left.Fk == nil || p.Right.Fk == nil {
 				msg := <-p.Mailbox
 				p.handleMessage(msg)
@@ -174,7 +174,7 @@ func (p *Philosopher) Run(wg *sync.WaitGroup) {
 			p.Right.Fk.IsDirty = true
 			p.CountMeals++
 
-			// Oddanie widelców, jeśli są żądania od sąsiadów
+			
 			if p.Left.PendingRequest && p.Left.Fk != nil {
 				p.Left.Fk.IsDirty = false
 				select {
@@ -205,7 +205,7 @@ func (p *Philosopher) Run(wg *sync.WaitGroup) {
 
 	fmt.Fprintf(os.Stderr, "####### FILOZOF %d JEST DONE ####### LICZBA FAILOW: %d ##############\n", p.ID, p.Fail)
 
-	// Sprzątanie pozostałych wiadomości po zakończeniu posiłków
+	
 	for p.Left.Fk != nil || p.Right.Fk != nil {
 		select {
 		case msg := <-p.Mailbox:
@@ -236,7 +236,7 @@ func main() {
 		}
 	}
 
-	// Inicjalizacja filozofów i ich kanałów mailowych (buforowanych)
+	
 	philosophers := make([]*Philosopher, numPhilosophers)
 	for i := 0; i < numPhilosophers; i++ {
 		philosophers[i] = &Philosopher{
@@ -247,7 +247,7 @@ func main() {
 		}
 	}
 
-	// Łączenie sąsiadów kanałami
+	
 	for i := 0; i < numPhilosophers; i++ {
 		leftIdx := (i - 1 + numPhilosophers) % numPhilosophers
 		rightIdx := (i + 1) % numPhilosophers
@@ -259,7 +259,7 @@ func main() {
 		philosophers[i].Right.NeighbourID = rightIdx
 	}
 
-	// Tworzenie i czysta dystrybucja widelców (dokładnie jak w Javie)
+	
 	forks := make([]*Fork, numPhilosophers)
 	for i := 0; i < numPhilosophers; i++ {
 		forks[i] = &Fork{IsDirty: true}
@@ -278,7 +278,7 @@ func main() {
 		}
 	}
 
-	// Odpalenie goroutines i oczekiwanie na zakończenie wszystkich wątków
+	
 	var wg sync.WaitGroup
 	for i := 0; i < numPhilosophers; i++ {
 		wg.Add(1)
