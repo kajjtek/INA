@@ -138,41 +138,44 @@ class Polynomial {
             return true;
     }
     bool operator!=(const Polynomial &o) const { return !(*this == o); }
-    bool is_zero() const { return *this == Polynomial<N>(); }
+    bool is_zero() const { return *this == Polynomial<N, Compare>(); }
 
     std::pair<std::vector<Polynomial>, Polynomial> polynomialReduce(std::vector<Polynomial> dividers) {
         int s = dividers.size();
 
-        Polynomial p = Polynomial<>(this->monomials); //kopiujemy sobie p;d
+        Polynomial p = *this;
         std::vector<Polynomial> qs(s, Polynomial<N, Compare>());
-        Polynomial rest();
-        Polynomial zero();
+        Polynomial rest;
 
-        while(p!=zero) {
+        while (!p.is_zero()) {
             int i = 0;
             bool divisionOccured = false;
-            while(i<s) {
+            
+            while (i < s) {
                 Monomial<N> leading_term_p = p.LT();
                 Polynomial& d = dividers[i];
                 Monomial<N> leading_term_d = d.LT();
-                if(leading_term_p.divisableBy(leading_term_d)) {
+                
+                if (leading_term_p.divisableBy(leading_term_d)) {
                     Monomial<N> res = leading_term_p / leading_term_d;
-                    qs[i] += res;
-                    p -= res * d;
+                    
+                    qs[i] += Polynomial({res});
+                    p -= Polynomial({res}) * d;
+                    
                     divisionOccured = true;
+                    break;
                 } else {
                     i++;
                 }
             }
 
-            if(!divisionOccured) {
-                r += p.LT();
+            if (!divisionOccured) {
+                rest += Polynomial({p.LT()});
                 p.removeLT();
             }
         }
         return {qs, rest};
     }
-
     Monomial<N> LT() {
         return monomials.back();
     }
