@@ -1,0 +1,317 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{graphicx}
+
+\geometry{margin=2.5cm}
+
+% Styl dla kodu C++
+\lstdefinestyle{cppstyle}{
+	language=C++,
+	basicstyle=\ttfamily\small,
+	keywordstyle=\color{blue}\bfseries,
+	commentstyle=\color{gray}\itshape,
+	stringstyle=\color{red!60!black},
+	numberstyle=\tiny\color{gray},
+	numbers=left,
+	stepnumber=1,
+	numbersep=8pt,
+	backgroundcolor=\color{gray!8},
+	frame=single,
+	rulecolor=\color{gray!40},
+	breaklines=true,
+	breakatwhitespace=false,
+	showstringspaces=false,
+	tabsize=4,
+	captionpos=b,
+	morekeywords={vector, array, pair, size_t}
+}
+
+\lstset{style=cppstyle}
+
+\title{Sprawozdanie 2}
+\author{Kajetan Plewa}
+\date{04 czerwca 2026}
+
+\begin{document}
+	
+	\maketitle
+	
+	% ---------------------------------------------------------------
+	\section{Implementacja funkcji PolynomialReduce}
+	
+	\subsection{a) Struktura wielomianu wielu zmiennych}
+	
+	Wielomian $n$ zmiennych $f \in \mathbb{R}[x_1,\ldots,x_n]$ jest reprezentowany jako lista
+	jednomianów -- obiektów klasy \texttt{Monomial<N>}, gdzie \texttt{N} jest stałą czasu
+	kompilacji oznaczającą liczbę zmiennych.
+	
+	Każdy jednomian przechowuje:
+	\begin{itemize}
+		\item \texttt{std::array<int,N> powers} -- wektor wykładników $(e_1,\ldots,e_N)$,
+		\item \texttt{float coefficient} -- współczynnik rzeczywisty.
+	\end{itemize}
+	
+	Wielomian klasy \texttt{Polynomial<N, Compare>} zawiera posortowany wektor jednomianów
+	oraz parametr szablonu \texttt{Compare} definiujący porządek jednomianowy.
+	Klasa jest zaprojektowana tak, aby łatwo rozszerzać ją na dowolne ciało $\kappa$ -- wystarczy
+	zmienić typ pola \texttt{coefficient}.
+	
+	Po każdej operacji wywoływana jest metoda \texttt{normalise()}, która sortuje jednomiany
+	zgodnie z wybranym porządkiem i scala wyrazy o tych samych wykładnikach. Dzięki temu w każdym momencie wykonywania kodu, vector monomials jest posortowany rosnąco według przyjętego porządku.
+	
+	% ---------------------------------------------------------------
+	\subsection{b) Porządki na jednomianach}
+	
+	Zaimplementowano następujące porządki monomalne:
+	
+	\paragraph{Porządek leksykograficzny (Lex, $x > y > z$).}
+	Jednomiany są porównywane zmienną po zmiennej od lewej.
+	Monomial $\mathbf{a}$ jest mniejszy od $\mathbf{b}$, jeśli na pierwszej pozycji, gdzie się różnią,
+	$a_i < b_i$.
+	Przykład dla trzech zmiennych:
+	\[
+	x^2 y \succ x y^2 \succ x y \succ z^3.
+	\]
+	
+	\paragraph{Porządek leksykograficzny permutowany.}
+	Identyczny mechanizm, lecz zmienne rozpatrywane są w innej kolejności.
+	Zaimplementowano dwa dodatkowe warianty:
+	\begin{itemize}
+		\item $y > z > x$ (\texttt{OrderLexYZX}),
+		\item $z > x > y$ (\texttt{OrderLexZXY}).
+	\end{itemize}
+	Zmiana kolejności zmiennych prowadzi do innego wiodącego wyrazu wielomianu, co skutkuje
+	różnymi przebiegami i wynikami algorytmu \textit{PolynomialReduce}.
+	
+	\paragraph{Porządek Graded Lex (GrLex).}
+	Jednomiany są porządkowane najpierw według stopnia całkowitego
+	$|\mathbf{e}| = e_1 + \cdots + e_N$, a przy równości stopni -- leksykograficznie.
+	Przykład:
+	\[
+	x^2 y \succ x y z \succ y^3 \succ x^2.
+	\]
+	
+	
+	% ---------------------------------------------------------------
+	\subsection{c) Implementacja \textit{PolynomialReduce}}
+	
+	Algorytm \textit{PolynomialReduce} dla wielomianu $f$ i ciągu dzielników
+	$G = (g_1,\ldots,g_s)$ wyznacza $\alpha_1,\ldots,\alpha_s$ oraz resztę $r$ takie, że
+	\[
+	f = \sum_{i=1}^{s} \alpha_i g_i + r.
+	\]
+	
+	Kod źródłowy:
+	
+	\begin{lstlisting}[caption={Metoda \texttt{polynomialReduce} (plik \texttt{Polynomial.hpp})}]
+		std::pair<std::vector<Polynomial>, Polynomial>
+		polynomialReduce(std::vector<Polynomial> dividers) {
+			int s = dividers.size();
+			Polynomial p = *this;
+			std::vector<Polynomial> qs(s, Polynomial<N, Compare>());
+			Polynomial rest;
+			
+			while (!p.is_zero()) {
+				int i = 0;
+				bool divisionOccured = false;
+				
+				while (i < s) {
+					Monomial<N> lp = p.LT();
+					Monomial<N> ld = dividers[i].LT();
+					
+					if (lp.divisableBy(ld)) {
+						Monomial<N> res = lp / ld;
+						qs[i]  += Polynomial({res});
+						p      -= Polynomial({res}) * dividers[i];
+						divisionOccured = true;
+						break;
+					} else {
+						i++;
+					}
+				}
+				
+				if (!divisionOccured) {
+					rest += Polynomial({p.LT()});
+					p.removeLT();
+				}
+			}
+			return {qs, rest};
+		}
+	\end{lstlisting}
+	
+	Jednomian wiodący $\mathrm{LT}(p)$ to ostatni element posortowanego wektora (największy
+	w danym porządku). Pętla wewnętrzna próbuje kolejno każdego dzielnika; jeśli
+	$\mathrm{LT}(g_i) \mid \mathrm{LT}(p)$, wykonywane jest odejmowanie. Jeśli żaden dzielnik
+	nie pasuje, wiodący wyraz trafia do reszty. \newline
+	Algorytm ten jest uogólnieniem algorytmu dzielenia wielomianów przedstawionego w sprawozdaniu nr 1.
+	
+	% ---------------------------------------------------------------
+	\subsection{d) Ćwiczenie 37 -- przykład redukcji}
+	
+	Dany jest wielomian
+	\[
+	f = x^3 - x^2 y - x^2 z \in \mathbb{R}[x,y,z]
+	\]
+	oraz dzielniki (w porządku GrLex, $x > y > z$):
+	\[
+	g_1 = x^2 y - z, \qquad g_2 = xy - 1.
+	\]
+	
+	\paragraph{Redukcja $f$ przez $(g_1, g_2)$.}
+	
+	Algorytm wyznaczył:
+	\[
+	\alpha_1 = -1, \quad \alpha_2 = 0, \quad r_1 = x^3 - x^2z - z.
+	\]
+
+	
+	\paragraph{Redukcja $f$ przez $(g_2, g_1)$.}
+	
+	Po zamianie kolejności:
+	\[
+	\alpha_2 = -x, \quad \alpha_1 = 0, \quad r_2 = x^3 - x^2z - x.
+	\]
+	
+	\paragraph{Analiza różnic.}
+	Obie reszty $r_1 \neq r_2$, co pokazuje, że wynik redukcji zależy od kolejności dzielników
+	w ciągu $G$. Dzieje się tak, ponieważ algorytm jest \emph{zachłanny} -- przy każdym
+	wiodącym wyrazie $\mathrm{LT}(p)$ wybiera \emph{pierwszego} z listy dzielnika, którego
+	wyraz wiodący dzieli $\mathrm{LT}(p)$.
+	
+	Ponieważ wyraz  $\mathrm{LT}(f) = x^3$ nie jest podzielny zarówno przez $LT(g_1)$ jak  i $LT(g_2)$ różnice w przebiegu algorytmu można zaobserować dopiero w drugim kroku. \newline
+	Wtedy $\mathrm{LT}(f) = x^2y$ - jako iż jednomiany wiodące obu dzielników dzielą $x^2y$ ich kolejność jest kluczowa. W pierwszym przypadku wynik dzielenia $\frac{LT(f)}{LT(g_1)}$ trafi do zmiennej $q_1$, a w drugim $\frac{LT(f)}{LT(g_2)}$ do zmiennej $q_2$ (gdzie $g_1$ oraz $g_2$ są już po redukcji z kroku $1$). Co za tym idzie wynik operacji PolynomialReduce będzie ewidentnie różny.
+	
+	% ---------------------------------------------------------------
+	\subsection{e) Trzy różne porządki leksykograficzne -- numer indeksu 282212}
+	
+	Numer indeksu: $a=2,\, b=8,\, c=2,\, d=2,\, e=1,\, f=2$, zatem
+	\[
+	h(x,y,z) = x^a y^b - y^c z^d + x^e z^f = x^2 y^8 - y^2 z^2 + xz^2.
+	\]
+	
+	Jako ciąg dzielników przyjęto $G = (g_1, g_2)$ gdzie
+	\[
+	g_1 = x - y, \qquad g_2 = y - z.
+	\]
+	
+	Wyniki algorytmu dla trzech porządków leksykograficznych:
+	
+	\begin{center}
+		\begin{tabular}{lll}
+			\hline
+			\textbf{Porządek} & \textbf{Zmienne malejąco} & \textbf{Reszta $r$} \\
+			\hline
+			Lex standardowy   & $x > y > z$ & $z^{10} - z^4 + z^3$ \\
+			Lex permutowany 1 & $y > z > x$ & $-x^2z^2 + xz^2 + x^{10}$ \\
+			Lex permutowany 2 & $z > x > y$ & $y^{10} - y^4 + y^3$ \\
+			\hline
+		\end{tabular}
+	\end{center}
+	
+	\paragraph{Skąd wynikają różnice?}
+	
+	Każdy porządek leksykograficzny wyznacza inny wyraz wiodący $\mathrm{LT}(h)$:
+	\begin{itemize}
+		\item $x > y > z$: $\mathrm{LT}(h) = x^2 y^8$ (dominuje $x$), więc redukcja eliminuje
+		$x$ i $y$, wyrażając $h$ przez zmienną $z$; reszta zawiera tylko potęgi~$z$.
+		\item $y > z > x$: $\mathrm{LT}(h) = x^2 y^8$ -- teraz dominuje $y$; redukcja przez
+		$g_1 = x-y$, $g_2 = y-z$ przebiega inaczej i reszta zawiera jedynie~$x$.
+		\item $z > x > y$: $\mathrm{LT}(h) = y^2 z^2$ (dominuje $z$); redukcja eliminuje~$z$
+		i~$x$, zostawiając resztę wyrażoną przez~$y$.
+	\end{itemize}
+	
+	\section{Złocień japoński}
+	
+	\subsection*{Wzór i opis krzywej}
+	
+	Inspiracją jest krzywa \emph{Quadrifolium}, dana w układzie biegunowym jako
+	\[
+	r(\theta) = \cos(2\theta).
+	\]
+	Opracowany wzór który daje oczekiwaną chryzantemę:
+	\[
+	\boxed{r(\theta) \;=\; 0.2 \;+\; \bigl|1 +sin(16\theta + \varphi)\bigr|^{0.035},}
+	\]
+	gdzie:
+	\begin{itemize}
+		\item $\varphi$ -- obrót całej rozety (faza sinusa).
+	\end{itemize}
+	
+	Współrzędne kartezjańskie punktów krzywej wyznaczane są standardowo:
+	\[
+	x(\theta) = r(\theta)\cos\theta, \qquad y(\theta) = r(\theta)\sin\theta, \qquad \theta \in [0,\, 2\pi).
+	\]
+	
+	\subsection{Wyjaśnienie wzoru}
+Pierwszym krokiem jest  przesunięcie funkcji w górę o~$1$:
+\[
+1 + \sin(16\theta) \;\geq\; 0,
+\]
+dzięki czemu wyrażenie jest nieujemne dla każdego~$\theta$.
+
+Samo dodanie jedynki daje jednak płatki z~ostrymi wcięciami
+sięgającymi zera -- wyglądają zbyt kanciasty. Aby je wygładzić,
+wyrażenie podniesiono do małej potęgi $s = 0{,}035$
+(co odpowiada pierwiastkowi bardzo wysokiego stopnia):
+\[
+\bigl(1 + \sin(16\theta)\bigr)^{s}.
+\]
+Funkcja potęgowa z wykładnikiem bliskim zera sprawia,
+że wartości w~otoczeniu zera rosną bardzo szybko --
+wcięcia między płatkami stają się płytkie i~zaokrąglone,
+co odpowiada charakterystycznemu kształtowi chrysantemy.
+
+Na koniec dodano stałą $l = 0{,}2$, która pełni rolę
+promienia okręgu centralnego widocznego w~środku cesarskiego godła:
+\[
+r(\theta) = 0{,}2 \;+\; (1 + \sin(16\theta))^{0{,}035}.
+\]
+\newline
+
+Godło składa się z dwóch rozet - pierwszoplanowej i drugoplanowej - przesuniętych przez dwie różne fazy:
+\[
+\varphi_1 = 1{,}4, \qquad \varphi_2 = 4{,}5.
+\]
+Rozeta tylnia rysowana jest ciemniejszym kolorem.
+	
+	\subsection*{Wynik}
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.55\textwidth]{./piekne.jpg}
+		\caption{Złocień cesarski}
+		\label{fig:kiku}
+	\end{figure}
+	
+\subsection*{Reprezentacja jako rozmaitość algebraiczna}
+
+Wyjściowa funkcja $r(\theta) = 0{,}2 + (1 + \sin(16\theta))^{0{,}035}$ zawiera ułamkowy wykładnik ($0{,}035 = \frac{7}{200}$), co uniemożliwia zwarty opis algebraiczny. Przyjęty został więc model uproszczony:
+\[
+r = 1 + \sin(16\theta).
+\]
+Stosując wzór de Moivre’a na wielokrotność kąta oraz podstawienia kartezjańskie $x = r\cos\theta$, $y = r\sin\theta$, wyznaczyłem $\sin(16\theta)$ jako:
+\[
+\sin(16\theta) = \operatorname{Im}\!\left(\frac{x + iy}{r}\right)^{\!16} = \frac{P_{16}(x,y)}{r^{16}},
+\]
+gdzie $P_{16}(x,y)$ jest jednorodnym wielomianem stopnia 16. Wstawiając to do równania bazowego, otrzymano:
+\[
+r = 1 + \frac{P_{16}(x,y)}{r^{16}} \implies r^{17} = r^{16} + P_{16}(x,y).
+\]
+Przechodząc całkowicie na współrzędne kartezjańskie ($r = (x^2+y^2)^{1/2}$), otrzymujemy:
+\[
+(x^2+y^2)^{17/2} = (x^2+y^2)^8 + P_{16}(x,y).
+\]
+Aby usunąć pierwiastek (wykładnik ułamkowy), podniesiono obie strony do kwadratu. Ostateczne równanie wielomianowe definiujące rozmaitość algebraiczną stopnia 34 w $\mathbb{R}^2$ przyjmuje postać:
+\[
+(x^2+y^2)^{17} - \left[(x^2+y^2)^8 + P_{16}(x,y)\right]^2 = 0.
+\]	
+\end{document}
