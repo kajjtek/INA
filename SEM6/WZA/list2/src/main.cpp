@@ -109,7 +109,7 @@ int main() {
     std::cout << "--- Podpunkt e) Trzy różne porządki Lex ---\n";
 
     // !!! TUTAJ WPISZ CYFRY SWOJEGO NUMERU INDEKSU (abcdef) !!!
-    int a = 1, b = 2, c = 3, d = 4, e = 5, f_idx = 6; 
+    int a = 2, b = 8, c = 2, d = 2, e = 1, f_idx = 2; 
     std::cout << "Dla indeksu o cyfrach: a=" << a << ", b=" << b << ", c=" << c 
               << ", d=" << d << ", e=" << e << ", f=" << f_idx << "\n\n";
 

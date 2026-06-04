@@ -2,6 +2,8 @@
 #define Polynomial_H
 
 #include <vector>
+#include <algorithm>
+#include <cmath>
 #include "./Monomial.hpp"
 
 template<long long N, typename Compare>
@@ -72,7 +74,7 @@ class Polynomial {
         }
 
         while(i<this->monomials.size()) { result.push_back(this->monomials.at(i++));}
-        while(j<o.monomials.size()) { result.push_back(this->monomials.at(j++));}
+        while(j<o.monomials.size()) { result.push_back(o.monomials.at(j++));}  // BUG FIX: was this->monomials
 
         this->monomials = std::move(result);
         normalise();
@@ -94,7 +96,9 @@ class Polynomial {
                 result.push_back(left);
                 i++;
             } else if (comp(right,left)) {
-                result.push_back(right);
+                Monomial<N> neg_right = right;
+                neg_right.coefficient = -neg_right.coefficient;
+                result.push_back(neg_right);
                 j++;
             } else {
                 result.push_back(left - right);
@@ -104,7 +108,11 @@ class Polynomial {
         }
 
         while(i<this->monomials.size()) { result.push_back(this->monomials.at(i++));}
-        while(j<o.monomials.size()) { result.push_back(this->monomials.at(j++));}
+        while(j<o.monomials.size()) {
+            Monomial<N> neg = o.monomials.at(j++);
+            neg.coefficient = -neg.coefficient;
+            result.push_back(neg);
+        }
 
         this->monomials = std::move(result);
         normalise();
@@ -181,7 +189,15 @@ class Polynomial {
     }
 
     void removeLT() {
-        monomials.pop_back();
+        if (!monomials.empty()) {
+            monomials.pop_back();
+        }
+
+        // Maintain invariant: polynomial should always have at least one monomial
+        // (the zero polynomial is represented as a single zero monomial).
+        if (monomials.empty()) {
+            monomials.push_back(Monomial<N>{});
+        }
     }
 
 
