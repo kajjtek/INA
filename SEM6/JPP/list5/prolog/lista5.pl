@@ -67,7 +67,6 @@ totient_helper(N, _, Acc, T) :-
     T is Acc * (N - 1) // N.
 totient_helper(_, _, Acc, Acc).
 
-% Usuwa wszystkie powtórzenia czynnika pierwszego z liczby
 remove_factor(N, F, Result) :-
     N mod F =:= 0, !,
     N1 is N // F,
@@ -80,20 +79,17 @@ primes(N, X) :-
     gen_list(2, N, Range),
     sieve(Range, X).
 
-% Generuje listę liczb od L do H
 gen_list(L, H, []) :- L > H, !.
 gen_list(L, H, [L | T]) :-
     L =< H,
     L1 is L + 1,
     gen_list(L1, H, T).
 
-% Sianie Sita Eratostenesa
 sieve([], []).
 sieve([P | Rest], [P | Primes]) :-
     filter_multiples(P, Rest, Filtered),
     sieve(Filtered, Primes).
 
-% Usuwa wielokrotności liczby P z listy
 filter_multiples(_, [], []).
 filter_multiples(P, [X | Src], Dst) :-
     X mod P =:= 0, !,
@@ -101,7 +97,5 @@ filter_multiples(P, [X | Src], Dst) :-
 filter_multiples(P, [X | Src], [X | Dst]) :-
     filter_multiples(P, Src, Dst).
 
-
-% Zwraca kolejny potencjalny dzielnik (omijamy liczby parzyste większe od 2)
 next_factor(2, 3) :- !.
 next_factor(F, F1) :- F1 is F + 2.
